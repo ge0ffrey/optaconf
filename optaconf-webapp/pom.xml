@@ -14,6 +14,10 @@
 
   <name>OptaConf WebApp</name>
 
+  <build>
+    <finalName>${project.artifactId}</finalName>
+  </build>
+
   <dependencies>
     <dependency>
       <groupId>org.optaplanner</groupId>
