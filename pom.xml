@@ -28,6 +28,13 @@
     </license>
   </licenses>
 
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+    <version.jboss.bom.wfk>2.6.0-redhat-1</version.jboss.bom.wfk>
+    <version.org.optaplanner>6.2.0.CR1</version.org.optaplanner>
+  </properties>
+
   <repositories>
     <!-- Bootstrap repository to locate the parent pom when the parent pom has not been build locally. -->
     <repository>
@@ -56,12 +63,31 @@
     <url>https://issues.jboss.org/browse/PLANNER</url>
   </issueManagement>
 
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.jboss.as.plugins</groupId>
+          <artifactId>jboss-as-maven-plugin</artifactId>
+          <version>7.4.Final</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
   <dependencyManagement>
     <dependencies>
       <dependency>
         <groupId>org.optaplanner</groupId>
         <artifactId>optaplanner-bom</artifactId>
-        <version>6.3.0-SNAPSHOT</version>
+        <version>${version.org.optaplanner}</version>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.jboss.bom.wfk</groupId>
+        <artifactId>jboss-javaee-6.0-with-tools</artifactId>
+        <version>${version.jboss.bom.wfk}</version>
+        <type>pom</type>
         <scope>import</scope>
       </dependency>
     </dependencies>
