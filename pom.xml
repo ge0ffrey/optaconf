@@ -31,7 +31,8 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-    <version.jboss.bom.wfk>2.6.0-redhat-1</version.jboss.bom.wfk>
+    <version.org.wildfly.plugins>1.0.2.Final</version.org.wildfly.plugins>
+    <version.org.wildfly.bom>8.1.0.Final</version.org.wildfly.bom>
     <version.org.optaplanner>6.2.0.CR1</version.org.optaplanner>
   </properties>
 
@@ -67,9 +68,9 @@
     <pluginManagement>
       <plugins>
         <plugin>
-          <groupId>org.jboss.as.plugins</groupId>
-          <artifactId>jboss-as-maven-plugin</artifactId>
-          <version>7.4.Final</version>
+          <groupId>org.wildfly.plugins</groupId>
+          <artifactId>wildfly-maven-plugin</artifactId>
+          <version>${version.org.wildfly.plugins}</version>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -84,9 +85,9 @@
         <scope>import</scope>
       </dependency>
       <dependency>
-        <groupId>org.jboss.bom.wfk</groupId>
-        <artifactId>jboss-javaee-6.0-with-tools</artifactId>
-        <version>${version.jboss.bom.wfk}</version>
+        <groupId>org.wildfly.bom</groupId>
+        <artifactId>jboss-javaee-7.0-with-tools</artifactId>
+        <version>${version.org.wildfly.bom}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
