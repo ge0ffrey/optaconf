@@ -5,7 +5,9 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.enterprise.context.ApplicationScoped;
@@ -20,6 +22,9 @@ import org.apache.commons.io.IOUtils;
 import org.optaconf.domain.Day;
 import org.optaconf.domain.Room;
 import org.optaconf.domain.Schedule;
+import org.optaconf.domain.Talk;
+import org.optaconf.domain.TalkExclusion;
+import org.optaconf.domain.Timeslot;
 
 @ApplicationScoped
 public class DevoxxImporter {
@@ -28,15 +33,20 @@ public class DevoxxImporter {
 
     public Schedule importSchedule() {
         Schedule schedule = new Schedule();
-        mapRooms(schedule);
-        mapDays(schedule);
+        schedule.setDayList(new ArrayList<Day>());
+        schedule.setTimeslotList(new ArrayList<Timeslot>());
+        schedule.setRoomList(new ArrayList<Room>());
+        schedule.setTalkList(new ArrayList<Talk>());
+        schedule.setTalkExclusionList(new ArrayList<TalkExclusion>());
+        Map<String, Room> roomMap = mapRooms(schedule);
+        mapDays(schedule, roomMap);
         return schedule;
     }
 
-    private void mapRooms(Schedule schedule) {
+    private Map<String, Room> mapRooms(Schedule schedule) {
+        Map<String, Room> roomMap = new HashMap<String, Room>();
         JsonObject rootObject = readJsonObject(REST_URL_ROOT + "/rooms");
         JsonArray array = rootObject.getJsonArray("rooms");
-        List<Room> roomList = new ArrayList<Room>();
         for (int i = 0; i < array.size(); i++) {
             JsonObject dRoom = array.getJsonObject(i);
             String id = dRoom.getString("id");
@@ -46,15 +56,16 @@ public class DevoxxImporter {
             if (!dRoom.getString("setup").equals("theatre")) {
                 continue;
             }
-            roomList.add(new Room(id, name, capacity));
+            Room room = new Room(id, name, capacity);
+            schedule.getRoomList().add(room);
+            roomMap.put(id, room);
         }
-        schedule.setRoomList(roomList);
+        return roomMap;
     }
 
-    private void mapDays(Schedule schedule) {
+    private void mapDays(Schedule schedule, Map<String, Room> roomMap) {
         JsonObject rootObject = readJsonObject(REST_URL_ROOT + "/schedules");
         JsonArray array = rootObject.getJsonArray("links");
-        List<Day> dayList = new ArrayList<Day>();
         Pattern dTitlePattern = Pattern.compile("Schedule for (\\w+) (\\d+.*\\d{4})");
         for (int i = 0; i < array.size(); i++) {
             JsonObject dDay = array.getJsonObject(i);
@@ -67,9 +78,46 @@ public class DevoxxImporter {
             }
             String name = dTitleMatcher.group(1);
             String date = dTitleMatcher.group(2);
-            dayList.add(new Day(dHref.replaceAll(".*\\/(.*)/", "$1"), name, date));
+            Day day = new Day(dHref.replaceAll(".*\\/(.*)/", "$1"), name, date);
+            schedule.getDayList().add(day);
+            mapTalks(schedule, roomMap, dHref, day);
         }
-        schedule.setDayList(dayList);
+    }
+
+    private void mapTalks(Schedule schedule, Map<String, Room> roomMap, String dayUrl, Day day) {
+        Map<String, Timeslot> timeslotMap = new HashMap<String, Timeslot>();
+        JsonObject rootObject = readJsonObject(dayUrl);
+        JsonArray array = rootObject.getJsonArray("slots");
+        for (int i = 0; i < array.size(); i++) {
+            JsonObject dSlot = array.getJsonObject(i);
+            if (dSlot.isNull("talk")) {
+                continue;
+            }
+            JsonObject dTalk = dSlot.getJsonObject("talk");
+            // TODO Add hands on etc too
+            if (!dTalk.getString("talkType").equalsIgnoreCase("Conference")) {
+                continue;
+            }
+            String id = dTalk.getString("id");
+            String title = dTalk.getString("title");
+            Talk talk = new Talk(id, title);
+            schedule.getTalkList().add(talk);
+
+            String roomId = dSlot.getString("roomId");
+            Room room = roomMap.get(roomId);
+            talk.setRoom(room);
+
+            String fromTime = dSlot.getString("fromTime");
+            String toTime = dSlot.getString("toTime");
+            String timeslotId = fromTime + " - " + toTime;
+            Timeslot timeslot = timeslotMap.get(timeslotId);
+            if (timeslot == null) {
+                timeslot = new Timeslot(timeslotId, timeslotId, day, fromTime, toTime);
+                schedule.getTimeslotList().add(timeslot);
+                timeslotMap.put(timeslotId, timeslot);
+            }
+            talk.setTimeslot(timeslot);
+        }
     }
 
     private JsonObject readJsonObject(String url) {

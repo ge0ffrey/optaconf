@@ -3,7 +3,6 @@ package org.optaconf.domain;
 import java.util.List;
 import javax.enterprise.inject.Vetoed;
 
-@Vetoed
 public class Schedule extends AbstractPersistable {
 
     private List<Day> dayList;

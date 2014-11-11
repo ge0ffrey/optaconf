@@ -3,7 +3,7 @@
 . Open the `pom.xml` as a new project in IntelliJ.
 . Download and unzip http://wildfly.org/[WildFly 8.1.0.Final].
 . In IntelliJ, add a JBoss app server run configuration for that WildFly installation and a deployment for the exploded war..
-. In IntelliJ, go to _Project structure_, menu item _Artifacts_ and suffix exploded war's output directory with `.war`.
+. In IntelliJ, go to _Project structure_, menu item _Artifacts_ and suffix exploded war's output directory with `-exploded.war`.
 . Run the WildFly run configuration.
 . Or if you don't have IntelliJ Ultimate Edition, run wildfly-8.1.0.Final/bin/standalone.sh then run mvn wildfly:deploy from within optaconf-webapp directory
 
