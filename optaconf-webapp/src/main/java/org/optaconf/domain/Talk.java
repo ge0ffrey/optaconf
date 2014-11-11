@@ -7,6 +7,14 @@ public class Talk extends AbstractPersistable {
     private Timeslot timeslot;
     private Room room;
 
+    public Talk() {
+    }
+
+    public Talk(long id, String title) {
+        super(id);
+        this.title = title;
+    }
+
     public String getTitle() {
         return title;
     }
