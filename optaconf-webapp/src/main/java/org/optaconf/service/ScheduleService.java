@@ -9,6 +9,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 import org.optaconf.bridge.devoxx.DevoxxImporter;
+import org.optaconf.cdi.ScheduleManager;
 import org.optaconf.domain.Schedule;
 import org.optaconf.domain.Talk;
 import org.optaconf.domain.TalkExclusion;
@@ -17,16 +18,17 @@ import org.optaconf.domain.TalkExclusion;
 public class ScheduleService {
 
     @Inject
-    private Schedule schedule;
+    private ScheduleManager scheduleManager;
 
     @Inject
     private DevoxxImporter devoxxImporter;
 
-    @GET
+    @GET // TODO should be post
     @Path("/import/devoxx")
     @Produces("application/json")
     public String importDevoxx(@PathParam("conferenceId") Long conferenceId) {
-        schedule = devoxxImporter.importSchedule();
+        Schedule schedule = devoxxImporter.importSchedule();
+        scheduleManager.setSchedule(schedule);
         return "Devoxx schedule with " + schedule.getDayList().size() + " days, "
                 + schedule.getTimeslotList().size() + " timeslots, "
                 + schedule.getRoomList().size() + " rooms, "

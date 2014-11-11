@@ -1,4 +1,4 @@
-package org.optaconf.service;
+package org.optaconf.cdi;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ import org.optaconf.domain.Timeslot;
 public class DummyScheduleProducer implements Serializable {
 
     @Produces @SessionScoped
-    public Schedule createDummySchedule() {
+    public ScheduleManager createDummySchedule() {
         Schedule schedule = new Schedule();
 
         List<Day> dayList = new ArrayList<Day>();
@@ -64,7 +64,7 @@ public class DummyScheduleProducer implements Serializable {
         talkExclusionList.add(new TalkExclusion("2", talk3, talk7, TalkExclusionType.SOFT_CONFLICT));
         schedule.setTalkExclusionList(talkExclusionList);
 
-        return schedule;
+        return new ScheduleManager(schedule);
     }
 
 }
