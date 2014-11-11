@@ -38,12 +38,13 @@ public class DevoxxImporter {
         schedule.setRoomList(new ArrayList<Room>());
         schedule.setTalkList(new ArrayList<Talk>());
         schedule.setTalkExclusionList(new ArrayList<TalkExclusion>());
-        mapRooms(schedule);
-        mapDays(schedule);
+        Map<String, Room> roomMap = mapRooms(schedule);
+        mapDays(schedule, roomMap);
         return schedule;
     }
 
-    private void mapRooms(Schedule schedule) {
+    private Map<String, Room> mapRooms(Schedule schedule) {
+        Map<String, Room> roomMap = new HashMap<String, Room>();
         JsonObject rootObject = readJsonObject(REST_URL_ROOT + "/rooms");
         JsonArray array = rootObject.getJsonArray("rooms");
         for (int i = 0; i < array.size(); i++) {
@@ -55,11 +56,14 @@ public class DevoxxImporter {
             if (!dRoom.getString("setup").equals("theatre")) {
                 continue;
             }
-            schedule.getRoomList().add(new Room(id, name, capacity));
+            Room room = new Room(id, name, capacity);
+            schedule.getRoomList().add(room);
+            roomMap.put(id, room);
         }
+        return roomMap;
     }
 
-    private void mapDays(Schedule schedule) {
+    private void mapDays(Schedule schedule, Map<String, Room> roomMap) {
         JsonObject rootObject = readJsonObject(REST_URL_ROOT + "/schedules");
         JsonArray array = rootObject.getJsonArray("links");
         Pattern dTitlePattern = Pattern.compile("Schedule for (\\w+) (\\d+.*\\d{4})");
@@ -76,11 +80,11 @@ public class DevoxxImporter {
             String date = dTitleMatcher.group(2);
             Day day = new Day(dHref.replaceAll(".*\\/(.*)/", "$1"), name, date);
             schedule.getDayList().add(day);
-            mapTalks(schedule, dHref, day);
+            mapTalks(schedule, roomMap, dHref, day);
         }
     }
 
-    private void mapTalks(Schedule schedule, String dayUrl, Day day) {
+    private void mapTalks(Schedule schedule, Map<String, Room> roomMap, String dayUrl, Day day) {
         Map<String, Timeslot> timeslotMap = new HashMap<String, Timeslot>();
         JsonObject rootObject = readJsonObject(dayUrl);
         JsonArray array = rootObject.getJsonArray("slots");
@@ -96,16 +100,23 @@ public class DevoxxImporter {
             }
             String id = dTalk.getString("id");
             String title = dTalk.getString("title");
-            schedule.getTalkList().add(new Talk(id, title));
+            Talk talk = new Talk(id, title);
+            schedule.getTalkList().add(talk);
+
+            String roomId = dSlot.getString("roomId");
+            Room room = roomMap.get(roomId);
+            talk.setRoom(room);
 
             String fromTime = dSlot.getString("fromTime");
             String toTime = dSlot.getString("toTime");
             String timeslotId = fromTime + " - " + toTime;
-            if (!timeslotMap.containsKey(timeslotId)) {
-                Timeslot timeslot = new Timeslot(timeslotId, timeslotId, day, fromTime, toTime);
+            Timeslot timeslot = timeslotMap.get(timeslotId);
+            if (timeslot == null) {
+                timeslot = new Timeslot(timeslotId, timeslotId, day, fromTime, toTime);
                 schedule.getTimeslotList().add(timeslot);
                 timeslotMap.put(timeslotId, timeslot);
             }
+            talk.setTimeslot(timeslot);
         }
     }
 
