@@ -71,7 +71,7 @@ public class ScheduleService {
     }
 
     @GET // TODO should be post
-    @Path("/isSolving")
+    @Path("/terminateSolving")
     @Produces("application/json")
     public void terminateSolving(@PathParam("conferenceId") Long conferenceId) {
         Solver solver = scheduleManager.getSolver();
