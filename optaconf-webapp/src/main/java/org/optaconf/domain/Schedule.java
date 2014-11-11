@@ -6,9 +6,18 @@ import javax.enterprise.inject.Vetoed;
 @Vetoed
 public class Schedule extends AbstractPersistable {
 
+    private List<Day> dayList;
     private List<Timeslot> timeslotList;
     private List<Room> roomList;
     private List<Talk> talkList;
+
+    public List<Day> getDayList() {
+        return dayList;
+    }
+
+    public void setDayList(List<Day> dayList) {
+        this.dayList = dayList;
+    }
 
     public List<Timeslot> getTimeslotList() {
         return timeslotList;

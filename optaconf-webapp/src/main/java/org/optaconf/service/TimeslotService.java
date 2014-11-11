@@ -1,6 +1,5 @@
 package org.optaconf.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -10,9 +9,10 @@ import javax.ws.rs.Produces;
 
 import org.optaconf.domain.Schedule;
 import org.optaconf.domain.Talk;
+import org.optaconf.domain.Timeslot;
 
-@Path("/{conferenceId}/talk")
-public class TalkService {
+@Path("/{conferenceId}/timeslot")
+public class TimeslotService {
 
     @Inject
     private Schedule schedule;
@@ -20,8 +20,8 @@ public class TalkService {
     @GET
     @Path("/")
     @Produces("application/json")
-    public List<Talk> getTalkList(@PathParam("conferenceId") Long conferenceId) {
-        return schedule.getTalkList();
+    public List<Timeslot> getTimeslotList(@PathParam("conferenceId") Long conferenceId) {
+        return schedule.getTimeslotList();
     }
 
 }

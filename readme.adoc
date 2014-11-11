@@ -1,0 +1,6 @@
+= Rest URL's
+
+* Day list: http://localhost:8080/optaconf-webapp/rest/123/day
+* Timeslot list: http://localhost:8080/optaconf-webapp/rest/123/timeslot
+* Room list: http://localhost:8080/optaconf-webapp/rest/123/room
+* Talk list: http://localhost:8080/optaconf-webapp/rest/123/talk

@@ -5,6 +5,15 @@ public class Timeslot extends AbstractPersistable {
     private String name;
     private Day day;
 
+    public Timeslot() {
+    }
+
+    public Timeslot(long id, String name, Day day) {
+        super(id);
+        this.name = name;
+        this.day = day;
+    }
+
     public String getName() {
         return name;
     }
