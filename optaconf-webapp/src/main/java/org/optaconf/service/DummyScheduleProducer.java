@@ -21,9 +21,9 @@ public class DummyScheduleProducer implements Serializable {
         Schedule schedule = new Schedule();
 
         List<Day> dayList = new ArrayList<Day>();
-        Day wedDay = new Day(1L, "Wed");
+        Day wedDay = new Day(1L, "Wed", "2014-11-13");
         dayList.add(wedDay);
-        Day thuDay = new Day(2L, "Thu");
+        Day thuDay = new Day(2L, "Thu", "2014-11-14");
         dayList.add(thuDay);
         schedule.setDayList(dayList);
 
