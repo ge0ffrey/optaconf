@@ -8,3 +8,5 @@
 /*.ipr
 /*.iws
 /*.iml
+node_modules/*
+src/main/webapp/node_modules/*
