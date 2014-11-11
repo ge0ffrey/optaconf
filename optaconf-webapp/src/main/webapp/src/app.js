@@ -1,7 +1,11 @@
-var app = angular.module('optaconf', ['ngResource', 'ngRoute', 'rooms', 'talks']);
+var app = angular.module('optaconf', ['ngResource', 'ngRoute', 'dashboard', 'rooms', 'talks']);
 
 app.config(["$routeProvider", function($routeProvider) {
     $routeProvider.
+        when('/', {
+                templateUrl: 'src/dashboard/dashboard.html',
+                controller: 'DashboardCtrl as vm'
+        }).
         when('/rooms', {
             templateUrl: 'src/rooms/rooms.html',
             controller: 'RoomCtrl as vm'
@@ -11,6 +15,6 @@ app.config(["$routeProvider", function($routeProvider) {
             controller: 'TalkCtrl as vm'
         }).
         otherwise({
-            redirectTo: '/rooms'
+            redirectTo: '/'
         });
 }]);
