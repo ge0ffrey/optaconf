@@ -18,7 +18,6 @@
         /*
          * Feature areas
          */
-        'app.login',
         'app.browser',
 
         'app.layout'
