@@ -1,0 +1,22 @@
+<div class="page-header">
+    <h1>{{vm.title}}</h1>
+</div>
+<div class="row">
+
+    <div class="col-md-12">
+        <table class="table table-striped">
+            <tr>
+                <th>Title</th>
+                <th>Timeslot</th>
+                <th>Room</th>
+            </tr>
+            <tr ng-repeat="talk in vm.talks">
+                <td>{{talk.title}}</td>
+                <td>{{talk.timeslot}}</td>
+                <td>{{talk.room}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
