@@ -1,11 +1,21 @@
 package org.optaconf.domain;
 
-public class TalkRelationship extends AbstractPersistable {
+public class TalkExclusion extends AbstractPersistable {
 
     private Talk firstTalk;
     private Talk secondTalk;
 
-    private TalkRelationshipType type;
+    private TalkExclusionType type;
+
+    public TalkExclusion() {
+    }
+
+    public TalkExclusion(long id, Talk firstTalk, Talk secondTalk, TalkExclusionType type) {
+        super(id);
+        this.firstTalk = firstTalk;
+        this.secondTalk = secondTalk;
+        this.type = type;
+    }
 
     public Talk getFirstTalk() {
         return firstTalk;
@@ -23,11 +33,11 @@ public class TalkRelationship extends AbstractPersistable {
         this.secondTalk = secondTalk;
     }
 
-    public TalkRelationshipType getType() {
+    public TalkExclusionType getType() {
         return type;
     }
 
-    public void setType(TalkRelationshipType type) {
+    public void setType(TalkExclusionType type) {
         this.type = type;
     }
 

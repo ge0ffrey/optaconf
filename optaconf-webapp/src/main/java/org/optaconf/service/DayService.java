@@ -29,7 +29,7 @@ public class DayService {
     @GET
     @Path("/{dayId}/timeslot")
     @Produces("application/json")
-    public List<Timeslot> getTimeslotListByDay(@PathParam("conferenceId") Long conferenceId,
+    public List<Timeslot> getTimeslotList(@PathParam("conferenceId") Long conferenceId,
             @PathParam("dayId") Long dayId) {
         // TODO do proper query to DB instead of filtering here
         List<Timeslot> globalTimeslotList = schedule.getTimeslotList();

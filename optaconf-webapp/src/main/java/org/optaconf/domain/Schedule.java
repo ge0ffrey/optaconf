@@ -10,6 +10,7 @@ public class Schedule extends AbstractPersistable {
     private List<Timeslot> timeslotList;
     private List<Room> roomList;
     private List<Talk> talkList;
+    private List<TalkExclusion> talkExclusionList;
 
     public List<Day> getDayList() {
         return dayList;
@@ -43,4 +44,11 @@ public class Schedule extends AbstractPersistable {
         this.talkList = talkList;
     }
 
+    public List<TalkExclusion> getTalkExclusionList() {
+        return talkExclusionList;
+    }
+
+    public void setTalkExclusionList(List<TalkExclusion> talkExclusionList) {
+        this.talkExclusionList = talkExclusionList;
+    }
 }

@@ -11,6 +11,8 @@ import org.optaconf.domain.Day;
 import org.optaconf.domain.Room;
 import org.optaconf.domain.Schedule;
 import org.optaconf.domain.Talk;
+import org.optaconf.domain.TalkExclusion;
+import org.optaconf.domain.TalkExclusionType;
 import org.optaconf.domain.Timeslot;
 
 @ApplicationScoped
@@ -41,11 +43,26 @@ public class DummyScheduleProducer implements Serializable {
         schedule.setRoomList(roomList);
 
         List<Talk> talkList = new ArrayList<Talk>();
-        talkList.add(new Talk(1L, "Talk 1"));
-        talkList.add(new Talk(2L, "Talk 2"));
-        talkList.add(new Talk(3L, "Talk 3"));
-        talkList.add(new Talk(4L, "Talk 4"));
+        Talk talk1 = new Talk(1L, "T1 JEE Basic");
+        talkList.add(talk1);
+        Talk talk2 = new Talk(2L, "T2 Security");
+        talkList.add(talk2);
+        Talk talk3 = new Talk(3L, "T3 WildFly");
+        talkList.add(talk3);
+        Talk talk4 = new Talk(4L, "T4 JEE Expert");
+        talkList.add(talk4);
+        Talk talk5 = new Talk(5L, "T5 Lambda part 1");
+        talkList.add(talk5);
+        Talk talk6 = new Talk(6L, "T6 Lambda part 2");
+        talkList.add(talk6);
+        Talk talk7 = new Talk(7L, "T7 Glassfish");
+        talkList.add(talk7);
         schedule.setTalkList(talkList);
+
+        List<TalkExclusion> talkExclusionList = new ArrayList<TalkExclusion>();
+        talkExclusionList.add(new TalkExclusion(1L, talk1, talk7, TalkExclusionType.HARD_CONFLICT));
+        talkExclusionList.add(new TalkExclusion(2L, talk3, talk7, TalkExclusionType.SOFT_CONFLICT));
+        schedule.setTalkExclusionList(talkExclusionList);
 
         return schedule;
     }

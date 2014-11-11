@@ -1,6 +1,6 @@
 package org.optaconf.domain;
 
-public enum TalkRelationshipType {
+public enum TalkExclusionType {
     HARD_CONFLICT, // Red
     SOFT_CONFLICT; // Yellow
 }
