@@ -2,6 +2,9 @@ package org.optaconf.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
+import javax.annotation.Resource;
+import javax.enterprise.concurrent.ManagedExecutorService;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -15,6 +18,8 @@ import org.optaconf.domain.Talk;
 import org.optaconf.domain.TalkExclusion;
 import org.optaplanner.core.api.solver.Solver;
 import org.optaplanner.core.api.solver.SolverFactory;
+import org.optaplanner.core.api.solver.event.BestSolutionChangedEvent;
+import org.optaplanner.core.api.solver.event.SolverEventListener;
 
 @Path("/{conferenceId}/schedule")
 public class ScheduleService {
@@ -27,6 +32,9 @@ public class ScheduleService {
 
     @Inject
     private SolverFactory solverFactory;
+
+    @Resource(name = "DefaultManagedExecutorService")
+    ManagedExecutorService executor;
 
     @GET // TODO should be post
     @Path("/import/devoxx")
@@ -44,10 +52,38 @@ public class ScheduleService {
     @Path("/solve")
     @Produces("application/json")
     public String solveSchedule(@PathParam("conferenceId") Long conferenceId) {
+        Solver oldSolver = scheduleManager.getSolver();
+        if (oldSolver != null && oldSolver.isSolving()) {
+            oldSolver.terminateEarly();
+        }
         Solver solver = solverFactory.buildSolver();
-        solver.solve(scheduleManager.getSchedule());
-        scheduleManager.setSchedule((Schedule) solver.getBestSolution());
-        return "Solved successfully. Sorry it took 20 seconds to respond."; // TODO go async
+        scheduleManager.setSolver(solver);
+        executor.submit(new SolverCallable(solver, scheduleManager.getSchedule()));
+        return "Solved started.";
+    }
+
+    private class SolverCallable implements Runnable {
+
+        private final Solver solver;
+        private final Schedule schedule;
+
+        private SolverCallable(Solver solver, Schedule schedule) {
+            this.solver = solver;
+            this.schedule = schedule;
+        }
+
+        public void run() {
+            solver.addEventListener(new SolverEventListener() {
+                @Override
+                public void bestSolutionChanged(BestSolutionChangedEvent bestSolutionChangedEvent) {
+                    scheduleManager.setSchedule((Schedule) bestSolutionChangedEvent.getNewBestSolution());
+                }
+            });
+            solver.solve(schedule);
+            Schedule bestSchedule = (Schedule) solver.getBestSolution();
+            scheduleManager.setSchedule(bestSchedule);
+            scheduleManager.setSolver(null);
+        }
     }
 
 }

@@ -28,4 +28,12 @@ public class ScheduleManager implements Serializable {
         this.schedule = schedule;
     }
 
+    public Solver getSolver() {
+        return solver;
+    }
+
+    public void setSolver(Solver solver) {
+        this.solver = solver;
+    }
+
 }
