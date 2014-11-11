@@ -1,0 +1,40 @@
+package org.optaconf.solver;
+    dialect "java"
+
+import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScoreHolder;
+
+import org.optaconf.domain.Day;
+import org.optaconf.domain.Room;
+import org.optaconf.domain.Schedule;
+import org.optaconf.domain.Talk;
+import org.optaconf.domain.TalkExclusion;
+import org.optaconf.domain.TalkExclusionType;
+import org.optaconf.domain.Timeslot;
+
+global HardSoftScoreHolder scoreHolder;
+
+// ############################################################################
+// Hard constraints
+// ############################################################################
+
+rule "talkExclusionHard"
+    when
+        TalkExclusion(type == TalkExclusionType.HARD_CONFLICT, $t1 : firstTalk, $t2 : secondTalk)
+        Talk(this == $t1, $ts : timeslot, $r : room)
+        Talk(this == $t2, timeslot == $ts, room == $r)
+    then
+        scoreHolder.addHardConstraintMatch(kcontext, -1);
+end
+
+// ############################################################################
+// Soft constraints
+// ############################################################################
+
+rule "talkExclusionSoft"
+    when
+        TalkExclusion(type == TalkExclusionType.SOFT_CONFLICT, $t1 : firstTalk, $t2 : secondTalk)
+        Talk(this == $t1, $ts : timeslot, $r : room)
+        Talk(this == $t2, timeslot == $ts, room == $r)
+    then
+        scoreHolder.addSoftConstraintMatch(kcontext, -1);
+end

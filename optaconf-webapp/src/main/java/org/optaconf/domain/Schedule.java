@@ -1,15 +1,26 @@
 package org.optaconf.domain;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.enterprise.inject.Vetoed;
 
-public class Schedule extends AbstractPersistable {
+import org.optaplanner.core.api.domain.solution.PlanningEntityCollectionProperty;
+import org.optaplanner.core.api.domain.solution.PlanningSolution;
+import org.optaplanner.core.api.domain.solution.Solution;
+import org.optaplanner.core.api.domain.valuerange.ValueRangeProvider;
+import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
+
+@PlanningSolution
+public class Schedule extends AbstractPersistable implements Solution<HardSoftScore> {
 
     private List<Day> dayList;
     private List<Timeslot> timeslotList;
     private List<Room> roomList;
     private List<Talk> talkList;
     private List<TalkExclusion> talkExclusionList;
+
+    private HardSoftScore score;
 
     public Schedule() {
     }
@@ -26,6 +37,7 @@ public class Schedule extends AbstractPersistable {
         this.dayList = dayList;
     }
 
+    @ValueRangeProvider(id = "timeslotRange")
     public List<Timeslot> getTimeslotList() {
         return timeslotList;
     }
@@ -34,6 +46,7 @@ public class Schedule extends AbstractPersistable {
         this.timeslotList = timeslotList;
     }
 
+    @ValueRangeProvider(id = "roomRange")
     public List<Room> getRoomList() {
         return roomList;
     }
@@ -42,6 +55,7 @@ public class Schedule extends AbstractPersistable {
         this.roomList = roomList;
     }
 
+    @PlanningEntityCollectionProperty
     public List<Talk> getTalkList() {
         return talkList;
     }
@@ -57,4 +71,25 @@ public class Schedule extends AbstractPersistable {
     public void setTalkExclusionList(List<TalkExclusion> talkExclusionList) {
         this.talkExclusionList = talkExclusionList;
     }
+
+    public HardSoftScore getScore() {
+        return score;
+    }
+
+    public void setScore(HardSoftScore score) {
+        this.score = score;
+    }
+
+    @Override
+    public Collection<?> getProblemFacts() {
+        List<Object> facts = new ArrayList<Object>();
+        facts.addAll(dayList);
+        facts.addAll(timeslotList);
+        facts.addAll(roomList);
+        facts.addAll(talkList);
+        facts.addAll(talkExclusionList);
+        // Do not add the planning entity's (processList) because that will be done automatically
+        return facts;
+    }
+
 }

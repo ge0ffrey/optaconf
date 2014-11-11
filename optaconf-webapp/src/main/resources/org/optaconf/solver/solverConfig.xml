@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<solver>
+  <!--<environmentMode>FAST_ASSERT</environmentMode>-->
+
+  <!-- Domain model configuration -->
+  <solutionClass>org.optaconf.domain.Schedule</solutionClass>
+  <entityClass>org.optaconf.domain.Talk</entityClass>
+
+  <!-- Score configuration -->
+  <scoreDirectorFactory>
+    <scoreDefinitionType>HARD_SOFT</scoreDefinitionType>
+    <scoreDrl>org/optaconf/solver/scoreRules.drl</scoreDrl>
+    <initializingScoreTrend>ONLY_DOWN</initializingScoreTrend>
+  </scoreDirectorFactory>
+
+  <!-- Optimization algorithms configuration -->
+  <termination>
+    <secondsSpentLimit>20</secondsSpentLimit>
+  </termination>
+  <constructionHeuristic>
+    <constructionHeuristicType>FIRST_FIT</constructionHeuristicType>
+  </constructionHeuristic>
+  <localSearch>
+    <unionMoveSelector>
+      <cartesianProductMoveSelector>
+        <changeMoveSelector>
+          <valueSelector>
+            <variableName>timeslot</variableName>
+          </valueSelector>
+        </changeMoveSelector>
+        <changeMoveSelector>
+          <valueSelector>
+            <variableName>room</variableName>
+          </valueSelector>
+        </changeMoveSelector>
+      </cartesianProductMoveSelector>
+      <swapMoveSelector/>
+    </unionMoveSelector>
+    <acceptor>
+      <lateAcceptanceSize>200</lateAcceptanceSize>
+    </acceptor>
+    <forager>
+      <acceptedCountLimit>1</acceptedCountLimit>
+    </forager>
+  </localSearch>
+</solver>
