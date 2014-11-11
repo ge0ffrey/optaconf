@@ -28,7 +28,9 @@ public class ScheduleService {
     public String importDevoxx(@PathParam("conferenceId") Long conferenceId) {
         schedule = devoxxImporter.importSchedule();
         return "Devoxx schedule with " + schedule.getDayList().size() + " days, "
-                + schedule.getRoomList().size() + " rooms imported successfully.";
+                + schedule.getTimeslotList().size() + " timeslots, "
+                + schedule.getRoomList().size() + " rooms, "
+                + schedule.getTalkList().size() + " talks imported successfully.";
     }
 
 }

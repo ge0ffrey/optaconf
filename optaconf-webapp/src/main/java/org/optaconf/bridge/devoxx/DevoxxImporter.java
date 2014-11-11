@@ -20,6 +20,9 @@ import org.apache.commons.io.IOUtils;
 import org.optaconf.domain.Day;
 import org.optaconf.domain.Room;
 import org.optaconf.domain.Schedule;
+import org.optaconf.domain.Talk;
+import org.optaconf.domain.TalkExclusion;
+import org.optaconf.domain.Timeslot;
 
 @ApplicationScoped
 public class DevoxxImporter {
@@ -28,6 +31,11 @@ public class DevoxxImporter {
 
     public Schedule importSchedule() {
         Schedule schedule = new Schedule();
+        schedule.setDayList(new ArrayList<Day>());
+        schedule.setTimeslotList(new ArrayList<Timeslot>());
+        schedule.setRoomList(new ArrayList<Room>());
+        schedule.setTalkList(new ArrayList<Talk>());
+        schedule.setTalkExclusionList(new ArrayList<TalkExclusion>());
         mapRooms(schedule);
         mapDays(schedule);
         return schedule;
@@ -36,7 +44,6 @@ public class DevoxxImporter {
     private void mapRooms(Schedule schedule) {
         JsonObject rootObject = readJsonObject(REST_URL_ROOT + "/rooms");
         JsonArray array = rootObject.getJsonArray("rooms");
-        List<Room> roomList = new ArrayList<Room>();
         for (int i = 0; i < array.size(); i++) {
             JsonObject dRoom = array.getJsonObject(i);
             String id = dRoom.getString("id");
@@ -46,15 +53,13 @@ public class DevoxxImporter {
             if (!dRoom.getString("setup").equals("theatre")) {
                 continue;
             }
-            roomList.add(new Room(id, name, capacity));
+            schedule.getRoomList().add(new Room(id, name, capacity));
         }
-        schedule.setRoomList(roomList);
     }
 
     private void mapDays(Schedule schedule) {
         JsonObject rootObject = readJsonObject(REST_URL_ROOT + "/schedules");
         JsonArray array = rootObject.getJsonArray("links");
-        List<Day> dayList = new ArrayList<Day>();
         Pattern dTitlePattern = Pattern.compile("Schedule for (\\w+) (\\d+.*\\d{4})");
         for (int i = 0; i < array.size(); i++) {
             JsonObject dDay = array.getJsonObject(i);
@@ -67,9 +72,28 @@ public class DevoxxImporter {
             }
             String name = dTitleMatcher.group(1);
             String date = dTitleMatcher.group(2);
-            dayList.add(new Day(dHref.replaceAll(".*\\/(.*)/", "$1"), name, date));
+            schedule.getDayList().add(new Day(dHref.replaceAll(".*\\/(.*)/", "$1"), name, date));
+            mapTalks(schedule, dHref);
         }
-        schedule.setDayList(dayList);
+    }
+
+    private void mapTalks(Schedule schedule, String dayUrl) {
+        JsonObject rootObject = readJsonObject(dayUrl);
+        JsonArray array = rootObject.getJsonArray("slots");
+        for (int i = 0; i < array.size(); i++) {
+            JsonObject dSlot = array.getJsonObject(i);
+            if (dSlot.isNull("talk")) {
+                continue;
+            }
+            JsonObject dTalk = dSlot.getJsonObject("talk");
+            // TODO Add hands on etc too
+            if (!dTalk.getString("talkType").equalsIgnoreCase("Conference")) {
+                continue;
+            }
+            String id = dTalk.getString("id");
+            String title = dTalk.getString("title");
+            schedule.getTalkList().add(new Talk(id, title));
+        }
     }
 
     private JsonObject readJsonObject(String url) {
