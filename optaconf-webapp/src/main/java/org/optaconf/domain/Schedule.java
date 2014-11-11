@@ -12,6 +12,13 @@ public class Schedule extends AbstractPersistable {
     private List<Talk> talkList;
     private List<TalkExclusion> talkExclusionList;
 
+    public Schedule() {
+    }
+
+    public Schedule(String id) {
+        super(id);
+    }
+
     public List<Day> getDayList() {
         return dayList;
     }

@@ -23,20 +23,20 @@ import org.optaplanner.core.api.score.constraint.ConstraintMatch;
 
 public abstract class AbstractPersistable implements Serializable, Comparable<AbstractPersistable> {
 
-    protected Long id;
+    protected String id;
 
     protected AbstractPersistable() {
     }
 
-    protected AbstractPersistable(long id) {
+    protected AbstractPersistable(String id) {
         this.id = id;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
     /**

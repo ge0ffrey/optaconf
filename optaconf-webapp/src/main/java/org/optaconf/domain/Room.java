@@ -8,7 +8,7 @@ public class Room extends AbstractPersistable {
     public Room() {
     }
 
-    public Room(long id, String name, int seatingCapacity) {
+    public Room(String id, String name, int seatingCapacity) {
         super(id);
         this.name = name;
         this.seatingCapacity = seatingCapacity;

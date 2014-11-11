@@ -10,7 +10,7 @@ public class Talk extends AbstractPersistable {
     public Talk() {
     }
 
-    public Talk(long id, String title) {
+    public Talk(String id, String title) {
         super(id);
         this.title = title;
     }

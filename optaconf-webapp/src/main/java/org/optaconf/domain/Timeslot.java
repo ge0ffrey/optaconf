@@ -8,7 +8,7 @@ public class Timeslot extends AbstractPersistable {
     public Timeslot() {
     }
 
-    public Timeslot(long id, String name, Day day) {
+    public Timeslot(String id, String name, Day day) {
         super(id);
         this.name = name;
         this.day = day;

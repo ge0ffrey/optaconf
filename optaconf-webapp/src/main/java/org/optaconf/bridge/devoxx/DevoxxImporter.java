@@ -18,8 +18,8 @@ import javax.json.stream.JsonParser;
 
 import org.apache.commons.io.IOUtils;
 import org.optaconf.domain.Day;
+import org.optaconf.domain.Room;
 import org.optaconf.domain.Schedule;
-import org.optaconf.domain.Talk;
 
 @ApplicationScoped
 public class DevoxxImporter {
@@ -28,13 +28,36 @@ public class DevoxxImporter {
 
     public Schedule importSchedule() {
         Schedule schedule = new Schedule();
-        JsonObject dSchedules = readJsonObject(REST_URL_ROOT + "/schedules");
-        JsonArray dDayArray = dSchedules.getJsonArray("links");
+        mapRooms(schedule);
+        mapDays(schedule);
+        return schedule;
+    }
+
+    private void mapRooms(Schedule schedule) {
+        JsonObject rootObject = readJsonObject(REST_URL_ROOT + "/rooms");
+        JsonArray array = rootObject.getJsonArray("rooms");
+        List<Room> roomList = new ArrayList<Room>();
+        for (int i = 0; i < array.size(); i++) {
+            JsonObject dRoom = array.getJsonObject(i);
+            String id = dRoom.getString("id");
+            String name = dRoom.getString("name");
+            int capacity = dRoom.getInt("capacity");
+            // TODO Add RoomType and store BOF rooms etc too
+            if (!dRoom.getString("setup").equals("theatre")) {
+                continue;
+            }
+            roomList.add(new Room(id, name, capacity));
+        }
+        schedule.setRoomList(roomList);
+    }
+
+    private void mapDays(Schedule schedule) {
+        JsonObject rootObject = readJsonObject(REST_URL_ROOT + "/schedules");
+        JsonArray array = rootObject.getJsonArray("links");
         List<Day> dayList = new ArrayList<Day>();
         Pattern dTitlePattern = Pattern.compile("Schedule for (\\w+) (\\d+.*\\d{4})");
-        long dayId = 0L;
-        for (int i = 0; i < dDayArray.size(); i++) {
-            JsonObject dDay = dDayArray.getJsonObject(i);
+        for (int i = 0; i < array.size(); i++) {
+            JsonObject dDay = array.getJsonObject(i);
             String dHref = dDay.getString("href");
             String dTitle = dDay.getString("title");
             Matcher dTitleMatcher = dTitlePattern.matcher(dTitle);
@@ -44,11 +67,9 @@ public class DevoxxImporter {
             }
             String name = dTitleMatcher.group(1);
             String date = dTitleMatcher.group(2);
-            dayList.add(new Day(dayId, name, date));
-            dayId++;
+            dayList.add(new Day(dHref.replaceAll(".*\\/(.*)/", "$1"), name, date));
         }
         schedule.setDayList(dayList);
-        return schedule;
     }
 
     private JsonObject readJsonObject(String url) {

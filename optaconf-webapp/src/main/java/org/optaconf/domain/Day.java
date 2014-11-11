@@ -8,7 +8,7 @@ public class Day extends AbstractPersistable {
     public Day() {
     }
 
-    public Day(long id, String name, String date) {
+    public Day(String id, String name, String date) {
         super(id);
         this.name = name;
         this.date = date;
