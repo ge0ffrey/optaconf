@@ -27,3 +27,5 @@ Import a schedule:
 Solve a schedule
 
 * Solve the schedule: http://localhost:8080/optaconf-webapp/rest/123/schedule/solve
+* Is solving? http://localhost:8080/optaconf-webapp/rest/123/schedule/isSolving
+* Terminate solving: http://localhost:8080/optaconf-webapp/rest/123/schedule/terminateSolving

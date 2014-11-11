@@ -62,6 +62,24 @@ public class ScheduleService {
         return "Solved started.";
     }
 
+    @GET
+    @Path("/isSolving")
+    @Produces("application/json")
+    public boolean isSolving(@PathParam("conferenceId") Long conferenceId) {
+        Solver solver = scheduleManager.getSolver();
+        return solver != null && solver.isSolving();
+    }
+
+    @GET // TODO should be post
+    @Path("/isSolving")
+    @Produces("application/json")
+    public void terminateSolving(@PathParam("conferenceId") Long conferenceId) {
+        Solver solver = scheduleManager.getSolver();
+        if (solver != null) {
+            solver.terminateEarly();
+        }
+    }
+
     private class SolverCallable implements Runnable {
 
         private final Solver solver;
