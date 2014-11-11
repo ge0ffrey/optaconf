@@ -30,10 +30,10 @@ public class DummyScheduleProducer implements Serializable {
         schedule.setDayList(dayList);
 
         List<Timeslot> timeslotList = new ArrayList<Timeslot>();
-        timeslotList.add(new Timeslot("1", "Wed 1", wedDay));
-        timeslotList.add(new Timeslot("2", "Wed 2", wedDay));
-        timeslotList.add(new Timeslot("3", "Thu 1", thuDay));
-        timeslotList.add(new Timeslot("4", "Thu 2", thuDay));
+        timeslotList.add(new Timeslot("1", "Wed 1", wedDay, "9:00", "10:00"));
+        timeslotList.add(new Timeslot("2", "Wed 2", wedDay, "10:00", "11:00"));
+        timeslotList.add(new Timeslot("3", "Thu 1", thuDay, "9:00", "10:00"));
+        timeslotList.add(new Timeslot("4", "Thu 2", thuDay, "10:00", "11:00"));
         schedule.setTimeslotList(timeslotList);
 
         List<Room> roomList = new ArrayList<Room>();

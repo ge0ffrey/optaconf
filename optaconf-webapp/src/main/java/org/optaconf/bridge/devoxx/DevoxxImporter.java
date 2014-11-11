@@ -5,7 +5,9 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.enterprise.context.ApplicationScoped;
@@ -72,12 +74,14 @@ public class DevoxxImporter {
             }
             String name = dTitleMatcher.group(1);
             String date = dTitleMatcher.group(2);
-            schedule.getDayList().add(new Day(dHref.replaceAll(".*\\/(.*)/", "$1"), name, date));
-            mapTalks(schedule, dHref);
+            Day day = new Day(dHref.replaceAll(".*\\/(.*)/", "$1"), name, date);
+            schedule.getDayList().add(day);
+            mapTalks(schedule, dHref, day);
         }
     }
 
-    private void mapTalks(Schedule schedule, String dayUrl) {
+    private void mapTalks(Schedule schedule, String dayUrl, Day day) {
+        Map<String, Timeslot> timeslotMap = new HashMap<String, Timeslot>();
         JsonObject rootObject = readJsonObject(dayUrl);
         JsonArray array = rootObject.getJsonArray("slots");
         for (int i = 0; i < array.size(); i++) {
@@ -93,6 +97,15 @@ public class DevoxxImporter {
             String id = dTalk.getString("id");
             String title = dTalk.getString("title");
             schedule.getTalkList().add(new Talk(id, title));
+
+            String fromTime = dSlot.getString("fromTime");
+            String toTime = dSlot.getString("toTime");
+            String timeslotId = fromTime + " - " + toTime;
+            if (!timeslotMap.containsKey(timeslotId)) {
+                Timeslot timeslot = new Timeslot(timeslotId, timeslotId, day, fromTime, toTime);
+                schedule.getTimeslotList().add(timeslot);
+                timeslotMap.put(timeslotId, timeslot);
+            }
         }
     }
 
