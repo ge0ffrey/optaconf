@@ -13,6 +13,8 @@ import org.optaconf.cdi.ScheduleManager;
 import org.optaconf.domain.Schedule;
 import org.optaconf.domain.Talk;
 import org.optaconf.domain.TalkExclusion;
+import org.optaplanner.core.api.solver.Solver;
+import org.optaplanner.core.api.solver.SolverFactory;
 
 @Path("/{conferenceId}/schedule")
 public class ScheduleService {
@@ -22,6 +24,9 @@ public class ScheduleService {
 
     @Inject
     private DevoxxImporter devoxxImporter;
+
+    @Inject
+    private SolverFactory solverFactory;
 
     @GET // TODO should be post
     @Path("/import/devoxx")
@@ -33,6 +38,16 @@ public class ScheduleService {
                 + schedule.getTimeslotList().size() + " timeslots, "
                 + schedule.getRoomList().size() + " rooms, "
                 + schedule.getTalkList().size() + " talks imported successfully.";
+    }
+
+    @GET // TODO should be post
+    @Path("/solve")
+    @Produces("application/json")
+    public String solveSchedule(@PathParam("conferenceId") Long conferenceId) {
+        Solver solver = solverFactory.buildSolver();
+        solver.solve(scheduleManager.getSchedule());
+        scheduleManager.setSchedule((Schedule) solver.getBestSolution());
+        return "Solved successfully. Sorry it took 20 seconds to respond."; // TODO go async
     }
 
 }

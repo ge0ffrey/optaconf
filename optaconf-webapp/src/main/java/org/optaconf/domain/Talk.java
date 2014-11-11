@@ -1,5 +1,9 @@
 package org.optaconf.domain;
 
+import org.optaplanner.core.api.domain.entity.PlanningEntity;
+import org.optaplanner.core.api.domain.variable.PlanningVariable;
+
+@PlanningEntity
 public class Talk extends AbstractPersistable {
 
     private String title;
@@ -23,6 +27,7 @@ public class Talk extends AbstractPersistable {
         this.title = title;
     }
 
+    @PlanningVariable(valueRangeProviderRefs = {"timeslotRange"})
     public Timeslot getTimeslot() {
         return timeslot;
     }
@@ -31,6 +36,7 @@ public class Talk extends AbstractPersistable {
         this.timeslot = timeslot;
     }
 
+    @PlanningVariable(valueRangeProviderRefs = {"roomRange"})
     public Room getRoom() {
         return room;
     }
