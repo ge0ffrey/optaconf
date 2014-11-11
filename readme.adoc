@@ -11,3 +11,7 @@ Filtered lists:
 
 * All timeslots of 1 day: http://localhost:8080/optaconf-webapp/rest/123/day/1/timeslot
 * All talk exclusions of 1 talk: http://localhost:8080/optaconf-webapp/rest/123/talk/1/exclusion
+
+Import a schedule:
+
+* A Devoxx schedule: http://localhost:8080/optaconf-webapp/rest/123/schedule/import/devoxx
