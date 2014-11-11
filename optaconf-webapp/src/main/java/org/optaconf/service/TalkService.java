@@ -11,15 +11,15 @@ import org.optaconf.domain.Talk;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Path("/")
+@Path("/talks")
 public class TalkService {
 
     private final static Logger logger = LoggerFactory.getLogger(TalkService.class);
 
     @GET
-    @Path("/json/{name}")
+    @Path("/{conferenceId}")
     @Produces("application/json")
-    public List<Talk> getTalkList() {
+    public List<Talk> getTalkList(@PathParam("conferenceId") Long conferenceId) {
         List<Talk> talkList = new ArrayList<Talk>();
         talkList.add(new Talk(1L, "Talk 1"));
         talkList.add(new Talk(2L, "Talk 2"));
