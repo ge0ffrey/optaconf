@@ -37,6 +37,7 @@
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li ui-route="#/" ng-class="{active: $uiRoute}"><a ui-route href="#/">Home</a></li>
+                <li ui-route="#/schedule" ng-class="{ active: $uiRoute}"><a ui-route href="#/schedule">Schedule</a></li>
                 <li ui-route="#/talks" ng-class="{ active: $uiRoute}"><a ui-route href="#/talks">Talks</a></li>
                 <li ui-route="#/rooms" ng-class="{ active: $uiRoute}"><a ui-route href="#/rooms">Rooms</a></li>
             </ul>
@@ -45,15 +46,9 @@
 </nav>
 
 <div class="container theme-showcase" role="main">
-
     <div ng-view></div>
+</div>
 
-
-</div> <!-- /container -->
-
-
-<!-- Bootstrap core JavaScript
-================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="bower_components/angular/angular.js"></script>
 <script src="bower_components/angular-resource/angular-resource.js"></script>
@@ -64,11 +59,7 @@
 <script src="src/app.js"></script>
 <script src="src/dashboard/dashboard.js"></script>
 <script src="src/rooms/rooms.js"></script>
+<script src="src/schedule/schedule.js"></script>
 <script src="src/talks/talks.js"></script>
-<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>-->
-<!--<script src="../../dist/js/bootstrap.min.js"></script>-->
-<!--<script src="../../assets/js/docs.min.js"></script>-->
-<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-<!--<script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>-->
 </body>
 </html>

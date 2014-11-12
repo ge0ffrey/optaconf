@@ -1,0 +1,25 @@
+<div class="page-header">
+    <h1>{{vm.title}}</h1>
+</div>
+<div class="row">
+
+    <div class="col-md-12">
+        <tabset>
+            <tab ng-repeat="day in vm.days" heading="{{day.name}}" active="tab.active" disabled="tab.disabled" select="vm.dayChanged(day)">
+                <table class="table table-striped">
+                    <tr>
+                        <th>&nbsp;</th>
+                        <th ng-repeat="r in vm.rooms">
+                            {{r.name}}
+                        </th>
+                    </tr>
+                    <tr ng-repeat="t in vm.timeslots">
+                        <td>{{t.name}}</td>
+                        <td ng-repeat="r in vm.rooms"></td>
+                    </tr>
+                </table>
+            </tab>
+        </tabset>
+    </div>
+
+</div>
