@@ -14,6 +14,7 @@ import org.optaconf.domain.Talk;
 import org.optaconf.domain.TalkExclusion;
 import org.optaconf.domain.TalkExclusionType;
 import org.optaconf.domain.Timeslot;
+import org.optaconf.domain.Track;
 
 @ApplicationScoped
 public class DummyScheduleProducer implements Serializable {
@@ -42,20 +43,27 @@ public class DummyScheduleProducer implements Serializable {
         roomList.add(new Room("3", "Room C", 80));
         schedule.setRoomList(roomList);
 
+        List<Track> trackList = new ArrayList<Track>();
+        Track jseTrack = new Track("JSE", "Standard Java");
+        trackList.add(jseTrack);
+        Track jeeTrack = new Track("JEE", "Enterprise Java");
+        trackList.add(jeeTrack);
+        schedule.setTrackList(trackList);
+
         List<Talk> talkList = new ArrayList<Talk>();
-        Talk talk1 = new Talk("1", "T1 JEE Basic");
+        Talk talk1 = new Talk("1", "T1 JEE Basic", jeeTrack);
         talkList.add(talk1);
-        Talk talk2 = new Talk("2", "T2 Security");
+        Talk talk2 = new Talk("2", "T2 Security", jseTrack);
         talkList.add(talk2);
-        Talk talk3 = new Talk("3", "T3 WildFly");
+        Talk talk3 = new Talk("3", "T3 WildFly", jeeTrack);
         talkList.add(talk3);
-        Talk talk4 = new Talk("4", "T4 JEE Expert");
+        Talk talk4 = new Talk("4", "T4 JEE Expert", jeeTrack);
         talkList.add(talk4);
-        Talk talk5 = new Talk("5", "T5 Lambda part 1");
+        Talk talk5 = new Talk("5", "T5 Lambda part 1", jseTrack);
         talkList.add(talk5);
-        Talk talk6 = new Talk("6", "T6 Lambda part 2");
+        Talk talk6 = new Talk("6", "T6 Lambda part 2", jseTrack);
         talkList.add(talk6);
-        Talk talk7 = new Talk("7", "T7 Glassfish");
+        Talk talk7 = new Talk("7", "T7 Glassfish", jeeTrack);
         talkList.add(talk7);
         schedule.setTalkList(talkList);
 

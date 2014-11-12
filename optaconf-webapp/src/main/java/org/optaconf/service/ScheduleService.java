@@ -45,6 +45,7 @@ public class ScheduleService {
         return "Devoxx schedule with " + schedule.getDayList().size() + " days, "
                 + schedule.getTimeslotList().size() + " timeslots, "
                 + schedule.getRoomList().size() + " rooms, "
+                + schedule.getTrackList().size() + " tracks, "
                 + schedule.getTalkList().size() + " talks imported successfully.";
     }
 

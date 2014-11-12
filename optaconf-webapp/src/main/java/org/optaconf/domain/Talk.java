@@ -7,6 +7,7 @@ import org.optaplanner.core.api.domain.variable.PlanningVariable;
 public class Talk extends AbstractPersistable {
 
     private String title;
+    private Track track;
 
     private Timeslot timeslot;
     private Room room;
@@ -14,9 +15,10 @@ public class Talk extends AbstractPersistable {
     public Talk() {
     }
 
-    public Talk(String id, String title) {
+    public Talk(String id, String title, Track track) {
         super(id);
         this.title = title;
+        this.track = track;
     }
 
     public String getTitle() {
@@ -25,6 +27,14 @@ public class Talk extends AbstractPersistable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Track getTrack() {
+        return track;
+    }
+
+    public void setTrack(Track track) {
+        this.track = track;
     }
 
     @PlanningVariable(valueRangeProviderRefs = {"timeslotRange"})
