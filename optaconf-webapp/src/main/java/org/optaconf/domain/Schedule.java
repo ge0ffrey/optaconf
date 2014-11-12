@@ -14,11 +14,12 @@ import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
 @PlanningSolution
 public class Schedule extends AbstractPersistable implements Solution<HardSoftScore> {
 
-    private List<Day> dayList;
-    private List<Timeslot> timeslotList;
-    private List<Room> roomList;
-    private List<Talk> talkList;
-    private List<TalkExclusion> talkExclusionList;
+    private List<Day> dayList = new ArrayList<Day>();
+    private List<Timeslot> timeslotList = new ArrayList<Timeslot>();
+    private List<Room> roomList = new ArrayList<Room>();
+    private List<Track> trackList = new ArrayList<Track>();
+    private List<Talk> talkList = new ArrayList<Talk>();
+    private List<TalkExclusion> talkExclusionList = new ArrayList<TalkExclusion>();
 
     private HardSoftScore score;
 
@@ -53,6 +54,14 @@ public class Schedule extends AbstractPersistable implements Solution<HardSoftSc
 
     public void setRoomList(List<Room> roomList) {
         this.roomList = roomList;
+    }
+
+    public List<Track> getTrackList() {
+        return trackList;
+    }
+
+    public void setTrackList(List<Track> trackList) {
+        this.trackList = trackList;
     }
 
     @PlanningEntityCollectionProperty

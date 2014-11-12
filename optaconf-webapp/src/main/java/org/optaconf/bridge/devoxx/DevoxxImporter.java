@@ -25,6 +25,7 @@ import org.optaconf.domain.Schedule;
 import org.optaconf.domain.Talk;
 import org.optaconf.domain.TalkExclusion;
 import org.optaconf.domain.Timeslot;
+import org.optaconf.domain.Track;
 
 @ApplicationScoped
 public class DevoxxImporter {
@@ -33,14 +34,25 @@ public class DevoxxImporter {
 
     public Schedule importSchedule() {
         Schedule schedule = new Schedule();
-        schedule.setDayList(new ArrayList<Day>());
-        schedule.setTimeslotList(new ArrayList<Timeslot>());
-        schedule.setRoomList(new ArrayList<Room>());
-        schedule.setTalkList(new ArrayList<Talk>());
-        schedule.setTalkExclusionList(new ArrayList<TalkExclusion>());
+        Map<String, Track> titleToTrackMap = mapTracks(schedule);
         Map<String, Room> roomMap = mapRooms(schedule);
-        mapDays(schedule, roomMap);
+        mapDays(schedule, titleToTrackMap, roomMap);
         return schedule;
+    }
+
+    private Map<String, Track> mapTracks(Schedule schedule) {
+        Map<String, Track> titleToTrackMap = new HashMap<String, Track>();
+        JsonObject rootObject = readJsonObject(REST_URL_ROOT + "/tracks");
+        JsonArray array = rootObject.getJsonArray("tracks");
+        for (int i = 0; i < array.size(); i++) {
+            JsonObject dTrack = array.getJsonObject(i);
+            String id = dTrack.getString("id");
+            String title = dTrack.getString("title");
+            Track track = new Track(id, title);
+            schedule.getTrackList().add(track);
+            titleToTrackMap.put(title, track);
+        }
+        return titleToTrackMap;
     }
 
     private Map<String, Room> mapRooms(Schedule schedule) {
@@ -63,7 +75,7 @@ public class DevoxxImporter {
         return roomMap;
     }
 
-    private void mapDays(Schedule schedule, Map<String, Room> roomMap) {
+    private void mapDays(Schedule schedule, Map<String, Track> titleToTrackMap, Map<String, Room> roomMap) {
         JsonObject rootObject = readJsonObject(REST_URL_ROOT + "/schedules");
         JsonArray array = rootObject.getJsonArray("links");
         Pattern dTitlePattern = Pattern.compile("Schedule for (\\w+) (\\d+.*\\d{4})");
@@ -80,11 +92,11 @@ public class DevoxxImporter {
             String date = dTitleMatcher.group(2);
             Day day = new Day(dHref.replaceAll(".*\\/(.*)/", "$1"), name, date);
             schedule.getDayList().add(day);
-            mapTalks(schedule, roomMap, dHref, day);
+            mapTalks(schedule, titleToTrackMap, roomMap, dHref, day);
         }
     }
 
-    private void mapTalks(Schedule schedule, Map<String, Room> roomMap, String dayUrl, Day day) {
+    private void mapTalks(Schedule schedule, Map<String, Track> titleToTrackMap, Map<String, Room> roomMap, String dayUrl, Day day) {
         Map<String, Timeslot> timeslotMap = new HashMap<String, Timeslot>();
         JsonObject rootObject = readJsonObject(dayUrl);
         JsonArray array = rootObject.getJsonArray("slots");
@@ -100,7 +112,17 @@ public class DevoxxImporter {
             }
             String id = dTalk.getString("id");
             String title = dTalk.getString("title");
-            Talk talk = new Talk(id, title);
+            String trackTitle = dTalk.getString("track");
+            // Workaround to a bug in the Devoxx REST API, because "Startups" doesn't exist as a track id or title
+            if (trackTitle.equalsIgnoreCase("Startups")) {
+                trackTitle = "Startup and entrepreneurship";
+            }
+            Track track = titleToTrackMap.get(trackTitle);
+            if (track == null) {
+                throw new IllegalArgumentException("The trackTitle (" + trackTitle
+                        + ") is not part of the titleToTrackMap (" + titleToTrackMap + ").");
+            }
+            Talk talk = new Talk(id, title, track);
             schedule.getTalkList().add(talk);
 
             String roomId = dSlot.getString("roomId");
