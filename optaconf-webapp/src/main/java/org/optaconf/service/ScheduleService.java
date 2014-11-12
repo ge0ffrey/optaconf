@@ -46,6 +46,7 @@ public class ScheduleService {
                 + schedule.getTimeslotList().size() + " timeslots, "
                 + schedule.getRoomList().size() + " rooms, "
                 + schedule.getTrackList().size() + " tracks, "
+                + schedule.getSpeakerList().size() + " speakers, "
                 + schedule.getTalkList().size() + " talks imported successfully.";
     }
 

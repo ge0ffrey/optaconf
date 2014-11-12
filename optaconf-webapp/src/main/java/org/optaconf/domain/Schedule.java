@@ -18,6 +18,7 @@ public class Schedule extends AbstractPersistable implements Solution<HardSoftSc
     private List<Timeslot> timeslotList = new ArrayList<Timeslot>();
     private List<Room> roomList = new ArrayList<Room>();
     private List<Track> trackList = new ArrayList<Track>();
+    private List<Speaker> speakerList = new ArrayList<Speaker>();
     private List<Talk> talkList = new ArrayList<Talk>();
     private List<TalkExclusion> talkExclusionList = new ArrayList<TalkExclusion>();
 
@@ -64,6 +65,14 @@ public class Schedule extends AbstractPersistable implements Solution<HardSoftSc
         this.trackList = trackList;
     }
 
+    public List<Speaker> getSpeakerList() {
+        return speakerList;
+    }
+
+    public void setSpeakerList(List<Speaker> speakerList) {
+        this.speakerList = speakerList;
+    }
+
     @PlanningEntityCollectionProperty
     public List<Talk> getTalkList() {
         return talkList;
@@ -95,6 +104,8 @@ public class Schedule extends AbstractPersistable implements Solution<HardSoftSc
         facts.addAll(dayList);
         facts.addAll(timeslotList);
         facts.addAll(roomList);
+        facts.addAll(trackList);
+        facts.addAll(speakerList);
         facts.addAll(talkList);
         facts.addAll(talkExclusionList);
         // Do not add the planning entity's (processList) because that will be done automatically

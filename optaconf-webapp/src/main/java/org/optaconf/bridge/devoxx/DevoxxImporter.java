@@ -35,6 +35,7 @@ public class DevoxxImporter {
     public Schedule importSchedule() {
         Schedule schedule = new Schedule();
         Map<String, Track> titleToTrackMap = mapTracks(schedule);
+        mapSpeakers(schedule);
         Map<String, Room> roomMap = mapRooms(schedule);
         mapDays(schedule, titleToTrackMap, roomMap);
         return schedule;
@@ -53,6 +54,19 @@ public class DevoxxImporter {
             titleToTrackMap.put(title, track);
         }
         return titleToTrackMap;
+    }
+
+    private void mapSpeakers(Schedule schedule) {
+        JsonArray array = readJsonArray(REST_URL_ROOT + "/speakers");
+        for (int i = 0; i < array.size(); i++) {
+            JsonObject dSpeaker = array.getJsonObject(i);
+            String id = dSpeaker.getString("uuid");
+            String firstName = dSpeaker.getString("firstName");
+            String lastName = dSpeaker.getString("lastName");
+            String name = firstName + " " + lastName;
+            Track track = new Track(id, name);
+            schedule.getTrackList().add(track);
+        }
     }
 
     private Map<String, Room> mapRooms(Schedule schedule) {
@@ -148,6 +162,21 @@ public class DevoxxImporter {
             schedulesIn = new URL(url).openConnection().getInputStream();
             JsonReader jsonReader = Json.createReader(schedulesIn);
             return jsonReader.readObject();
+        } catch (MalformedURLException e) {
+            throw new IllegalStateException("Import from Devoxx CFP failed on URL (" + url + ").", e);
+        } catch (IOException e) {
+            throw new IllegalStateException("Import from Devoxx CFP failed on URL (" + url + ").", e);
+        } finally {
+            IOUtils.closeQuietly(schedulesIn);
+        }
+    }
+
+    private JsonArray readJsonArray(String url) {
+        InputStream schedulesIn = null;
+        try {
+            schedulesIn = new URL(url).openConnection().getInputStream();
+            JsonReader jsonReader = Json.createReader(schedulesIn);
+            return jsonReader.readArray();
         } catch (MalformedURLException e) {
             throw new IllegalStateException("Import from Devoxx CFP failed on URL (" + url + ").", e);
         } catch (IOException e) {
