@@ -1,11 +1,15 @@
 angular.module('talks', [])
-    .controller('TalkCtrl', ['$resource', function($resource) {
+    .controller('TalkCtrl', ['Talk', function(Talk) {
         var vm = this;
         vm.title = 'Talks';
         vm.talks = [];
 
-        var talkResource = $resource("http://localhost:8080/optaconf-webapp/rest/123/talk");
-        talkResource.query(function(talks) {
+        Talk.query(function(talks) {
             vm.talks = talks;
         });
+    }])
+    .factory('Talk', ['$resource', '$window', function($resource, $window) {
+        var contextPath = $window.location.pathname.substr(1).split('/')[0];
+
+        return $resource("http://localhost:8080/" + contextPath + "/rest/123/talk");
     }]);
