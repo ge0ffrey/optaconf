@@ -1,4 +1,4 @@
-var app = angular.module('optaconf', ['ngResource', 'ngRoute', 'dashboard', 'rooms', 'talks']);
+var app = angular.module('optaconf', ['ngResource', 'ngRoute', 'ui.utils', 'dashboard', 'rooms', 'talks']);
 
 app.config(["$routeProvider", function($routeProvider) {
     $routeProvider.

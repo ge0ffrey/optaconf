@@ -36,11 +36,11 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Home</a></li>
-                <li><a href="#/talks">Talks</a></li>
-                <li><a href="#/rooms">Rooms</a></li>
+                <li ui-route="#/" ng-class="{active: $uiRoute}"><a ui-route href="#/">Home</a></li>
+                <li ui-route="#/talks" ng-class="{ active: $uiRoute}"><a ui-route href="#/talks">Talks</a></li>
+                <li ui-route="#/rooms" ng-class="{ active: $uiRoute}"><a ui-route href="#/rooms">Rooms</a></li>
             </ul>
-        </div><!--/.nav-collapse -->
+        </div>
     </div>
 </nav>
 
@@ -59,6 +59,7 @@
 <script src="bower_components/angular-resource/angular-resource.js"></script>
 <script src="bower_components/angular-route/angular-route.js"></script>
 <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+<script src="bower_components/angular-ui-utils/ui-utils.js"></script>
 
 <script src="src/app.js"></script>
 <script src="src/dashboard/dashboard.js"></script>
