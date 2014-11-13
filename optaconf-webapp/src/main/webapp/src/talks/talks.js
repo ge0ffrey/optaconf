@@ -2,35 +2,26 @@ angular.module('talks', [])
     .controller('TalkCtrl', ['Talk', '$log','TalkService','$q', function(Talk, $log, TalkService, $q) {
         var vm = this;
         vm.title = 'Talks';
-        vm.talks = [];
-        vm.schedule = [];
-        TalkService.getDays()
-            .then(function(result) {
-                var days = result.data;
-                _.forEach(days, function(d) {
-                    var day = {
-                        name: d.name
-                    };
-                    days.push(day);
-                    var timeslotsPromises = [];
-                    timeslotsPromises.push($q(function(success, reject) {
-                        return TalkService.getTimeslotsForDay(d).then(function(result) {
-                            day.timeslots = result.data;
-                            success(day);
-                        }, reject);
-                    }));
-                    $q.all(timeslotsPromises).then(function(timeslots) {
-                        $log.debug(timeslots);
-                    });
-                });
-                vm.days = days;
 
+        TalkService.getRooms().then(function(result) {
+            var rooms = result.data;
+            vm.rooms = rooms;
+            TalkService.getMap().then(function(map) {
+                var schedule = map.data;
+                vm.schedule = map.data;
             });
+        });
 
     }])
     .factory('TalkService', function($http, $window) {
         var contextPath = $window.location.pathname.substr(1).split('/')[0];
         return {
+            getMap: function() {
+                return $http.get('rest/123/talk/map');
+            },
+            getRooms: function() {
+                return $http.get('rest/123/room');
+            },
             getDayTalks: function(day) {
                 return $http.get('rest/123/day/'+day.id+'/talk');
             },

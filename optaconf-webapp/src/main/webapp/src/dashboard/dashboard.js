@@ -1,12 +1,12 @@
 angular.module('dashboard', [])
-    .controller('DashboardCtrl', ['Schedule', function(Schedule) {
+    .controller('DashboardCtrl', ['ScheduleImport', 'ScheduleSolve', function(ScheduleImport, ScheduleSolve) {
         var vm = this;
         vm.title = 'Dashboard';
         vm.isSolving = false;
 
         vm.import = function() {
             console.log("Importing devoxx schedule...");
-            Schedule.import(function() {
+            ScheduleImport.import(function() {
                 console.log('imported devoxx schedule!');
             });
         };
@@ -14,7 +14,7 @@ angular.module('dashboard', [])
         vm.solve = function() {
             console.log("Solving schedule...");
             vm.isSolving = true;
-            Schedule.solve(function() {
+            ScheduleSolve.solve(function() {
                 console.log("solved devoxx schedule!");
             });
         };
