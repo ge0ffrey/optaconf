@@ -1,7 +1,7 @@
 <div class="page-header">
     <h1>{{vm.title}}</h1>
 </div>
-<div class="row">
+<div class="row" data-ng-repeat="day in vm.days">
 
     <div class="col-md-12">
         <table class="table table-striped">
@@ -12,9 +12,9 @@
                 </tr>
             </thead>
             <tbody>
-                <tr data-ng-repeat="timeslot in vm.timeslots">
-                    <td>{{timeslot.name}}</td>
-                    <td></td>
+                <tr data-ng-repeat="(key, value) in day.timeslots">
+                    <td>{{key}}</td><td>{{value}}</td>
+                    <td data-ng-repeat="(k,v) in value">{{v}}</td>
                 </tr>
             </tbody>
         </table>

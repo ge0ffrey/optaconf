@@ -3,38 +3,36 @@ angular.module('talks', [])
         var vm = this;
         vm.title = 'Talks';
         vm.talks = [];
-
-        var promises = [];
+        vm.schedule = [];
         TalkService.getDays()
-            .then(function(days) {
-                vm.days = days;
-                _.forEach(days, function(day) {
-                    promises.push($q(function(success, reject) {
-                        return TalkService.getDayTalks(day);
+            .then(function(result) {
+                var days = result.data;
+                _.forEach(days, function(d) {
+                    var day = {
+                        name: d.name
+                    };
+                    days.push(day);
+                    var timeslotsPromises = [];
+                    timeslotsPromises.push($q(function(success, reject) {
+                        return TalkService.getTimeslotsForDay(d).then(function(result) {
+                            day.timeslots = result.data;
+                            success(day);
+                        }, reject);
                     }));
-                    promises.push($q(function(success, reject) {
-                        return TalkService.getTimeslotsForDay(day);
-                    }));
+                    $q.all(timeslotsPromises).then(function(timeslots) {
+                        $log.debug(timeslots);
+                    });
                 });
-                $q.all(promises).then(function(results) {
-                    $log.debug(results);
-                })
+                vm.days = days;
+
             });
 
-        Talk.query(function(talks) {
-            vm.talks = talks;
-            vm.rooms = [{
-                key:'room1',
-                value:'Room 1'
-            }, {name:'Room 2'}, {name:'Room 3'}, {name:'Room 4'}];
-            vm.timeslots = [{name:'12:00 - 12:50'}, {name:'13:00 - 13:50'}, {name:'14:00 - 14:50'}, {name:'15:00 - 15:50'}];
-        });
     }])
     .factory('TalkService', function($http, $window) {
         var contextPath = $window.location.pathname.substr(1).split('/')[0];
         return {
             getDayTalks: function(day) {
-                return $http.get('rest/123/'+day.id+'/talk');
+                return $http.get('rest/123/day/'+day.id+'/talk');
             },
             getDays: function() {
                 return $http.get('rest/123/day')
