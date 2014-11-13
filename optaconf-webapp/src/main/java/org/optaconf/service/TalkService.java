@@ -43,7 +43,11 @@ public class TalkService {
         }
         for (Timeslot timeslot : schedule.getTimeslotList()) {
             Day day = timeslot.getDay();
-            dayTimeslotRoomToTalkMap.get(day.getId()).put(timeslot.getId(), new LinkedHashMap<String, Talk>());
+            LinkedHashMap<String, Talk> roomToTalkMap = new LinkedHashMap<String, Talk>();
+            dayTimeslotRoomToTalkMap.get(day.getId()).put(timeslot.getId(), roomToTalkMap);
+            for (Room room : schedule.getRoomList()) {
+                roomToTalkMap.put(room.getId(), null);
+            }
         }
         for (Talk talk : schedule.getTalkList()) {
             Timeslot timeslot = talk.getTimeslot();
