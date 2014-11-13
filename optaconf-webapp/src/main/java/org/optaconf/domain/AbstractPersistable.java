@@ -21,7 +21,7 @@ import java.io.Serializable;
 import org.apache.commons.lang.builder.CompareToBuilder;
 import org.optaplanner.core.api.score.constraint.ConstraintMatch;
 
-public abstract class AbstractPersistable implements Serializable, Comparable<AbstractPersistable> {
+public abstract class AbstractPersistable implements Serializable {
 
     protected String id;
 
@@ -38,18 +38,6 @@ public abstract class AbstractPersistable implements Serializable, Comparable<Ab
 
     public void setId(String id) {
         this.id = id;
-    }
-    /**
-     * Used by the GUI to sort the {@link ConstraintMatch} list
-     * by {@link ConstraintMatch#getJustificationList()}.
-     * @param other never null
-     * @return comparison
-     */
-    public int compareTo(AbstractPersistable other) {
-        return new CompareToBuilder()
-                .append(getClass().getName(), other.getClass().getName())
-                .append(id, other.id)
-                .toComparison();
     }
 
     public String toString() {

@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -74,6 +76,7 @@ public class DevoxxImporter {
             schedule.getSpeakerList().add(speaker);
             speakerMap.put(id, speaker);
         }
+        Collections.sort(schedule.getSpeakerList());
         return speakerMap;
     }
 
@@ -94,6 +97,7 @@ public class DevoxxImporter {
             schedule.getRoomList().add(room);
             roomMap.put(id, room);
         }
+        Collections.sort(schedule.getRoomList());
         return roomMap;
     }
 
@@ -116,6 +120,7 @@ public class DevoxxImporter {
             schedule.getDayList().add(day);
             mapTalks(schedule, titleToTrackMap, speakerMap, roomMap, dHref, day);
         }
+        Collections.sort(schedule.getDayList());
     }
 
     private void mapTalks(Schedule schedule, Map<String, Track> titleToTrackMap, Map<String, Speaker> speakerMap, Map<String, Room> roomMap, String dayUrl, Day day) {
@@ -178,6 +183,7 @@ public class DevoxxImporter {
             }
             talk.setTimeslot(timeslot);
         }
+        Collections.sort(schedule.getTimeslotList());
     }
 
     private JsonObject readJsonObject(String url) {

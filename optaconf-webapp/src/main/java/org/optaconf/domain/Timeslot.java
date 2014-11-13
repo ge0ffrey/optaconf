@@ -1,6 +1,8 @@
 package org.optaconf.domain;
 
-public class Timeslot extends AbstractPersistable {
+import org.apache.commons.lang.builder.CompareToBuilder;
+
+public class Timeslot extends AbstractPersistable implements Comparable<Timeslot> {
 
     private String name;
     private Day day;
@@ -49,4 +51,14 @@ public class Timeslot extends AbstractPersistable {
     public void setToTime(String toTime) {
         this.toTime = toTime;
     }
+
+    @Override
+    public int compareTo(Timeslot other) {
+        return new CompareToBuilder()
+                .append(day, other.day)
+                .append(fromTime, other.fromTime)
+                .append(toTime, other.toTime)
+                .toComparison();
+    }
+
 }
