@@ -1,6 +1,8 @@
 package org.optaconf.domain;
 
-public class Room extends AbstractPersistable {
+import org.apache.commons.lang.builder.CompareToBuilder;
+
+public class Room extends AbstractPersistable implements Comparable<Room> {
 
     private String name;
     private int seatingCapacity;
@@ -28,6 +30,14 @@ public class Room extends AbstractPersistable {
 
     public void setSeatingCapacity(int seatingCapacity) {
         this.seatingCapacity = seatingCapacity;
+    }
+
+    @Override
+    public int compareTo(Room other) {
+        return new CompareToBuilder()
+                .append(name, other.name)
+                .append(other.seatingCapacity, seatingCapacity)
+                .toComparison();
     }
 
 }

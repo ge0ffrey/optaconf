@@ -1,6 +1,6 @@
 package org.optaconf.domain;
 
-public class Day extends AbstractPersistable {
+public class Day extends AbstractPersistable implements Comparable<Day> {
 
     private String name;
     private String date;
@@ -28,6 +28,11 @@ public class Day extends AbstractPersistable {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    @Override
+    public int compareTo(Day other) {
+        return date.compareTo(other.date);
     }
 
 }
