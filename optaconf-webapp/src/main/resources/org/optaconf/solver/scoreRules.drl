@@ -17,24 +17,40 @@ global HardSoftScoreHolder scoreHolder;
 // Hard constraints
 // ############################################################################
 
-rule "talkExclusionHard"
+rule "roomConflict"
     when
-        TalkExclusion(type == TalkExclusionType.HARD_CONFLICT, $t1 : firstTalk, $t2 : secondTalk)
-        Talk(this == $t1, $ts : timeslot, $r : room)
-        Talk(this == $t2, timeslot == $ts, room == $r)
+        Talk($id: id, $room : room, $timeslot : timeslot)
+        Talk(id > $id, room == $room, timeslot == $timeslot)
     then
         scoreHolder.addHardConstraintMatch(kcontext, -1);
 end
+
+//rule "talkExclusionHard"
+//    when
+//        TalkExclusion(type == TalkExclusionType.HARD_CONFLICT, $t1 : firstTalk, $t2 : secondTalk)
+//        Talk(this == $t1, $ts : timeslot, $r : room)
+//        Talk(this == $t2, timeslot == $ts, room == $r)
+//    then
+//        scoreHolder.addHardConstraintMatch(kcontext, -1);
+//end
 
 // ############################################################################
 // Soft constraints
 // ############################################################################
 
-rule "talkExclusionSoft"
+//rule "talkExclusionSoft"
+//    when
+//        TalkExclusion(type == TalkExclusionType.SOFT_CONFLICT, $t1 : firstTalk, $t2 : secondTalk)
+//        Talk(this == $t1, $ts : timeslot, $r : room)
+//        Talk(this == $t2, timeslot == $ts, room == $r)
+//    then
+//        scoreHolder.addSoftConstraintMatch(kcontext, -1);
+//end
+
+rule "trackConflict"
     when
-        TalkExclusion(type == TalkExclusionType.SOFT_CONFLICT, $t1 : firstTalk, $t2 : secondTalk)
-        Talk(this == $t1, $ts : timeslot, $r : room)
-        Talk(this == $t2, timeslot == $ts, room == $r)
+        Talk($id: id, $track : track, $timeslot : timeslot)
+        Talk(id > $id, track == $track, timeslot == $timeslot)
     then
         scoreHolder.addSoftConstraintMatch(kcontext, -1);
 end

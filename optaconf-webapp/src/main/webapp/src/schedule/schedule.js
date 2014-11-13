@@ -43,7 +43,13 @@ angular.module('schedule', [])
                 method: 'GET',
                 responseType: 'text',
                 transformResponse: []
-            },
+            }
+        });
+    }])
+    .factory('Schedule', ['$resource', '$window', function($resource, $window) {
+        var contextPath = $window.location.pathname.substr(1).split('/')[0];
+
+        return $resource("http://localhost:8080/" + contextPath + "/rest/123/schedule/solve", null, {
             'solve': {
                 method: 'GET',
                 responseType: 'text',
