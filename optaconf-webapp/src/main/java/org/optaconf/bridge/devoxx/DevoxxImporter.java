@@ -5,9 +5,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -16,18 +14,16 @@ import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
-import javax.json.JsonValue;
-import javax.json.stream.JsonParser;
 
 import org.apache.commons.io.IOUtils;
 import org.optaconf.domain.Day;
 import org.optaconf.domain.Room;
 import org.optaconf.domain.Schedule;
-import org.optaconf.domain.Speaker;
+import org.optaconf.domain.speaker.Speaker;
 import org.optaconf.domain.Talk;
-import org.optaconf.domain.TalkExclusion;
 import org.optaconf.domain.Timeslot;
 import org.optaconf.domain.Track;
+import org.optaconf.util.TangoColorFactory;
 
 @ApplicationScoped
 public class DevoxxImporter {
@@ -47,11 +43,13 @@ public class DevoxxImporter {
         Map<String, Track> titleToTrackMap = new HashMap<String, Track>();
         JsonObject rootObject = readJsonObject(REST_URL_ROOT + "/tracks");
         JsonArray array = rootObject.getJsonArray("tracks");
+        TangoColorFactory tangoColorFactory = new TangoColorFactory();
         for (int i = 0; i < array.size(); i++) {
             JsonObject dTrack = array.getJsonObject(i);
             String id = dTrack.getString("id");
             String title = dTrack.getString("title");
-            Track track = new Track(id, title);
+            String colorHex = tangoColorFactory.pickColorHex(id);
+            Track track = new Track(id, title, colorHex);
             schedule.getTrackList().add(track);
             titleToTrackMap.put(title, track);
         }

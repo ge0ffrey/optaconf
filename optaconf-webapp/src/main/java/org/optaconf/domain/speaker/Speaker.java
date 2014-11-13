@@ -1,4 +1,6 @@
-package org.optaconf.domain;
+package org.optaconf.domain.speaker;
+
+import org.optaconf.domain.AbstractPersistable;
 
 public class Speaker extends AbstractPersistable {
 

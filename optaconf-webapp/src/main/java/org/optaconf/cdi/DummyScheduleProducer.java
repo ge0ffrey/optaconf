@@ -15,6 +15,7 @@ import org.optaconf.domain.TalkExclusion;
 import org.optaconf.domain.TalkExclusionType;
 import org.optaconf.domain.Timeslot;
 import org.optaconf.domain.Track;
+import org.optaconf.util.TangoColorFactory;
 
 @ApplicationScoped
 public class DummyScheduleProducer implements Serializable {
@@ -43,10 +44,11 @@ public class DummyScheduleProducer implements Serializable {
         roomList.add(new Room("3", "Room C", 80));
         schedule.setRoomList(roomList);
 
+        TangoColorFactory tangoColorFactory = new TangoColorFactory();
         List<Track> trackList = new ArrayList<Track>();
-        Track jseTrack = new Track("JSE", "Standard Java");
+        Track jseTrack = new Track("JSE", "Standard Java", tangoColorFactory.pickColorHex("JSE"));
         trackList.add(jseTrack);
-        Track jeeTrack = new Track("JEE", "Enterprise Java");
+        Track jeeTrack = new Track("JEE", "Enterprise Java", tangoColorFactory.pickColorHex("JEE"));
         trackList.add(jeeTrack);
         schedule.setTrackList(trackList);
 

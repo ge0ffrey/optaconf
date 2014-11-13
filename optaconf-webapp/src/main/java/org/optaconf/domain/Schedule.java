@@ -3,8 +3,8 @@ package org.optaconf.domain;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import javax.enterprise.inject.Vetoed;
 
+import org.optaconf.domain.speaker.Speaker;
 import org.optaplanner.core.api.domain.solution.PlanningEntityCollectionProperty;
 import org.optaplanner.core.api.domain.solution.PlanningSolution;
 import org.optaplanner.core.api.domain.solution.Solution;

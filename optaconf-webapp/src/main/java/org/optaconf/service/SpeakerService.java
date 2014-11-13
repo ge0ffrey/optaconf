@@ -9,8 +9,7 @@ import javax.ws.rs.Produces;
 
 import org.optaconf.cdi.ScheduleManager;
 import org.optaconf.domain.Schedule;
-import org.optaconf.domain.Speaker;
-import org.optaconf.domain.Track;
+import org.optaconf.domain.speaker.Speaker;
 
 @Path("/{conferenceId}/speaker")
 public class SpeakerService {
