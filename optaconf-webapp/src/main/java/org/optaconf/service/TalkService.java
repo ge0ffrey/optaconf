@@ -1,6 +1,7 @@
 package org.optaconf.service;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
@@ -10,6 +11,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 import org.optaconf.cdi.ScheduleManager;
+import org.optaconf.domain.Day;
 import org.optaconf.domain.Room;
 import org.optaconf.domain.Schedule;
 import org.optaconf.domain.Talk;
@@ -28,6 +30,28 @@ public class TalkService {
     public List<Talk> getTalkList(@PathParam("conferenceId") Long conferenceId) {
         Schedule schedule = scheduleManager.getSchedule();
         return schedule.getTalkList();
+    }
+
+    @GET
+    @Path("/map")
+    @Produces("application/json")
+    public Map<String, Map<String, Map<String, Talk>>> getDayTimeslotRoomToTalkMap(@PathParam("conferenceId") Long conferenceId) {
+        Schedule schedule = scheduleManager.getSchedule();
+        Map<String, Map<String, Map<String, Talk>>> dayTimeslotRoomToTalkMap = new LinkedHashMap<String, Map<String, Map<String, Talk>>>();
+        for (Day day : schedule.getDayList()) {
+            dayTimeslotRoomToTalkMap.put(day.getId(), new LinkedHashMap<String, Map<String, Talk>>());
+        }
+        for (Timeslot timeslot : schedule.getTimeslotList()) {
+            Day day = timeslot.getDay();
+            dayTimeslotRoomToTalkMap.get(day.getId()).put(timeslot.getId(), new LinkedHashMap<String, Talk>());
+        }
+        for (Talk talk : schedule.getTalkList()) {
+            Timeslot timeslot = talk.getTimeslot();
+            Day day = timeslot.getDay();
+            Room room = talk.getRoom();
+            dayTimeslotRoomToTalkMap.get(day.getId()).get(timeslot.getId()).put(room.getId(), talk);
+        }
+        return dayTimeslotRoomToTalkMap;
     }
 
     @GET
