@@ -51,13 +51,13 @@ public class DayService {
     @GET
     @Path("/{dayId}/talk")
     @Produces("application/json")
-    public Map<Timeslot, Map<Room, Talk>> getTimeslotRoomToTalkMap(@PathParam("conferenceId") Long conferenceId,
+    public Map<String, Map<String, Talk>> getTimeslotRoomToTalkMap(@PathParam("conferenceId") Long conferenceId,
             @PathParam("dayId") String dayId) {
         Schedule schedule = scheduleManager.getSchedule();
-        Map<Timeslot, Map<Room, Talk>> timeslotRoomToTalkMap = new LinkedHashMap<Timeslot, Map<Room, Talk>>();
+        Map<String, Map<String, Talk>> timeslotRoomToTalkMap = new LinkedHashMap<String, Map<String, Talk>>();
         List<Timeslot> timeslotList = getTimeslotList(conferenceId, dayId);
         for (Timeslot timeslot : timeslotList) {
-            Map<Room, Talk> roomToTalkMap = new LinkedHashMap<Room, Talk>();
+            Map<String, Talk> roomToTalkMap = new LinkedHashMap<String, Talk>();
             List<Room> roomList = schedule.getRoomList();
             for (Room room : roomList) {
                 Talk talk = null;
@@ -68,9 +68,9 @@ public class DayService {
                         break;
                     }
                 }
-                roomToTalkMap.put(room, talk);
+                roomToTalkMap.put(room.getId(), talk);
             }
-            timeslotRoomToTalkMap.put(timeslot, roomToTalkMap);
+            timeslotRoomToTalkMap.put(timeslot.getId(), roomToTalkMap);
         }
         return timeslotRoomToTalkMap;
     }
