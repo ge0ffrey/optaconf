@@ -8,6 +8,7 @@ import java.net.UnknownHostException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -47,7 +48,7 @@ public class DevoxxImporter {
     }
 
     private Map<String, Track> mapTracks(Schedule schedule) {
-        Map<String, Track> titleToTrackMap = new HashMap<String, Track>();
+        Map<String, Track> titleToTrackMap = new LinkedHashMap<String, Track>();
         JsonObject rootObject = readJsonObject(REST_URL_ROOT + "/tracks");
         JsonArray array = rootObject.getJsonArray("tracks");
         TangoColorFactory tangoColorFactory = new TangoColorFactory();
@@ -64,7 +65,7 @@ public class DevoxxImporter {
     }
 
     private Map<String, Speaker> mapSpeakers(Schedule schedule) {
-        Map<String, Speaker> speakerMap = new HashMap<String, Speaker>();
+        Map<String, Speaker> speakerMap = new LinkedHashMap<String, Speaker>();
         JsonArray array = readJsonArray(REST_URL_ROOT + "/speakers");
         for (int i = 0; i < array.size(); i++) {
             JsonObject dSpeaker = array.getJsonObject(i);
@@ -81,7 +82,7 @@ public class DevoxxImporter {
     }
 
     private Map<String, Room> mapRooms(Schedule schedule) {
-        Map<String, Room> roomMap = new HashMap<String, Room>();
+        Map<String, Room> roomMap = new LinkedHashMap<String, Room>();
         JsonObject rootObject = readJsonObject(REST_URL_ROOT + "/rooms");
         JsonArray array = rootObject.getJsonArray("rooms");
         for (int i = 0; i < array.size(); i++) {
@@ -124,7 +125,7 @@ public class DevoxxImporter {
     }
 
     private void mapTalks(Schedule schedule, Map<String, Track> titleToTrackMap, Map<String, Speaker> speakerMap, Map<String, Room> roomMap, String dayUrl, Day day) {
-        Map<String, Timeslot> timeslotMap = new HashMap<String, Timeslot>();
+        Map<String, Timeslot> timeslotMap = new LinkedHashMap<String, Timeslot>();
         JsonObject rootObject = readJsonObject(dayUrl);
         JsonArray array = rootObject.getJsonArray("slots");
         for (int i = 0; i < array.size(); i++) {
