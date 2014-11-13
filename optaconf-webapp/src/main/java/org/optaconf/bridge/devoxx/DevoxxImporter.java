@@ -23,19 +23,24 @@ import org.optaconf.domain.speaker.Speaker;
 import org.optaconf.domain.Talk;
 import org.optaconf.domain.Timeslot;
 import org.optaconf.domain.Track;
+import org.optaconf.domain.speaker.SpeakingRelation;
 import org.optaconf.util.TangoColorFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @ApplicationScoped
 public class DevoxxImporter {
+
+    private Logger logger = LoggerFactory.getLogger(DevoxxImporter.class);
 
     private static final String REST_URL_ROOT = "http://cfp.devoxx.be/api/conferences/DevoxxBe2014";
 
     public Schedule importSchedule() {
         Schedule schedule = new Schedule();
         Map<String, Track> titleToTrackMap = mapTracks(schedule);
-        mapSpeakers(schedule);
+        Map<String, Speaker> speakerMap = mapSpeakers(schedule);
         Map<String, Room> roomMap = mapRooms(schedule);
-        mapDays(schedule, titleToTrackMap, roomMap);
+        mapDays(schedule, titleToTrackMap, speakerMap, roomMap);
         return schedule;
     }
 
@@ -56,7 +61,8 @@ public class DevoxxImporter {
         return titleToTrackMap;
     }
 
-    private void mapSpeakers(Schedule schedule) {
+    private Map<String, Speaker> mapSpeakers(Schedule schedule) {
+        Map<String, Speaker> speakerMap = new HashMap<String, Speaker>();
         JsonArray array = readJsonArray(REST_URL_ROOT + "/speakers");
         for (int i = 0; i < array.size(); i++) {
             JsonObject dSpeaker = array.getJsonObject(i);
@@ -66,7 +72,9 @@ public class DevoxxImporter {
             String name = firstName + " " + lastName;
             Speaker speaker = new Speaker(id, name);
             schedule.getSpeakerList().add(speaker);
+            speakerMap.put(id, speaker);
         }
+        return speakerMap;
     }
 
     private Map<String, Room> mapRooms(Schedule schedule) {
@@ -89,7 +97,7 @@ public class DevoxxImporter {
         return roomMap;
     }
 
-    private void mapDays(Schedule schedule, Map<String, Track> titleToTrackMap, Map<String, Room> roomMap) {
+    private void mapDays(Schedule schedule, Map<String, Track> titleToTrackMap, Map<String, Speaker> speakerMap, Map<String, Room> roomMap) {
         JsonObject rootObject = readJsonObject(REST_URL_ROOT + "/schedules");
         JsonArray array = rootObject.getJsonArray("links");
         Pattern dTitlePattern = Pattern.compile("Schedule for (\\w+) (\\d+.*\\d{4})");
@@ -106,11 +114,11 @@ public class DevoxxImporter {
             String date = dTitleMatcher.group(2);
             Day day = new Day(dHref.replaceAll(".*\\/(.*)/", "$1"), name, date);
             schedule.getDayList().add(day);
-            mapTalks(schedule, titleToTrackMap, roomMap, dHref, day);
+            mapTalks(schedule, titleToTrackMap, speakerMap, roomMap, dHref, day);
         }
     }
 
-    private void mapTalks(Schedule schedule, Map<String, Track> titleToTrackMap, Map<String, Room> roomMap, String dayUrl, Day day) {
+    private void mapTalks(Schedule schedule, Map<String, Track> titleToTrackMap, Map<String, Speaker> speakerMap, Map<String, Room> roomMap, String dayUrl, Day day) {
         Map<String, Timeslot> timeslotMap = new HashMap<String, Timeslot>();
         JsonObject rootObject = readJsonObject(dayUrl);
         JsonArray array = rootObject.getJsonArray("slots");
@@ -138,6 +146,22 @@ public class DevoxxImporter {
             }
             Talk talk = new Talk(id, title, track);
             schedule.getTalkList().add(talk);
+
+            JsonArray speakersArray = dTalk.getJsonArray("speakers");
+            for (int j = 0; j < speakersArray.size(); j++) {
+                JsonObject dSpeaker = speakersArray.getJsonObject(j);
+                String speakerId = dSpeaker.getJsonObject("link").getString("href").replaceAll(".*/", "");
+                Speaker speaker = speakerMap.get(speakerId);
+                if (speaker == null) {
+                    logger.warn("Ignoring speaking relation for speaker ({}} to talk ({}) because the speaker doesn't exist in the speaker list.",
+                            dSpeaker.getString("name"), talk.getTitle());
+                    continue;
+//                    throw new IllegalArgumentException("The speakerId (" + speakerId
+//                            + ") is not part of the speakerMap (" + speakerMap + ").");
+                }
+                SpeakingRelation speakingRelation = new SpeakingRelation(talk.getId() + "_" + speaker.getId(), talk, speaker);
+                schedule.getSpeakingRelationList().add(speakingRelation);
+            }
 
             String roomId = dSlot.getString("roomId");
             Room room = roomMap.get(roomId);

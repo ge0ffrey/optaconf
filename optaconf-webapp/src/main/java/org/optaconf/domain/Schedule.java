@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.optaconf.domain.speaker.Speaker;
+import org.optaconf.domain.speaker.SpeakingRelation;
 import org.optaplanner.core.api.domain.solution.PlanningEntityCollectionProperty;
 import org.optaplanner.core.api.domain.solution.PlanningSolution;
 import org.optaplanner.core.api.domain.solution.Solution;
@@ -20,6 +21,7 @@ public class Schedule extends AbstractPersistable implements Solution<HardSoftSc
     private List<Track> trackList = new ArrayList<Track>();
     private List<Speaker> speakerList = new ArrayList<Speaker>();
     private List<Talk> talkList = new ArrayList<Talk>();
+    private List<SpeakingRelation> speakingRelationList = new ArrayList<SpeakingRelation>();
     private List<TalkExclusion> talkExclusionList = new ArrayList<TalkExclusion>();
 
     private HardSoftScore score;
@@ -86,6 +88,14 @@ public class Schedule extends AbstractPersistable implements Solution<HardSoftSc
         return talkExclusionList;
     }
 
+    public List<SpeakingRelation> getSpeakingRelationList() {
+        return speakingRelationList;
+    }
+
+    public void setSpeakingRelationList(List<SpeakingRelation> speakingRelationList) {
+        this.speakingRelationList = speakingRelationList;
+    }
+
     public void setTalkExclusionList(List<TalkExclusion> talkExclusionList) {
         this.talkExclusionList = talkExclusionList;
     }
@@ -106,6 +116,7 @@ public class Schedule extends AbstractPersistable implements Solution<HardSoftSc
         facts.addAll(roomList);
         facts.addAll(trackList);
         facts.addAll(speakerList);
+        facts.addAll(speakingRelationList);
         facts.addAll(talkList);
         facts.addAll(talkExclusionList);
         // Do not add the planning entity's (processList) because that will be done automatically
