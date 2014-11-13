@@ -1,6 +1,6 @@
 
 <!DOCTYPE html>
-<html lang="en" ng-app="optaconf">
+<html lang="en" data-ng-app="optaconf">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -36,10 +36,10 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li ui-route="#/" ng-class="{active: $uiRoute}"><a ui-route href="#/">Home</a></li>
-                <li ui-route="#/schedule" ng-class="{ active: $uiRoute}"><a ui-route href="#/schedule">Schedule</a></li>
-                <li ui-route="#/talks" ng-class="{ active: $uiRoute}"><a ui-route href="#/talks">Talks</a></li>
-                <li ui-route="#/rooms" ng-class="{ active: $uiRoute}"><a ui-route href="#/rooms">Rooms</a></li>
+                <li data-ui-route="#/" ng-class="{active: $uiRoute}"><a ui-route href="#/">Home</a></li>
+                <li data-ui-route="#/schedule" ng-class="{ active: $uiRoute}"><a ui-route href="#/schedule">Schedule</a></li>
+                <li data-ui-route="#/talks" ng-class="{ active: $uiRoute}"><a ui-route href="#/talks">Talks</a></li>
+                <li data-ui-route="#/rooms" ng-class="{ active: $uiRoute}"><a ui-route href="#/rooms">Rooms</a></li>
             </ul>
         </div>
     </div>
@@ -55,6 +55,7 @@
 <script src="bower_components/angular-route/angular-route.js"></script>
 <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
 <script src="bower_components/angular-ui-utils/ui-utils.js"></script>
+<script src="bower_components/lodash/dist/lodash.js"></script>
 
 <script src="src/app.js"></script>
 <script src="src/dashboard/dashboard.js"></script>

@@ -26,7 +26,7 @@ General lists:
 
 Filtered lists:
 
-* All timeslots of 1 day: http://localhost:8080/optaconf-webapp/rest/123/day/1/timeslot
+* All timeslots of 1 day: http://localhost:8080/optaconf-webapp/rest/123/day/wednesday/timeslot
 * All talk exclusions of 1 talk: http://localhost:8080/optaconf-webapp/rest/123/talk/1/exclusion
 * All talks on 1 day grouped by timeslot and room: http://localhost:8080/optaconf-webapp/rest/123/day/wednesday/talk
 
