@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,6 +23,7 @@ import org.apache.commons.io.IOUtils;
 import org.optaconf.domain.Day;
 import org.optaconf.domain.Room;
 import org.optaconf.domain.Schedule;
+import org.optaconf.domain.Speaker;
 import org.optaconf.domain.Talk;
 import org.optaconf.domain.TalkExclusion;
 import org.optaconf.domain.Timeslot;
@@ -64,8 +66,8 @@ public class DevoxxImporter {
             String firstName = dSpeaker.getString("firstName");
             String lastName = dSpeaker.getString("lastName");
             String name = firstName + " " + lastName;
-            Track track = new Track(id, name);
-            schedule.getTrackList().add(track);
+            Speaker speaker = new Speaker(id, name);
+            schedule.getSpeakerList().add(speaker);
         }
     }
 
@@ -162,8 +164,10 @@ public class DevoxxImporter {
             schedulesIn = new URL(url).openConnection().getInputStream();
             JsonReader jsonReader = Json.createReader(schedulesIn);
             return jsonReader.readObject();
+        } catch (UnknownHostException e) {
+            throw new IllegalStateException("Check your network connection. Import from Devoxx CFP failed on URL (" + url + ").", e);
         } catch (MalformedURLException e) {
-            throw new IllegalStateException("Import from Devoxx CFP failed on URL (" + url + ").", e);
+            throw new IllegalStateException("Check the Devoxx CFP URL. Import from Devoxx CFP failed on URL (" + url + ").", e);
         } catch (IOException e) {
             throw new IllegalStateException("Import from Devoxx CFP failed on URL (" + url + ").", e);
         } finally {

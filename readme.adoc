@@ -20,6 +20,8 @@ General lists:
 * All days: http://localhost:8080/optaconf-webapp/rest/123/day
 * All timeslots: http://localhost:8080/optaconf-webapp/rest/123/timeslot
 * All rooms: http://localhost:8080/optaconf-webapp/rest/123/room
+* All tracks: http://localhost:8080/optaconf-webapp/rest/123/track
+* All speakers: http://localhost:8080/optaconf-webapp/rest/123/speaker
 * All talks: http://localhost:8080/optaconf-webapp/rest/123/talk
 
 Filtered lists:
