@@ -10,6 +10,8 @@ import org.optaconf.domain.Talk;
 import org.optaconf.domain.TalkExclusion;
 import org.optaconf.domain.TalkExclusionType;
 import org.optaconf.domain.Timeslot;
+import org.optaconf.domain.speaker.Speaker;
+import org.optaconf.domain.speaker.SpeakingRelation;
 
 global HardSoftScoreHolder scoreHolder;
 
@@ -21,6 +23,16 @@ rule "roomConflict"
     when
         Talk($id: id, $room : room, $timeslot : timeslot)
         Talk(id > $id, room == $room, timeslot == $timeslot)
+    then
+        scoreHolder.addHardConstraintMatch(kcontext, -1);
+end
+
+rule "speakerConflict"
+    when
+        $leftTalk : Talk($id: id, $timeslot : timeslot)
+        SpeakingRelation(talk == $leftTalk, $speaker : speaker)
+        $rightTalk : Talk(id > $id, timeslot == $timeslot)
+        SpeakingRelation(talk == $rightTalk, speaker == $speaker)
     then
         scoreHolder.addHardConstraintMatch(kcontext, -1);
 end

@@ -34,7 +34,7 @@ public class ScheduleService {
     private SolverFactory solverFactory;
 
     @Resource(name = "DefaultManagedExecutorService")
-    ManagedExecutorService executor;
+    private ManagedExecutorService executor;
 
     @GET // TODO should be post
     @Path("/import/devoxx")
@@ -96,11 +96,11 @@ public class ScheduleService {
             solver.addEventListener(new SolverEventListener() {
                 @Override
                 public void bestSolutionChanged(BestSolutionChangedEvent bestSolutionChangedEvent) {
-                    scheduleManager.setSchedule((Schedule) bestSolutionChangedEvent.getNewBestSolution());
+                    scheduleManager.setSchedule((Schedule) bestSolutionChangedEvent.getNewBestSolution()); // TODO throws eaten Exception
                 }
             });
             solver.solve(schedule);
-            Schedule bestSchedule = (Schedule) solver.getBestSolution();
+            Schedule bestSchedule = (Schedule) solver.getBestSolution(); // TODO throws eaten Exception
             scheduleManager.setSchedule(bestSchedule);
             scheduleManager.setSolver(null);
         }
