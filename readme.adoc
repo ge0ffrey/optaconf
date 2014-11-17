@@ -7,12 +7,6 @@
 . Run the WildFly run configuration.
 . Or if you don't have IntelliJ Ultimate Edition, run wildfly-8.1.0.Final/bin/standalone.sh then run mvn wildfly:deploy from within optaconf-webapp directory
 
-= Webapp setup
-
-. Install Node.js -> http://nodejs.org
-. Install Bower -> npm install -g bower
-. Install Bower-managed dependencies -> cd optaconf-webapp/src/main/webapp && bower install
-
 = Rest URL's
 
 General lists:
