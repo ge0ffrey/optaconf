@@ -22,6 +22,7 @@ import org.apache.commons.io.IOUtils;
 import org.optaconf.domain.Day;
 import org.optaconf.domain.Room;
 import org.optaconf.domain.Schedule;
+import org.optaconf.domain.UnavailableTimeslotRoomPenalty;
 import org.optaconf.domain.speaker.Speaker;
 import org.optaconf.domain.Talk;
 import org.optaconf.domain.Timeslot;
@@ -44,6 +45,7 @@ public class DevoxxImporter {
         Map<String, Speaker> speakerMap = mapSpeakers(schedule);
         Map<String, Room> roomMap = mapRooms(schedule);
         mapDays(schedule, titleToTrackMap, speakerMap, roomMap);
+        buildUnavailableTimeslotRoomPenaltyList(schedule);
         return schedule;
     }
 
@@ -138,13 +140,15 @@ public class DevoxxImporter {
             if (!dTalk.getString("talkType").equalsIgnoreCase("Conference")) {
                 continue;
             }
+            String trackTitle = dTalk.getString("track");
+            if (trackTitle.equalsIgnoreCase("Startups")) {
+                // Ignore startups because they have a fixed room
+                continue;
+//                // Workaround to a bug in the Devoxx REST API, because "Startups" doesn't exist as a track id or title
+//                trackTitle = "Startup and entrepreneurship";
+            }
             String id = dTalk.getString("id");
             String title = dTalk.getString("title");
-            String trackTitle = dTalk.getString("track");
-            // Workaround to a bug in the Devoxx REST API, because "Startups" doesn't exist as a track id or title
-            if (trackTitle.equalsIgnoreCase("Startups")) {
-                trackTitle = "Startup and entrepreneurship";
-            }
             Track track = titleToTrackMap.get(trackTitle);
             if (track == null) {
                 throw new IllegalArgumentException("The trackTitle (" + trackTitle
@@ -159,7 +163,7 @@ public class DevoxxImporter {
                 String speakerId = dSpeaker.getJsonObject("link").getString("href").replaceAll(".*/", "");
                 Speaker speaker = speakerMap.get(speakerId);
                 if (speaker == null) {
-                    logger.warn("Ignoring speaking relation for speaker ({}} to talk ({}) because the speaker doesn't exist in the speaker list.",
+                    logger.warn("Ignoring speaking relation for speaker ({}) to talk ({}) because the speaker doesn't exist in the speaker list.",
                             dSpeaker.getString("name"), talk.getTitle());
                     continue;
 //                    throw new IllegalArgumentException("The speakerId (" + speakerId
@@ -185,6 +189,33 @@ public class DevoxxImporter {
             talk.setTimeslot(timeslot);
         }
         Collections.sort(schedule.getTimeslotList());
+    }
+
+    private void buildUnavailableTimeslotRoomPenaltyList(Schedule schedule) {
+        Map<Timeslot, Map<Room, Talk>> timeslotRoomToTalkMap = new LinkedHashMap<>();
+        for (Talk talk : schedule.getTalkList()) {
+            Timeslot timeslot = talk.getTimeslot();
+            Room room = talk.getRoom();
+            if (timeslot == null || room == null) {
+                continue;
+            }
+            Map<Room, Talk> roomToTalkMap = timeslotRoomToTalkMap.get(timeslot);
+            if (roomToTalkMap == null) {
+                roomToTalkMap = new LinkedHashMap<>();
+                timeslotRoomToTalkMap.put(timeslot, roomToTalkMap);
+            }
+            roomToTalkMap.put(room, talk);
+        }
+        for (Timeslot timeslot : schedule.getTimeslotList()) {
+            Map<Room, Talk> roomToTalkMap = timeslotRoomToTalkMap.get(timeslot);
+            for (Room room : schedule.getRoomList()) {
+                if (roomToTalkMap == null || !roomToTalkMap.containsKey(room)) {
+                    UnavailableTimeslotRoomPenalty penalty = new UnavailableTimeslotRoomPenalty(
+                            timeslot.getId() + "_" + room.getId(), timeslot, room);
+                    schedule.getUnavailableTimeslotRoomPenaltyList().add(penalty);
+                }
+            }
+        }
     }
 
     private JsonObject readJsonObject(String url) {

@@ -59,9 +59,13 @@ public class ScheduleService {
             oldSolver.terminateEarly();
         }
         Solver solver = solverFactory.buildSolver();
-        scheduleManager.setSolver(solver);
-        executor.submit(new SolverCallable(solver, scheduleManager.getSchedule()));
-        return "Solved started.";
+        // TODO Use async solving https://developer.jboss.org/message/910391
+//        scheduleManager.setSolver(solver);
+//        executor.submit(new SolverCallable(solver, scheduleManager.getSchedule()));
+//        return "Solved started.";
+        solver.solve(scheduleManager.getSchedule());
+        scheduleManager.setSchedule((Schedule) solver.getBestSolution());
+        return "Solved. Sorry it took so long";
     }
 
     @GET

@@ -18,6 +18,7 @@ public class Schedule extends AbstractPersistable implements Solution<HardSoftSc
     private List<Day> dayList = new ArrayList<Day>();
     private List<Timeslot> timeslotList = new ArrayList<Timeslot>();
     private List<Room> roomList = new ArrayList<Room>();
+    private List<UnavailableTimeslotRoomPenalty> unavailableTimeslotRoomPenaltyList = new ArrayList<UnavailableTimeslotRoomPenalty>();
     private List<Track> trackList = new ArrayList<Track>();
     private List<Speaker> speakerList = new ArrayList<Speaker>();
     private List<Talk> talkList = new ArrayList<Talk>();
@@ -57,6 +58,14 @@ public class Schedule extends AbstractPersistable implements Solution<HardSoftSc
 
     public void setRoomList(List<Room> roomList) {
         this.roomList = roomList;
+    }
+
+    public List<UnavailableTimeslotRoomPenalty> getUnavailableTimeslotRoomPenaltyList() {
+        return unavailableTimeslotRoomPenaltyList;
+    }
+
+    public void setUnavailableTimeslotRoomPenaltyList(List<UnavailableTimeslotRoomPenalty> unavailableTimeslotRoomPenaltyList) {
+        this.unavailableTimeslotRoomPenaltyList = unavailableTimeslotRoomPenaltyList;
     }
 
     public List<Track> getTrackList() {
@@ -114,6 +123,7 @@ public class Schedule extends AbstractPersistable implements Solution<HardSoftSc
         facts.addAll(dayList);
         facts.addAll(timeslotList);
         facts.addAll(roomList);
+        facts.addAll(unavailableTimeslotRoomPenaltyList);
         facts.addAll(trackList);
         facts.addAll(speakerList);
         facts.addAll(speakingRelationList);

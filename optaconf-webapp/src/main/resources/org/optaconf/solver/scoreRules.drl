@@ -5,6 +5,7 @@ import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScoreHolder;
 
 import org.optaconf.domain.Day;
 import org.optaconf.domain.Room;
+import org.optaconf.domain.UnavailableTimeslotRoomPenalty;
 import org.optaconf.domain.Schedule;
 import org.optaconf.domain.Talk;
 import org.optaconf.domain.TalkExclusion;
@@ -21,8 +22,16 @@ global HardSoftScoreHolder scoreHolder;
 
 rule "roomConflict"
     when
-        Talk($id: id, $room : room, $timeslot : timeslot)
-        Talk(id > $id, room == $room, timeslot == $timeslot)
+        Talk($id: id, $timeslot : timeslot, $room : room)
+        Talk(id > $id, timeslot == $timeslot, room == $room)
+    then
+        scoreHolder.addHardConstraintMatch(kcontext, -1);
+end
+
+rule "unavailableTimeslotRoomPenalty"
+    when
+        UnavailableTimeslotRoomPenalty($timeslot : timeslot, $room : room)
+        Talk(timeslot == $timeslot, room == $room)
     then
         scoreHolder.addHardConstraintMatch(kcontext, -1);
 end
