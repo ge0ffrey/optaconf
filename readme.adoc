@@ -1,4 +1,4 @@
-= Project setup
+== Project setup for IntelliJ
 
 . Open the `pom.xml` as a new project in IntelliJ.
 . Download and unzip http://wildfly.org/[WildFly 8.1.0.Final].
@@ -7,7 +7,19 @@
 . Run the WildFly run configuration.
 . Or if you don't have IntelliJ Ultimate Edition, run wildfly-8.1.0.Final/bin/standalone.sh then run mvn wildfly:deploy from within optaconf-webapp directory
 
-= Rest URL's
+== Project setup for Eclipse
+
+. Install http://tools.jboss.org[JBoss Tools] 
+. In Eclipse, Import the project as a Maven project.
+. In Eclipse, Use *File > New Server*, choose WildFly 8.x and you can use 'Download and install' to get WildFly 8.1
+. In Eclipse, Drag the webapp project to the WildFly server
+. In Eclipse, Run WildFly
+
+== Rest URL's
+
+Import a schedule:
+
+* A Devoxx schedule: http://localhost:8080/optaconf-webapp/rest/123/schedule/import/devoxx
 
 General lists:
 
@@ -26,10 +38,6 @@ Filtered lists:
 * All timeslots of 1 day: http://localhost:8080/optaconf-webapp/rest/123/day/wednesday/timeslot
 * All talk exclusions of 1 talk: http://localhost:8080/optaconf-webapp/rest/123/talk/1/exclusion
 * All talks on 1 day grouped by timeslot and room: http://localhost:8080/optaconf-webapp/rest/123/day/wednesday/talk
-
-Import a schedule:
-
-* A Devoxx schedule: http://localhost:8080/optaconf-webapp/rest/123/schedule/import/devoxx
 
 Solve a schedule
 
