@@ -15,7 +15,7 @@
 . In Eclipse, Drag the webapp project to the WildFly server
 . In Eclipse, Run WildFly
 
-== Rest URL's
+== Rest URLs
 
 Import a schedule:
 
