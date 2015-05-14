@@ -37,7 +37,7 @@
   </properties>
 
   <repositories>
-    <!-- Bootstrap repository to locate the parent pom when the parent pom has not been build locally. -->
+    <!-- Bootstrap repository to locate the parent pom when the parent pom has not been built locally. -->
     <repository>
       <id>jboss-public-repository-group</id>
       <name>JBoss Public Repository Group</name>

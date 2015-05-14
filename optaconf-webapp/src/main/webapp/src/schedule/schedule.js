@@ -26,7 +26,7 @@ angular.module('schedule', [])
     }])
     .factory('Day', ['$resource', '$window', function($resource, $window) {
         var contextPath = $window.location.pathname.substr(1).split('/')[0];
-        var url = "http://localhost:8080/" + contextPath + "/rest/123/day";
+        var url = "/" + contextPath + "/rest/123/day";
         return $resource(url, null, {
             'getTimeslots': {
                 url: url + '/:id/timeslot',
@@ -38,7 +38,7 @@ angular.module('schedule', [])
     .factory('ScheduleImport', ['$resource', '$window', function($resource, $window) {
         var contextPath = $window.location.pathname.substr(1).split('/')[0];
 
-        return $resource("http://localhost:8080/" + contextPath + "/rest/123/schedule/import/devoxx", null, {
+        return $resource("/" + contextPath + "/rest/123/schedule/import/devoxx", null, {
             'import': {
                 method: 'GET',
                 responseType: 'text',
@@ -49,7 +49,7 @@ angular.module('schedule', [])
     .factory('ScheduleSolve', ['$resource', '$window', function($resource, $window) {
         var contextPath = $window.location.pathname.substr(1).split('/')[0];
 
-        return $resource("http://localhost:8080/" + contextPath + "/rest/123/schedule/solve", null, {
+        return $resource("/" + contextPath + "/rest/123/schedule/solve", null, {
             'solve': {
                 method: 'GET',
                 responseType: 'text',
