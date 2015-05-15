@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.inject.Inject;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 import org.optaconf.cdi.ScheduleManager;
 import org.optaconf.domain.Day;
@@ -17,16 +20,21 @@ import org.optaconf.domain.Schedule;
 import org.optaconf.domain.Talk;
 import org.optaconf.domain.TalkExclusion;
 import org.optaconf.domain.Timeslot;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Path("/{conferenceId}/talk")
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
 public class TalkService {
+	
+	private static final Logger LOG = LoggerFactory.getLogger(TalkService.class);
 
     @Inject
     private ScheduleManager scheduleManager;
 
     @GET
     @Path("/")
-    @Produces("application/json")
     public List<Talk> getTalkList(@PathParam("conferenceId") Long conferenceId) {
         Schedule schedule = scheduleManager.getSchedule();
         return schedule.getTalkList();
@@ -34,7 +42,6 @@ public class TalkService {
 
     @GET
     @Path("/map")
-    @Produces("application/json")
     public Map<String, Map<String, Map<String, Talk>>> getDayTimeslotRoomToTalkMap(@PathParam("conferenceId") Long conferenceId) {
         Schedule schedule = scheduleManager.getSchedule();
         Map<String, Map<String, Map<String, Talk>>> dayTimeslotRoomToTalkMap = new LinkedHashMap<String, Map<String, Map<String, Talk>>>();
@@ -60,7 +67,6 @@ public class TalkService {
 
     @GET
     @Path("/{talkId}/exclusion")
-    @Produces("application/json")
     public List<TalkExclusion> getTalkExclusionList(@PathParam("conferenceId") Long conferenceId,
             @PathParam("talkId") Long talkId) {
         Schedule schedule = scheduleManager.getSchedule();

@@ -22,6 +22,7 @@ import java.awt.Stroke;
 import java.util.HashMap;
 import java.util.Map;
 
+//TODO refactor this to just contain CSS class references to a custom style sheet for tango color scheme
 public class TangoColorFactory {
 
     public static final Color CHAMELEON_1 = new Color(138, 226, 52);
@@ -104,7 +105,7 @@ public class TangoColorFactory {
         if (shadeIndex == 0) {
             color = SEQUENCE_1[colorIndex];
         } else if (shadeIndex == 1) {
-            color = SEQUENCE_2[colorIndex]; // TODO
+            color = SEQUENCE_2[colorIndex];
         } else if (shadeIndex == 2) {
             color = SEQUENCE_3[colorIndex];
         } else {

@@ -1,28 +1,33 @@
 package org.optaconf.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Callable;
 import javax.annotation.Resource;
 import javax.enterprise.concurrent.ManagedExecutorService;
 import javax.inject.Inject;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 import org.optaconf.bridge.devoxx.DevoxxImporter;
 import org.optaconf.cdi.ScheduleManager;
 import org.optaconf.domain.Schedule;
-import org.optaconf.domain.Talk;
-import org.optaconf.domain.TalkExclusion;
 import org.optaplanner.core.api.solver.Solver;
 import org.optaplanner.core.api.solver.SolverFactory;
 import org.optaplanner.core.api.solver.event.BestSolutionChangedEvent;
 import org.optaplanner.core.api.solver.event.SolverEventListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Path("/{conferenceId}/schedule")
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
 public class ScheduleService {
+	
+	private static final Logger LOG = LoggerFactory.getLogger(ScheduleService.class);
 
     @Inject
     private ScheduleManager scheduleManager;
@@ -36,9 +41,8 @@ public class ScheduleService {
     @Resource(name = "DefaultManagedExecutorService")
     private ManagedExecutorService executor;
 
-    @GET // TODO should be post
+    @POST
     @Path("/import/devoxx")
-    @Produces("application/json")
     public String importDevoxx(@PathParam("conferenceId") Long conferenceId) {
         Schedule schedule = devoxxImporter.importSchedule();
         scheduleManager.setSchedule(schedule);
@@ -50,9 +54,8 @@ public class ScheduleService {
                 + schedule.getTalkList().size() + " talks imported successfully.";
     }
 
-    @GET // TODO should be post
+    @PUT
     @Path("/solve")
-    @Produces("application/json")
     public String solveSchedule(@PathParam("conferenceId") Long conferenceId) {
         Solver oldSolver = scheduleManager.getSolver();
         if (oldSolver != null && oldSolver.isSolving()) {
@@ -70,15 +73,13 @@ public class ScheduleService {
 
     @GET
     @Path("/isSolving")
-    @Produces("application/json")
     public boolean isSolving(@PathParam("conferenceId") Long conferenceId) {
         Solver solver = scheduleManager.getSolver();
         return solver != null && solver.isSolving();
     }
 
-    @GET // TODO should be post
+    @PUT
     @Path("/terminateSolving")
-    @Produces("application/json")
     public void terminateSolving(@PathParam("conferenceId") Long conferenceId) {
         Solver solver = scheduleManager.getSolver();
         if (solver != null) {

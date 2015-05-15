@@ -3,6 +3,7 @@ package org.optaconf.cdi;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.SessionScoped;
 import javax.enterprise.inject.Produces;
@@ -16,10 +17,14 @@ import org.optaconf.domain.TalkExclusionType;
 import org.optaconf.domain.Timeslot;
 import org.optaconf.domain.Track;
 import org.optaconf.util.TangoColorFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @ApplicationScoped
 public class DummyScheduleProducer implements Serializable {
 
+	private static final Logger LOG = LoggerFactory.getLogger(DummyScheduleProducer.class);
+	
     @Produces @SessionScoped
     public ScheduleManager createDummySchedule() {
         Schedule schedule = new Schedule();

@@ -5,13 +5,12 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.json.Json;
 import javax.json.JsonArray;
@@ -22,12 +21,13 @@ import org.apache.commons.io.IOUtils;
 import org.optaconf.domain.Day;
 import org.optaconf.domain.Room;
 import org.optaconf.domain.Schedule;
-import org.optaconf.domain.UnavailableTimeslotRoomPenalty;
-import org.optaconf.domain.speaker.Speaker;
+import org.optaconf.domain.Speaker;
+import org.optaconf.domain.SpeakingRelation;
 import org.optaconf.domain.Talk;
 import org.optaconf.domain.Timeslot;
 import org.optaconf.domain.Track;
-import org.optaconf.domain.speaker.SpeakingRelation;
+import org.optaconf.domain.UnavailableTimeslotRoomPenalty;
+import org.optaconf.service.TalkService;
 import org.optaconf.util.TangoColorFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
 @ApplicationScoped
 public class DevoxxImporter {
 
-    private Logger logger = LoggerFactory.getLogger(DevoxxImporter.class);
+	private static final Logger LOG = LoggerFactory.getLogger(DevoxxImporter.class);
 
     private static final String REST_URL_ROOT = "http://cfp.devoxx.be/api/conferences/DevoxxBe2014";
 
@@ -163,7 +163,7 @@ public class DevoxxImporter {
                 String speakerId = dSpeaker.getJsonObject("link").getString("href").replaceAll(".*/", "");
                 Speaker speaker = speakerMap.get(speakerId);
                 if (speaker == null) {
-                    logger.warn("Ignoring speaking relation for speaker ({}) to talk ({}) because the speaker doesn't exist in the speaker list.",
+                    LOG.warn("Ignoring speaking relation for speaker ({}) to talk ({}) because the speaker doesn't exist in the speaker list.",
                             dSpeaker.getString("name"), talk.getTitle());
                     continue;
 //                    throw new IllegalArgumentException("The speakerId (" + speakerId

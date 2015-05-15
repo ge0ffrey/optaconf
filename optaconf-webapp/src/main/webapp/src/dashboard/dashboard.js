@@ -1,21 +1,23 @@
 angular.module('dashboard', [])
-    .controller('DashboardCtrl', ['ScheduleImport', 'ScheduleSolve', function(ScheduleImport, ScheduleSolve) {
+    .controller('DashboardCtrl', ['ScheduleImport', 'ScheduleSolve', '$log' , function(ScheduleImport, ScheduleSolve, $log) {
         var vm = this;
         vm.title = 'Dashboard';
         vm.isSolving = false;
+        vm.importUrl = "";
 
         vm.import = function() {
-            console.log("Importing devoxx schedule...");
+        	//TODO grab importUrl and do input validation
+        	$log.info("Importing devoxx schedule...");
             ScheduleImport.import(function() {
-                console.log('imported devoxx schedule!');
+                $log.info('imported devoxx schedule!');
             });
         };
 
         vm.solve = function() {
-            console.log("Solving schedule...");
+            $log.info("Solving schedule...");
             vm.isSolving = true;
             ScheduleSolve.solve(function() {
-                console.log("solved devoxx schedule!");
+                $log.info("solved devoxx schedule!");
             });
         };
     }]);

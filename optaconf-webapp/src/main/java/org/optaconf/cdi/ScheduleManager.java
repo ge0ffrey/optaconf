@@ -6,10 +6,14 @@ import javax.enterprise.inject.Vetoed;
 
 import org.optaconf.domain.Schedule;
 import org.optaplanner.core.api.solver.Solver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Vetoed
 public class ScheduleManager implements Serializable {
 
+	private static final Logger LOG = LoggerFactory.getLogger(ScheduleManager.class);
+	
     private Schedule schedule;
     private Solver solver;
 
