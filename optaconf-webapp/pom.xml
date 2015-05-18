@@ -15,7 +15,7 @@
   <name>OptaConf WebApp</name>
 
   <build>
-    <finalName>${parent.artifactId}</finalName>
+    <finalName>${project.artifactId}</finalName>
   </build>
 
   <dependencies>

@@ -37,8 +37,7 @@ public class DevoxxImporter {
 	private static final Logger LOG = LoggerFactory.getLogger(DevoxxImporter.class);
 
 //    private static final String REST_URL_ROOT = "http://cfp.devoxx.be/api/conferences/DevoxxBe2015";
-//    private static final String REST_URL_ROOT = "http://cfp.devoxx.fr/api/conferences/DevoxxFR2015";
-    private static final String REST_URL_ROOT = "http://localhost:8080/optaconf/devoxxfr2015";
+    private static final String REST_URL_ROOT = "http://cfp.devoxx.fr/api/conferences/DevoxxFR2015";
 
     public Schedule importSchedule() {
         Schedule schedule = new Schedule();

@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('talks', [])
     .controller('TalkCtrl', ['Talk', '$log','TalkService','$q', function(Talk, $log, TalkService, $q) {
         var vm = this;

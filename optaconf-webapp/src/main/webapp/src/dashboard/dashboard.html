@@ -3,10 +3,8 @@
 </div>
 <div class="row">
     <div class="col-md-12">
-    	<span class="col-md-6"><input class="form-control" type="text" data-ng=model="vm.importUrl" id="importUrl" name="importUrl" placeholder="Please enter conference REST URL."/></span>
-    	<span class="col-md-3"><button class="btn btn-primary" data-ng-click="vm.import()">Import Schedule</button></span>
-    	<span class="col-md-2"><button class="btn btn-default" data-ng-click="vm.solve()">Solve schedule</button></span>
-        
+    	<span data-ng-show="vm.clickedImport==false"class="col-md-2"><button class="btn btn-primary" data-ng-click="vm.import()">Import Schedule</button></span>
+    	<span data-ng-show="vm.clickedImport==true" class="col-md-2"><button class="btn btn-default" data-ng-click="vm.solve()">Solve schedule</button></span>
     </div>
 
 </div>

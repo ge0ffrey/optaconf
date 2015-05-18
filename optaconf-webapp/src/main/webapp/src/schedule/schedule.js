@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('schedule', [])
     .controller('ScheduleCtrl', ['Day', 'Room', function(Day, Room) {
         var vm = this;
