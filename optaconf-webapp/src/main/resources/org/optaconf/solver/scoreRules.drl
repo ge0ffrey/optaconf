@@ -11,8 +11,8 @@ import org.optaconf.domain.Talk;
 import org.optaconf.domain.TalkExclusion;
 import org.optaconf.domain.TalkExclusionType;
 import org.optaconf.domain.Timeslot;
-import org.optaconf.domain.speaker.Speaker;
-import org.optaconf.domain.speaker.SpeakingRelation;
+import org.optaconf.domain.Speaker;
+import org.optaconf.domain.SpeakingRelation;
 
 global HardSoftScoreHolder scoreHolder;
 

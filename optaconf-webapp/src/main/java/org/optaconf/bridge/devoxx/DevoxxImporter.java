@@ -27,7 +27,6 @@ import org.optaconf.domain.Talk;
 import org.optaconf.domain.Timeslot;
 import org.optaconf.domain.Track;
 import org.optaconf.domain.UnavailableTimeslotRoomPenalty;
-import org.optaconf.service.TalkService;
 import org.optaconf.util.TangoColorFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
