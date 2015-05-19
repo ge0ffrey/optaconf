@@ -1,10 +1,13 @@
+<div data-ng-show="vm.feedback !== ''" class="well">
+{{vm.feedback}}		
+</div>
 <div class="page-header">
     <h1>{{vm.title}}</h1>
 </div>
 <div class="row">
     <div class="col-md-12">
-    	<span data-ng-show="vm.clickedImport==false"class="col-md-2"><button class="btn btn-primary" data-ng-click="vm.import()">Import Schedule</button></span>
-    	<span data-ng-show="vm.clickedImport==true" class="col-md-2"><button class="btn btn-default" data-ng-click="vm.solve()">Solve schedule</button></span>
+    	<span class="col-md-2"><button class="btn btn-primary" data-ng-click="vm.import()">Import Schedule</button></span>
+    	<span class="col-md-2"><button class="btn btn-default" data-ng-click="vm.solve()">Solve schedule</button></span>
     </div>
 
 </div>

@@ -1,37 +1,62 @@
 'use strict';
 
 angular.module('dashboard', [])
-    .controller('DashboardCtrl', ['ScheduleImport', 'ScheduleSolve', '$log','$modal' , function(ScheduleImport, ScheduleSolve, $log, $modal) {
-        var vm = this;
+    .controller('DashboardCtrl', ['ScheduleImport', 'ScheduleSolve', '$log','$modal', '$timeout' , function(ScheduleImport, ScheduleSolve, $log, $modal, $timeout) {
+        
+    	var vm = this;
         vm.title = 'Dashboard';
-        vm.isSolving = false;
-        vm.clickedImport = false;
-        vm.clickedSolve = false;
+        vm.feedback = '';
+        
         vm.import = function() {
-        	//TODO grab importUrl and do input validation
         	$log.info("Importing devoxx schedule...");
+        	vm.busyModal = vm.openBusyImport();
             ScheduleImport.import(function() {
-                $log.info('imported devoxx schedule!');
-                vm.clickedImport = true;
+            	vm.busyModal.close();
+            	
+            	$log.info('imported devoxx schedule!');
+                
+            	vm.feedback = "imported devoxx schedule";
+                
+                $timeout(function() {
+					vm.feedback = ''
+				}, 5000);
+                
+                
             });
         };
 
         vm.solve = function() {
             $log.info("Solving schedule...");
-         // open modal dialog and save the reference so we can close it
-			vm.busyModal = vm.openBusyModal();
-            vm.isSolving = true;
+         
+			vm.busyModal = vm.openBusySolve();
+			
             ScheduleSolve.solve(function() {
                 $log.info("solved devoxx schedule!");
+                
                 vm.busyModal.close();
-                vm.clickedSolve = true;
+                
+                vm.feedback = "solved devoxx schedule";
+                
+                $timeout(function() {
+					vm.feedback = ''
+				}, 5000);
             });
         };
         
-        vm.openBusyModal = function() {
+        vm.openBusyImport = function() {
 
 			return $modal.open({
-				templateUrl : 'src/shared/_busyModal.html',
+				templateUrl : 'src/dashboard/_importModal.html',
+				backdrop : 'static',
+				keyboard : false
+			});
+
+		};
+		
+		vm.openBusySolve = function() {
+
+			return $modal.open({
+				templateUrl : 'src/dashboard/_solveModal.html',
 				backdrop : 'static',
 				keyboard : false
 			});

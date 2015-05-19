@@ -27,7 +27,7 @@ import org.optaconf.domain.Talk;
 import org.optaconf.domain.Timeslot;
 import org.optaconf.domain.Track;
 import org.optaconf.domain.UnavailableTimeslotRoomPenalty;
-import org.optaconf.util.TangoColorFactory;
+import org.optaconf.util.TangoCssFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,12 +53,12 @@ public class DevoxxImporter {
         Map<String, Track> titleToTrackMap = new LinkedHashMap<String, Track>();
         JsonObject rootObject = readJsonObject(REST_URL_ROOT + "/tracks");
         JsonArray array = rootObject.getJsonArray("tracks");
-        TangoColorFactory tangoColorFactory = new TangoColorFactory();
+        TangoCssFactory tangoColorFactory = new TangoCssFactory();
         for (int i = 0; i < array.size(); i++) {
             JsonObject dTrack = array.getJsonObject(i);
             String id = dTrack.getString("id");
             String title = dTrack.getString("title");
-            String colorHex = tangoColorFactory.pickColorHex(id);
+            String colorHex = tangoColorFactory.pickCssClass(id);
             Track track = new Track(id, title, colorHex);
             schedule.getTrackList().add(track);
             titleToTrackMap.put(title, track);

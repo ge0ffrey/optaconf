@@ -5,15 +5,14 @@ angular.module('talks', [])
         var vm = this;
         vm.title = 'Talks';
 
+        vm.weekDays = ["monday","tuesday","wednesday","thursday","friday"];
+        
         TalkService.getRooms().then(function(result) {
-            var rooms = result.data;
-            vm.rooms = rooms;
+            vm.rooms = result.data;
             TalkService.getMap().then(function(map) {
-                var schedule = map.data;
                 vm.schedule = map.data;
             });
         });
-
     }])
     .factory('TalkService', function($http, $window) {
         var contextPath = $window.location.pathname.substr(1).split('/')[0];
