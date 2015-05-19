@@ -1,23 +1,24 @@
 <div class="page-header">
-    <h1>{{vm.title}}</h1>
+	<h1>{{vm.title}}</h1>
 </div>
-<div class="row" data-ng-repeat="(day, timeslots) in vm.schedule">
-    <h1>{{day}}</h1>
-    <div class="col-md-12">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Timeslot</th>
-                    <th data-ng-repeat="room in vm.rooms">{{room.name}}</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr data-ng-repeat="(timeslot, talk) in timeslots">
-                    <td>{{timeslot}}</td>
-                    <td data-ng-repeat="(k,v) in talk" style="background:{{v.track.colorHex}}">{{v.title}}</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
 
+<div class="row" data-ng-repeat="weekDay in vm.weekDays">
+	<h1>{{weekDay}}</h1>
+	<div class="col-md-12">
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Timeslot</th>
+					<th data-ng-repeat="room in vm.rooms">{{room.name}}</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr data-ng-repeat="(timeslot, talk) in vm.schedule[weekDay]">
+					<td>{{timeslot}}</td>
+					<td data-ng-repeat="(k,v) in talk"
+						class="{{v.track.colorHex}}">{{v.title}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 </div>

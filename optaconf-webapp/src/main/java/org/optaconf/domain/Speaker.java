@@ -1,11 +1,11 @@
-package org.optaconf.domain.speaker;
+package org.optaconf.domain;
 
 import org.apache.commons.lang.builder.CompareToBuilder;
-import org.optaconf.domain.AbstractPersistable;
 
 public class Speaker extends AbstractPersistable implements Comparable<Speaker> {
 
     private String name;
+    private Boolean rockstar;
 
     public Speaker() {
     }
@@ -27,8 +27,16 @@ public class Speaker extends AbstractPersistable implements Comparable<Speaker> 
     public String toString() {
         return name;
     }
+    
+    public Boolean getRockstar() {
+		return rockstar;
+	}
 
-    @Override
+	public void setRockstar(Boolean rockstar) {
+		this.rockstar = rockstar;
+	}
+
+	@Override
     public int compareTo(Speaker other) {
         return new CompareToBuilder()
                 .append(name, other.name)

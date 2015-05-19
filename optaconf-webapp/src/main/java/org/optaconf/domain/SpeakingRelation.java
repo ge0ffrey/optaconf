@@ -1,10 +1,11 @@
-package org.optaconf.domain.speaker;
+package org.optaconf.domain;
 
-import org.optaconf.domain.AbstractPersistable;
-import org.optaconf.domain.Talk;
+import org.optaconf.service.DayService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SpeakingRelation extends AbstractPersistable {
-
+	
     private Speaker speaker;
     private Talk talk;
 

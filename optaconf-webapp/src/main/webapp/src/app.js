@@ -1,4 +1,6 @@
-var app = angular.module('optaconf', ['ngResource', 'ngRoute', 'ui.bootstrap.tabs', 'ui.bootstrap.tpls', 'ui.utils', 'dashboard', 'rooms', 'schedule', 'talks']);
+'use strict';
+
+var app = angular.module('optaconf', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.utils', 'dashboard', 'rooms', 'schedule', 'talks']);
 
 app.config(["$routeProvider", function($routeProvider) {
     $routeProvider.

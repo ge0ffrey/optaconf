@@ -33,7 +33,7 @@
 
     <version.org.wildfly.plugins>1.0.2.Final</version.org.wildfly.plugins>
     <version.org.wildfly.bom>8.1.0.Final</version.org.wildfly.bom>
-    <version.org.optaplanner>6.2.0.CR1</version.org.optaplanner>
+    <version.org.optaplanner>6.2.0.Final</version.org.optaplanner>
   </properties>
 
   <repositories>

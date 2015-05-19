@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('schedule', [])
     .controller('ScheduleCtrl', ['Day', 'Room', function(Day, Room) {
         var vm = this;
@@ -40,7 +42,7 @@ angular.module('schedule', [])
 
         return $resource("/" + contextPath + "/rest/123/schedule/import/devoxx", null, {
             'import': {
-                method: 'GET',
+                method: 'POST',
                 responseType: 'text',
                 transformResponse: []
             }
@@ -51,7 +53,7 @@ angular.module('schedule', [])
 
         return $resource("/" + contextPath + "/rest/123/schedule/solve", null, {
             'solve': {
-                method: 'GET',
+                method: 'PUT',
                 responseType: 'text',
                 transformResponse: []
             }

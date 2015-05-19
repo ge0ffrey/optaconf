@@ -5,13 +5,12 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.json.Json;
 import javax.json.JsonArray;
@@ -22,22 +21,23 @@ import org.apache.commons.io.IOUtils;
 import org.optaconf.domain.Day;
 import org.optaconf.domain.Room;
 import org.optaconf.domain.Schedule;
-import org.optaconf.domain.UnavailableTimeslotRoomPenalty;
-import org.optaconf.domain.speaker.Speaker;
+import org.optaconf.domain.Speaker;
+import org.optaconf.domain.SpeakingRelation;
 import org.optaconf.domain.Talk;
 import org.optaconf.domain.Timeslot;
 import org.optaconf.domain.Track;
-import org.optaconf.domain.speaker.SpeakingRelation;
-import org.optaconf.util.TangoColorFactory;
+import org.optaconf.domain.UnavailableTimeslotRoomPenalty;
+import org.optaconf.util.TangoCssFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @ApplicationScoped
 public class DevoxxImporter {
 
-    private Logger logger = LoggerFactory.getLogger(DevoxxImporter.class);
+	private static final Logger LOG = LoggerFactory.getLogger(DevoxxImporter.class);
 
-    private static final String REST_URL_ROOT = "http://cfp.devoxx.be/api/conferences/DevoxxBe2014";
+//    private static final String REST_URL_ROOT = "http://cfp.devoxx.be/api/conferences/DevoxxBe2015";
+    private static final String REST_URL_ROOT = "http://cfp.devoxx.fr/api/conferences/DevoxxFR2015";
 
     public Schedule importSchedule() {
         Schedule schedule = new Schedule();
@@ -53,12 +53,12 @@ public class DevoxxImporter {
         Map<String, Track> titleToTrackMap = new LinkedHashMap<String, Track>();
         JsonObject rootObject = readJsonObject(REST_URL_ROOT + "/tracks");
         JsonArray array = rootObject.getJsonArray("tracks");
-        TangoColorFactory tangoColorFactory = new TangoColorFactory();
+        TangoCssFactory tangoColorFactory = new TangoCssFactory();
         for (int i = 0; i < array.size(); i++) {
             JsonObject dTrack = array.getJsonObject(i);
             String id = dTrack.getString("id");
             String title = dTrack.getString("title");
-            String colorHex = tangoColorFactory.pickColorHex(id);
+            String colorHex = tangoColorFactory.pickCssClass(id);
             Track track = new Track(id, title, colorHex);
             schedule.getTrackList().add(track);
             titleToTrackMap.put(title, track);
@@ -142,10 +142,24 @@ public class DevoxxImporter {
             }
             String trackTitle = dTalk.getString("track");
             if (trackTitle.equalsIgnoreCase("Startups")) {
-                // Ignore startups because they have a fixed room
-                continue;
-//                // Workaround to a bug in the Devoxx REST API, because "Startups" doesn't exist as a track id or title
-//                trackTitle = "Startup and entrepreneurship";
+                // Workaround to a bug in the Devoxx REST API, because "Startups" doesn't exist as a track id or title
+                trackTitle = "Startup and entrepreneurship";
+            }
+            if (trackTitle.equalsIgnoreCase("Architecture, Performance and Security")) {
+                // Workaround to a bug in the Devoxx REST API, because "Startups" doesn't exist as a track id or title
+                trackTitle = "Architecture, Performance & Security";
+            }
+            if (trackTitle.equalsIgnoreCase("Cloud & DevOps")) {
+                // Workaround to a bug in the Devoxx REST API, because "Startups" doesn't exist as a track id or title
+                trackTitle = "Cloud, DevOps and Tools";
+            }
+            if (trackTitle.equalsIgnoreCase("Web, Mobile & UX")) {
+                // Workaround to a bug in the Devoxx REST API, because "Startups" doesn't exist as a track id or title
+                trackTitle = "Web, Mobile &  UX";
+            }
+            if (trackTitle.equalsIgnoreCase("Agility, Methodology & Tests")) {
+                // Workaround to a bug in the Devoxx REST API, because "Startups" doesn't exist as a track id or title
+                trackTitle = "Agility, Methodology & Test";
             }
             String id = dTalk.getString("id");
             String title = dTalk.getString("title");
@@ -163,7 +177,7 @@ public class DevoxxImporter {
                 String speakerId = dSpeaker.getJsonObject("link").getString("href").replaceAll(".*/", "");
                 Speaker speaker = speakerMap.get(speakerId);
                 if (speaker == null) {
-                    logger.warn("Ignoring speaking relation for speaker ({}) to talk ({}) because the speaker doesn't exist in the speaker list.",
+                    LOG.warn("Ignoring speaking relation for speaker ({}) to talk ({}) because the speaker doesn't exist in the speaker list.",
                             dSpeaker.getString("name"), talk.getTitle());
                     continue;
 //                    throw new IllegalArgumentException("The speakerId (" + speakerId

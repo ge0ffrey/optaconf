@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <solver>
-  <!--<environmentMode>FAST_ASSERT</environmentMode>-->
+  <environmentMode>FAST_ASSERT</environmentMode>
 
   <!-- Domain model configuration -->
   <solutionClass>org.optaconf.domain.Schedule</solutionClass>
@@ -15,7 +15,7 @@
 
   <!-- Optimization algorithms configuration -->
   <termination>
-    <secondsSpentLimit>60</secondsSpentLimit>
+    <secondsSpentLimit>7</secondsSpentLimit>
   </termination>
   <constructionHeuristic>
     <constructionHeuristicType>FIRST_FIT</constructionHeuristicType>
@@ -37,7 +37,7 @@
       <swapMoveSelector/>
     </unionMoveSelector>
     <acceptor>
-      <lateAcceptanceSize>200</lateAcceptanceSize>
+      <lateAcceptanceSize>400</lateAcceptanceSize>
     </acceptor>
     <forager>
       <acceptedCountLimit>1</acceptedCountLimit>
