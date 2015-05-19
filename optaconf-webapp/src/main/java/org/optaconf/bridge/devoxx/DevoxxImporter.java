@@ -34,9 +34,11 @@ import org.slf4j.LoggerFactory;
 @ApplicationScoped
 public class DevoxxImporter {
 
-	private static final Logger LOG = LoggerFactory.getLogger(DevoxxImporter.class);
+    private static final Logger LOG = LoggerFactory
+            .getLogger(DevoxxImporter.class);
 
-//    private static final String REST_URL_ROOT = "http://cfp.devoxx.be/api/conferences/DevoxxBe2015";
+    // private static final String REST_URL_ROOT =
+    // "http://cfp.devoxx.be/api/conferences/DevoxxBe2015";
     private static final String REST_URL_ROOT = "http://cfp.devoxx.fr/api/conferences/DevoxxFR2015";
 
     public Schedule importSchedule() {
@@ -104,10 +106,12 @@ public class DevoxxImporter {
         return roomMap;
     }
 
-    private void mapDays(Schedule schedule, Map<String, Track> titleToTrackMap, Map<String, Speaker> speakerMap, Map<String, Room> roomMap) {
+    private void mapDays(Schedule schedule, Map<String, Track> titleToTrackMap,
+            Map<String, Speaker> speakerMap, Map<String, Room> roomMap) {
         JsonObject rootObject = readJsonObject(REST_URL_ROOT + "/schedules");
         JsonArray array = rootObject.getJsonArray("links");
-        Pattern dTitlePattern = Pattern.compile("Schedule for (\\w+) (\\d+.*\\d{4})");
+        Pattern dTitlePattern = Pattern
+                .compile("Schedule for (\\w+) (\\d+.*\\d{4})");
         for (int i = 0; i < array.size(); i++) {
             JsonObject dDay = array.getJsonObject(i);
             String dHref = dDay.getString("href");
@@ -115,7 +119,8 @@ public class DevoxxImporter {
             Matcher dTitleMatcher = dTitlePattern.matcher(dTitle);
             if (!dTitleMatcher.find() && dTitleMatcher.groupCount() != 2) {
                 throw new IllegalStateException("A schedules title (" + dTitle
-                        + ") does not match the pattern (" + dTitlePattern.pattern() + ").");
+                        + ") does not match the pattern ("
+                        + dTitlePattern.pattern() + ").");
             }
             String name = dTitleMatcher.group(1);
             String date = dTitleMatcher.group(2);
@@ -126,7 +131,10 @@ public class DevoxxImporter {
         Collections.sort(schedule.getDayList());
     }
 
-    private void mapTalks(Schedule schedule, Map<String, Track> titleToTrackMap, Map<String, Speaker> speakerMap, Map<String, Room> roomMap, String dayUrl, Day day) {
+    private void mapTalks(Schedule schedule,
+            Map<String, Track> titleToTrackMap,
+            Map<String, Speaker> speakerMap, Map<String, Room> roomMap,
+            String dayUrl, Day day) {
         Map<String, Timeslot> timeslotMap = new LinkedHashMap<String, Timeslot>();
         JsonObject rootObject = readJsonObject(dayUrl);
         JsonArray array = rootObject.getJsonArray("slots");
@@ -142,31 +150,38 @@ public class DevoxxImporter {
             }
             String trackTitle = dTalk.getString("track");
             if (trackTitle.equalsIgnoreCase("Startups")) {
-                // Workaround to a bug in the Devoxx REST API, because "Startups" doesn't exist as a track id or title
+                // Workaround to a bug in the Devoxx REST API, because
+                // "Startups" doesn't exist as a track id or title
                 trackTitle = "Startup and entrepreneurship";
             }
-            if (trackTitle.equalsIgnoreCase("Architecture, Performance and Security")) {
-                // Workaround to a bug in the Devoxx REST API, because "Startups" doesn't exist as a track id or title
+            if (trackTitle
+                    .equalsIgnoreCase("Architecture, Performance and Security")) {
+                // Workaround to a bug in the Devoxx REST API, because
+                // "Startups" doesn't exist as a track id or title
                 trackTitle = "Architecture, Performance & Security";
             }
             if (trackTitle.equalsIgnoreCase("Cloud & DevOps")) {
-                // Workaround to a bug in the Devoxx REST API, because "Startups" doesn't exist as a track id or title
+                // Workaround to a bug in the Devoxx REST API, because
+                // "Startups" doesn't exist as a track id or title
                 trackTitle = "Cloud, DevOps and Tools";
             }
             if (trackTitle.equalsIgnoreCase("Web, Mobile & UX")) {
-                // Workaround to a bug in the Devoxx REST API, because "Startups" doesn't exist as a track id or title
+                // Workaround to a bug in the Devoxx REST API, because
+                // "Startups" doesn't exist as a track id or title
                 trackTitle = "Web, Mobile &  UX";
             }
             if (trackTitle.equalsIgnoreCase("Agility, Methodology & Tests")) {
-                // Workaround to a bug in the Devoxx REST API, because "Startups" doesn't exist as a track id or title
+                // Workaround to a bug in the Devoxx REST API, because
+                // "Startups" doesn't exist as a track id or title
                 trackTitle = "Agility, Methodology & Test";
             }
             String id = dTalk.getString("id");
             String title = dTalk.getString("title");
             Track track = titleToTrackMap.get(trackTitle);
             if (track == null) {
-                throw new IllegalArgumentException("The trackTitle (" + trackTitle
-                        + ") is not part of the titleToTrackMap (" + titleToTrackMap + ").");
+                throw new IllegalArgumentException("The trackTitle ("
+                        + trackTitle + ") is not part of the titleToTrackMap ("
+                        + titleToTrackMap + ").");
             }
             Talk talk = new Talk(id, title, track);
             schedule.getTalkList().add(talk);
@@ -174,16 +189,21 @@ public class DevoxxImporter {
             JsonArray speakersArray = dTalk.getJsonArray("speakers");
             for (int j = 0; j < speakersArray.size(); j++) {
                 JsonObject dSpeaker = speakersArray.getJsonObject(j);
-                String speakerId = dSpeaker.getJsonObject("link").getString("href").replaceAll(".*/", "");
+                String speakerId = dSpeaker.getJsonObject("link")
+                        .getString("href").replaceAll(".*/", "");
                 Speaker speaker = speakerMap.get(speakerId);
                 if (speaker == null) {
-                    LOG.warn("Ignoring speaking relation for speaker ({}) to talk ({}) because the speaker doesn't exist in the speaker list.",
+                    LOG.warn(
+                            "Ignoring speaking relation for speaker ({}) to talk ({}) because the speaker doesn't exist in the speaker list.",
                             dSpeaker.getString("name"), talk.getTitle());
                     continue;
-//                    throw new IllegalArgumentException("The speakerId (" + speakerId
-//                            + ") is not part of the speakerMap (" + speakerMap + ").");
+                    // throw new IllegalArgumentException("The speakerId (" +
+                    // speakerId
+                    // + ") is not part of the speakerMap (" + speakerMap +
+                    // ").");
                 }
-                SpeakingRelation speakingRelation = new SpeakingRelation(talk.getId() + "_" + speaker.getId(), talk, speaker);
+                SpeakingRelation speakingRelation = new SpeakingRelation(
+                        talk.getId() + "_" + speaker.getId(), talk, speaker);
                 schedule.getSpeakingRelationList().add(speakingRelation);
             }
 
@@ -196,7 +216,8 @@ public class DevoxxImporter {
             String timeslotId = fromTime + " - " + toTime;
             Timeslot timeslot = timeslotMap.get(timeslotId);
             if (timeslot == null) {
-                timeslot = new Timeslot(timeslotId, timeslotId, day, fromTime, toTime);
+                timeslot = new Timeslot(timeslotId, timeslotId, day, fromTime,
+                        toTime);
                 schedule.getTimeslotList().add(timeslot);
                 timeslotMap.put(timeslotId, timeslot);
             }
@@ -225,8 +246,10 @@ public class DevoxxImporter {
             for (Room room : schedule.getRoomList()) {
                 if (roomToTalkMap == null || !roomToTalkMap.containsKey(room)) {
                     UnavailableTimeslotRoomPenalty penalty = new UnavailableTimeslotRoomPenalty(
-                            timeslot.getId() + "_" + room.getId(), timeslot, room);
-                    schedule.getUnavailableTimeslotRoomPenaltyList().add(penalty);
+                            timeslot.getId() + "_" + room.getId(), timeslot,
+                            room);
+                    schedule.getUnavailableTimeslotRoomPenaltyList().add(
+                            penalty);
                 }
             }
         }
@@ -239,11 +262,16 @@ public class DevoxxImporter {
             JsonReader jsonReader = Json.createReader(schedulesIn);
             return jsonReader.readObject();
         } catch (UnknownHostException e) {
-            throw new IllegalStateException("Check your network connection. Import from Devoxx CFP failed on URL (" + url + ").", e);
+            throw new IllegalStateException(
+                    "Check your network connection. Import from Devoxx CFP failed on URL ("
+                            + url + ").", e);
         } catch (MalformedURLException e) {
-            throw new IllegalStateException("Check the Devoxx CFP URL. Import from Devoxx CFP failed on URL (" + url + ").", e);
+            throw new IllegalStateException(
+                    "Check the Devoxx CFP URL. Import from Devoxx CFP failed on URL ("
+                            + url + ").", e);
         } catch (IOException e) {
-            throw new IllegalStateException("Import from Devoxx CFP failed on URL (" + url + ").", e);
+            throw new IllegalStateException(
+                    "Import from Devoxx CFP failed on URL (" + url + ").", e);
         } finally {
             IOUtils.closeQuietly(schedulesIn);
         }
@@ -256,9 +284,11 @@ public class DevoxxImporter {
             JsonReader jsonReader = Json.createReader(schedulesIn);
             return jsonReader.readArray();
         } catch (MalformedURLException e) {
-            throw new IllegalStateException("Import from Devoxx CFP failed on URL (" + url + ").", e);
+            throw new IllegalStateException(
+                    "Import from Devoxx CFP failed on URL (" + url + ").", e);
         } catch (IOException e) {
-            throw new IllegalStateException("Import from Devoxx CFP failed on URL (" + url + ").", e);
+            throw new IllegalStateException(
+                    "Import from Devoxx CFP failed on URL (" + url + ").", e);
         } finally {
             IOUtils.closeQuietly(schedulesIn);
         }
