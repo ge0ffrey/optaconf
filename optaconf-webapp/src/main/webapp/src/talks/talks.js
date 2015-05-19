@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('talks', [])
-    .controller('TalkCtrl', ['Talk', '$log','TalkService','$q', function(Talk, $log, TalkService, $q) {
+    .controller('TalkController', ['Talk', '$log','TalkService','$q', function(Talk, $log, TalkService, $q) {
         var vm = this;
-        vm.title = 'Talks';
+        vm.title = 'Talk Schedule';
 
         vm.weekDays = ["monday","tuesday","wednesday","thursday","friday"];
         

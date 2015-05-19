@@ -1,5 +1,5 @@
 angular.module('rooms', [])
-    .controller('RoomCtrl', ['Room', function(Room) {
+    .controller('RoomController', ['Room', function(Room) {
         var vm = this;
         vm.title = 'Rooms';
         vm.rooms = [];
