@@ -6,15 +6,15 @@ package org.optaconf.domain;
 public class Track extends AbstractPersistable {
 
     private String title;
-    private String colorHex;
+    private String cssStyleClass;
 
     public Track() {
     }
 
-    public Track(String id, String title, String colorHex) {
+    public Track(String id, String title, String cssStyleClass) {
         super(id);
         this.title = title;
-        this.colorHex = colorHex;
+        this.cssStyleClass = cssStyleClass;
     }
 
     public String getTitle() {
@@ -25,12 +25,12 @@ public class Track extends AbstractPersistable {
         this.title = title;
     }
 
-    public String getColorHex() {
-        return colorHex;
+    public String getCssStyleClass() {
+        return cssStyleClass;
     }
 
-    public void setColorHex(String colorHex) {
-        this.colorHex = colorHex;
+    public void setCssStyleClass(String cssStyleClass) {
+        this.cssStyleClass = cssStyleClass;
     }
 
 }
