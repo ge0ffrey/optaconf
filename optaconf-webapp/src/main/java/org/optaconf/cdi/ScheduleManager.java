@@ -12,8 +12,8 @@ import org.slf4j.LoggerFactory;
 @Vetoed
 public class ScheduleManager implements Serializable {
 
-	private static final Logger LOG = LoggerFactory.getLogger(ScheduleManager.class);
-	
+    private static final Logger LOG = LoggerFactory.getLogger(ScheduleManager.class);
+
     private Schedule schedule;
     private Solver solver;
 

@@ -16,7 +16,7 @@
 				<tr data-ng-repeat="(timeslot, talk) in vm.schedule[weekDay]">
 					<td>{{timeslot}}</td>
 					<td data-ng-repeat="(k,v) in talk"
-						class="{{v.track.colorHex}}">{{v.title}}</td>
+						class="{{v.track.cssStyleClass}}">{{v.title}}</td>
 				</tr>
 			</tbody>
 		</table>

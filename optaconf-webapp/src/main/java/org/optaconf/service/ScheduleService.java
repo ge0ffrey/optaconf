@@ -47,7 +47,7 @@ public class ScheduleService {
 		Schedule schedule = devoxxImporter.importSchedule();
 		scheduleManager.setSchedule(schedule);
 		
-		StringBuffer message = new StringBuffer()
+		StringBuilder message = new StringBuilder()
 				.append("Devoxx schedule with ")
 				.append(schedule.getDayList().size()).append(" days, ")
 				.append(schedule.getTimeslotList().size())

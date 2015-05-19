@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('dashboard', [])
-    .controller('DashboardCtrl', ['ScheduleImport', 'ScheduleSolve', '$log','$modal', '$timeout' , function(ScheduleImport, ScheduleSolve, $log, $modal, $timeout) {
+    .controller('DashboardController', ['ScheduleImport', 'ScheduleSolve', '$log','$modal', '$timeout', '$location' , function(ScheduleImport, ScheduleSolve, $log, $modal, $timeout, $location) {
         
     	var vm = this;
-        vm.title = 'Dashboard';
+        vm.title = 'Import and Optimize Devoxx FR 2015 Schedule';
         vm.feedback = '';
         
         vm.import = function() {
@@ -35,10 +35,12 @@ angular.module('dashboard', [])
                 
                 vm.busyModal.close();
                 
-                vm.feedback = "solved devoxx schedule";
+                vm.feedback = "solved devoxx schedule, redirecting to Talk Schedule in 5 seconds.";
                 
                 $timeout(function() {
-					vm.feedback = ''
+					vm.feedback = '';
+					$location.path('/talks');
+					
 				}, 5000);
             });
         };

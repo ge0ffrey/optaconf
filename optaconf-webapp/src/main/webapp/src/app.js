@@ -6,19 +6,19 @@ app.config(["$routeProvider", function($routeProvider) {
     $routeProvider.
         when('/', {
                 templateUrl: 'src/dashboard/dashboard.html',
-                controller: 'DashboardCtrl as vm'
+                controller: 'DashboardController as vm'
         }).
         when('/rooms', {
             templateUrl: 'src/rooms/rooms.html',
-            controller: 'RoomCtrl as vm'
+            controller: 'RoomController as vm'
         }).
         when('/schedule', {
             templateUrl: 'src/schedule/schedule.html',
-            controller: 'ScheduleCtrl as vm'
+            controller: 'ScheduleController as vm'
         }).
         when('/talks', {
             templateUrl: 'src/talks/talks.html',
-            controller: 'TalkCtrl as vm'
+            controller: 'TalkController as vm'
         }).
         otherwise({
             redirectTo: '/'

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('schedule', [])
-    .controller('ScheduleCtrl', ['Day', 'Room', function(Day, Room) {
+    .controller('ScheduleController', ['Day', 'Room', function(Day, Room) {
         var vm = this;
         vm.title = 'Schedule';
         vm.days = [];
