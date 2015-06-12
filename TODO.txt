@@ -1,0 +1,44 @@
+- Tests: unit tests, etc
+-- testdata => serialize a schedule to a file (let's just xsteam dump it)
+-- just testing the solver?
+(-- test the jaxrs calls with arquillian maybe? or cargo? or soapui?)
+
+- refactor String id to String externalId
+
+- Add JPA (matyas)
+-- Add numberic id which is the database id
+-- hsql with example datasource
+-- auto-generate tables => "just works"
+-- optimistic locking
+
+- extra constraints (ge0ffrey)
+-- Add domain + constraint + CRUD for SpeakerTimeslotUnavailability
+-- Add domain + constraint + CRUD for prepareTime for certain Talks. (for example to set up the robots that they 'll be showing)
+-- Add domain + constraint for language "en", "fr", etc
+-- other constraint on ge0ffrey's list
+-- ConferenceParametrization object
+
+- Multitenancy or multiple conferences
+-- refactor rename Schedule to Conference
+-- Add a String name to Conference
+-- Opening screen: list of conferences (if a conf is imported multiple times, it shows up multiple times)
+-- and a button "new conference" => from scratch or import (from devoxx BE or FR or ...)
+
+- Async solving on a separate thread (copy paste from VehicleRoutingSolverManager)
+-- take bestSolutionChange event and push that back to the client via a websocket
+
+
+Phase 2: a viable reference app that "optimize a conference schedule" = minimal marketable feature
+
+- What if multiple conf schedules solve at the same time etc.
+
+- Deploy on openshift
+
+- Authentication / authorization (Keycloak - SSO of google, openid, etc)
+
+- Marketing: Markus (Javaland) and Stephan (Devoxx)
+
+
+Phase 9
+
+- Integration with? lanyrd - fosdem's schedule - ...
