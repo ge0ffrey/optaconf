@@ -1,5 +1,5 @@
 - Tests: unit tests, etc
--- testdata => serialize a schedule to a file (let's just xsteam dump it)
+-- testdata => serialize a schedule to a file (let's just xstream dump it)
 -- just testing the solver?
 (-- test the jaxrs calls with arquillian maybe? or cargo? or soapui?)
 
