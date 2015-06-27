@@ -7,7 +7,7 @@
 
 - Add JPA (matyas)
 -- Refactor String id to String externalId - FINISHED
--- Add numberic id which is the database id - FINISHED
+-- Add numeric id which is the database id - FINISHED
 -- hsql with example datasource - FINISHED
 -- auto-generate tables => "just works" - FINISHED
 -- optimistic locking - introduced @version column - FINISHED
