@@ -3,17 +3,20 @@
 -- just testing the solver?
 (-- test the jaxrs calls with arquillian maybe? or cargo? or soapui?)
 
-- refactor String id to String externalId
+
 
 - Add JPA (matyas)
--- Add numberic id which is the database id
--- hsql with example datasource
--- auto-generate tables => "just works"
--- optimistic locking
+-- Refactor String id to String externalId - FINISHED
+-- Add numberic id which is the database id - FINISHED
+-- hsql with example datasource - FINISHED
+-- auto-generate tables => "just works" - FINISHED
+-- optimistic locking - introduced @version column - FINISHED
+-- annotate relationships with proper jpa @OneToMany, @ManyToMany, @ManyToOne (currently not done and thus composition treated as binary)
+-- add proper constraints to fields other than @Column, for instance field level validation, and null constraints
 
 - extra constraints (ge0ffrey)
 -- Add domain + constraint + CRUD for SpeakerTimeslotUnavailability
--- Add domain + constraint + CRUD for prepareTime for certain Talks. (for example to set up the robots that they 'll be showing)
+-- Add domain + constraint + CRUD for prepareTime for certain Talks. (for example to set up the robots that they'll be showing)
 -- Add domain + constraint for language "en", "fr", etc
 -- other constraint on ge0ffrey's list
 -- ConferenceParametrization object

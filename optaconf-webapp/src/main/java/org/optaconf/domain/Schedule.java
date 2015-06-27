@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+
 import org.optaplanner.core.api.domain.solution.PlanningEntityCollectionProperty;
 import org.optaplanner.core.api.domain.solution.PlanningSolution;
 import org.optaplanner.core.api.domain.solution.Solution;
@@ -11,8 +14,9 @@ import org.optaplanner.core.api.domain.valuerange.ValueRangeProvider;
 import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
 
 @PlanningSolution
+//@Entity(name="optaconf_schedule")
 public class Schedule extends AbstractPersistable implements Solution<HardSoftScore> {
-
+    
     private List<Day> dayList = new ArrayList<Day>();
     private List<Timeslot> timeslotList = new ArrayList<Timeslot>();
     private List<Room> roomList = new ArrayList<Room>();

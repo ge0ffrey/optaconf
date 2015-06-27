@@ -1,12 +1,17 @@
 package org.optaconf.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+
 /**
  * Group of tracks
  */
+@Entity(name="optaconf_track")
 public class Track extends AbstractPersistable {
-
+   @Column
     private String title;
-    private String cssStyleClass;
+   @Column 
+   private String cssStyleClass;
 
     public Track() {
     }

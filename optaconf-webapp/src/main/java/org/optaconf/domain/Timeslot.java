@@ -1,13 +1,17 @@
 package org.optaconf.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+
 import org.apache.commons.lang.builder.CompareToBuilder;
 
+@Entity(name="optaconf_timeslot")
 public class Timeslot extends AbstractPersistable implements Comparable<Timeslot> {
 
-    private String name;
-    private Day day;
-    private String fromTime;
-    private String toTime;
+   @Column private String name;
+   @Column private Day day;
+   @Column private String fromTime;
+   @Column private String toTime;
 
     public Timeslot() {
     }

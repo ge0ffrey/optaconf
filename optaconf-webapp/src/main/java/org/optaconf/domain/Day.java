@@ -1,8 +1,14 @@
 package org.optaconf.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+
+@Entity(name="optaconf_day")
 public class Day extends AbstractPersistable implements Comparable<Day> {
 
+    @Column
     private String name;
+    @Column
     private String date;
 
     public Day() {

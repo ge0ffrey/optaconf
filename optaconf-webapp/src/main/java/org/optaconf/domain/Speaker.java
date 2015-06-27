@@ -1,11 +1,15 @@
 package org.optaconf.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+
 import org.apache.commons.lang.builder.CompareToBuilder;
 
+@Entity(name="optaconf_speaker")
 public class Speaker extends AbstractPersistable implements Comparable<Speaker> {
 
-    private String name;
-    private Boolean rockstar;
+   @Column private String name;
+   @Column private Boolean rockstar;
 
     public Speaker() {
     }

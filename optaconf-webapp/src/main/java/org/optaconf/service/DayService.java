@@ -47,7 +47,7 @@ public class DayService {
         List<Timeslot> globalTimeslotList = schedule.getTimeslotList();
         List<Timeslot> timeslotList = new ArrayList<Timeslot>(globalTimeslotList.size());
         for (Timeslot timeslot : globalTimeslotList) {
-            if (timeslot.getDay().getId().equals(dayId)) {
+            if (timeslot.getDay().getExternalId().equals(dayId)) {
                 timeslotList.add(timeslot);
             }
         }
@@ -73,9 +73,9 @@ public class DayService {
                         break;
                     }
                 }
-                roomToTalkMap.put(room.getId(), talk);
+                roomToTalkMap.put(room.getExternalId(), talk);
             }
-            timeslotRoomToTalkMap.put(timeslot.getId(), roomToTalkMap);
+            timeslotRoomToTalkMap.put(timeslot.getExternalId(), roomToTalkMap);
         }
         return timeslotRoomToTalkMap;
     }

@@ -203,7 +203,7 @@ public class DevoxxImporter {
                     // ").");
                 }
                 SpeakingRelation speakingRelation = new SpeakingRelation(
-                        talk.getId() + "_" + speaker.getId(), talk, speaker);
+                        talk.getExternalId() + "_" + speaker.getExternalId(), talk, speaker);
                 schedule.getSpeakingRelationList().add(speakingRelation);
             }
 
@@ -246,7 +246,7 @@ public class DevoxxImporter {
             for (Room room : schedule.getRoomList()) {
                 if (roomToTalkMap == null || !roomToTalkMap.containsKey(room)) {
                     UnavailableTimeslotRoomPenalty penalty = new UnavailableTimeslotRoomPenalty(
-                            timeslot.getId() + "_" + room.getId(), timeslot,
+                            timeslot.getExternalId() + "_" + room.getExternalId(), timeslot,
                             room);
                     schedule.getUnavailableTimeslotRoomPenaltyList().add(
                             penalty);

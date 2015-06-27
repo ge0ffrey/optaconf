@@ -1,13 +1,17 @@
 package org.optaconf.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+
 import org.optaplanner.core.api.domain.entity.PlanningEntity;
 import org.optaplanner.core.api.domain.variable.PlanningVariable;
 
 @PlanningEntity
+@Entity(name="optaconf_talk")
 public class Talk extends AbstractPersistable {
 
-    private String title;
-    private Track track;
+   @Column private String title;
+   @Column private Track track;
 
     private Timeslot timeslot;
     private Room room;

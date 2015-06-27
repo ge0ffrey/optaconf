@@ -1,9 +1,13 @@
 package org.optaconf.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+
+@Entity(name="optaconf_talkexclusion")
 public class TalkExclusion extends AbstractPersistable {
 
-    private Talk firstTalk;
-    private Talk secondTalk;
+   @Column private Talk firstTalk;
+   @Column private Talk secondTalk;
 
     private TalkExclusionType type;
 

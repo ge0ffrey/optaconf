@@ -1,10 +1,16 @@
 package org.optaconf.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+
 import org.apache.commons.lang.builder.CompareToBuilder;
 
+@Entity(name="optaconf_room")
 public class Room extends AbstractPersistable implements Comparable<Room> {
-
+    @Column
     private String name;
+    
+    @Column
     private int seatingCapacity;
 
     public Room() {

@@ -46,21 +46,26 @@ public class TalkService {
         Schedule schedule = scheduleManager.getSchedule();
         Map<String, Map<String, Map<String, Talk>>> dayTimeslotRoomToTalkMap = new LinkedHashMap<String, Map<String, Map<String, Talk>>>();
         for (Day day : schedule.getDayList()) {
-            dayTimeslotRoomToTalkMap.put(day.getId(), new LinkedHashMap<String, Map<String, Talk>>());
+            dayTimeslotRoomToTalkMap.put(day.getExternalId(), new LinkedHashMap<String, Map<String, Talk>>());
         }
         for (Timeslot timeslot : schedule.getTimeslotList()) {
             Day day = timeslot.getDay();
             LinkedHashMap<String, Talk> roomToTalkMap = new LinkedHashMap<String, Talk>();
-            dayTimeslotRoomToTalkMap.get(day.getId()).put(timeslot.getId(), roomToTalkMap);
+            dayTimeslotRoomToTalkMap.get(day.getExternalId()).put(timeslot.getExternalId(), roomToTalkMap);
             for (Room room : schedule.getRoomList()) {
-                roomToTalkMap.put(room.getId(), null);
+                roomToTalkMap.put(room.getExternalId(), null);
             }
         }
         for (Talk talk : schedule.getTalkList()) {
             Timeslot timeslot = talk.getTimeslot();
             Day day = timeslot.getDay();
             Room room = talk.getRoom();
-            dayTimeslotRoomToTalkMap.get(day.getId()).get(timeslot.getId()).put(room.getId(), talk);
+            if(room != null && room.getExternalId() != null){
+               Map<String, Map<String, Talk>> dayOfTalks = dayTimeslotRoomToTalkMap.get(day.getExternalId());
+               Map<String, Talk> talks = dayOfTalks.get(timeslot.getExternalId());
+               talks.put(room.getExternalId(), talk);
+            }
+            
         }
         return dayTimeslotRoomToTalkMap;
     }
@@ -74,8 +79,8 @@ public class TalkService {
         List<TalkExclusion> globalTalkExclusionList = schedule.getTalkExclusionList();
         List<TalkExclusion> talkExclusionList = new ArrayList<TalkExclusion>(globalTalkExclusionList.size());
         for (TalkExclusion talkExclusion : globalTalkExclusionList) {
-            if (talkExclusion.getFirstTalk().getId().equals(talkId)
-                    || talkExclusion.getSecondTalk().getId().equals(talkId)) {
+            if (talkExclusion.getFirstTalk().getExternalId().equals(talkId)
+                    || talkExclusion.getSecondTalk().getExternalId().equals(talkId)) {
                 talkExclusionList.add(talkExclusion);
             }
         }

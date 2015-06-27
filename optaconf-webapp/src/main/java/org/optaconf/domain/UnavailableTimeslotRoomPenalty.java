@@ -16,9 +16,14 @@
 
 package org.optaconf.domain;
 
-public class UnavailableTimeslotRoomPenalty extends AbstractPersistable {
+import javax.persistence.Column;
+import javax.persistence.Entity;
 
+@Entity(name="optaconf_unavailtimeslotroompenalty")
+public class UnavailableTimeslotRoomPenalty extends AbstractPersistable {
+   @Column
     private Timeslot timeslot;
+   @Column
     private Room room;
 
     public UnavailableTimeslotRoomPenalty() {

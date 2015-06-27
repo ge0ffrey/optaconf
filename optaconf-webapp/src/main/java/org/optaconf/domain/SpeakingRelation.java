@@ -1,9 +1,12 @@
 package org.optaconf.domain;
 
+import javax.persistence.Entity;
+
 import org.optaconf.service.DayService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Entity(name="optaconf_speakingrelation")
 public class SpeakingRelation extends AbstractPersistable {
 	
     private Speaker speaker;
