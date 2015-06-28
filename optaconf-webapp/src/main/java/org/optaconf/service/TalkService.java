@@ -60,7 +60,9 @@ public class TalkService {
             Timeslot timeslot = talk.getTimeslot();
             Day day = timeslot.getDay();
             Room room = talk.getRoom();
-            dayTimeslotRoomToTalkMap.get(day.getId()).get(timeslot.getId()).put(room.getId(), talk);
+            if(room != null && room.getId() != null){
+               dayTimeslotRoomToTalkMap.get(day.getId()).get(timeslot.getId()).put(room.getId(), talk);
+            }
         }
         return dayTimeslotRoomToTalkMap;
     }
