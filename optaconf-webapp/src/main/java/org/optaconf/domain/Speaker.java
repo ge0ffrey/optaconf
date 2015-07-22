@@ -14,6 +14,7 @@ public class Speaker extends AbstractPersistable implements Comparable<Speaker>
 
    @Column
    private String name;
+   
    @Column
    private Boolean rockstar;
 

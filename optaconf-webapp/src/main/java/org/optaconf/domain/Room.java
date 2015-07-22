@@ -13,57 +13,65 @@ import javax.persistence.OneToOne;
 
 import org.apache.commons.lang.builder.CompareToBuilder;
 
-@Entity(name="optaconf_room")
-public class Room extends AbstractPersistable implements Comparable<Room> {
-    @Column
-    private String name;
-    
-    @Column
-    private int seatingCapacity;
-    
-    @OneToMany(mappedBy="room", cascade=CascadeType.ALL)
-    private List<Talk> talks = new ArrayList<Talk>();
-    
-    @OneToOne(optional = true)
-    @JoinColumn(name = "timeslot_room_penalty_id")
-    private UnavailableTimeslotRoomPenalty penalty;
-    
-    @ManyToOne
-    @JoinColumn(name="schedule_id", nullable=false)
-    private Schedule schedule;
+@Entity(name = "optaconf_room")
+public class Room extends AbstractPersistable implements Comparable<Room>
+{
 
-    public Room() {
-    }
+   @Column
+   private String name;
 
-    public Room(String id, String name, int seatingCapacity) {
-        super(id);
-        this.name = name;
-        this.seatingCapacity = seatingCapacity;
-    }
+   @Column
+   private int seatingCapacity;
 
-    public String getName() {
-        return name;
-    }
+   @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
+   private List<Talk> talks = new ArrayList<Talk>();
 
-    public void setName(String name) {
-        this.name = name;
-    }
+   @OneToOne(optional = true)
+   @JoinColumn(name = "timeslot_room_penalty_id")
+   private UnavailableTimeslotRoomPenalty penalty;
 
-    public int getSeatingCapacity() {
-        return seatingCapacity;
-    }
+   @ManyToOne
+   @JoinColumn(name = "schedule_id", nullable = false)
+   private Schedule schedule;
 
-    public void setSeatingCapacity(int seatingCapacity) {
-        this.seatingCapacity = seatingCapacity;
-    }
+   public Room()
+   {}
 
-    @Override
-    public int compareTo(Room other) {
-        return new CompareToBuilder()
-                .append(name, other.name)
-                .append(other.seatingCapacity, seatingCapacity)
-                .toComparison();
-    }
+   public Room(String id, String name, int seatingCapacity)
+   {
+      super(id);
+      this.name = name;
+      this.seatingCapacity = seatingCapacity;
+   }
+
+   public String getName()
+   {
+      return name;
+   }
+
+   public void setName(String name)
+   {
+      this.name = name;
+   }
+
+   public int getSeatingCapacity()
+   {
+      return seatingCapacity;
+   }
+
+   public void setSeatingCapacity(int seatingCapacity)
+   {
+      this.seatingCapacity = seatingCapacity;
+   }
+
+   @Override
+   public int compareTo(Room other)
+   {
+      return new CompareToBuilder()
+               .append(name, other.name)
+               .append(other.seatingCapacity, seatingCapacity)
+               .toComparison();
+   }
 
    public List<Talk> getTalks()
    {
@@ -84,7 +92,7 @@ public class Room extends AbstractPersistable implements Comparable<Room> {
    {
       this.penalty = penalty;
    }
-    
+
    public Schedule getSchedule()
    {
       return schedule;

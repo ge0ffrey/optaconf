@@ -15,6 +15,7 @@ public class Day extends AbstractPersistable implements Comparable<Day> {
 
     @Column(length=255, nullable=false)
     private String name;
+    
     @Column(length=255, nullable=false)
     private String date;
     

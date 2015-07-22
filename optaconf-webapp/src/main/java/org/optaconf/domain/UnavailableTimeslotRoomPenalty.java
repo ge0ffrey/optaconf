@@ -26,6 +26,7 @@ public class UnavailableTimeslotRoomPenalty extends AbstractPersistable
 {
    @OneToOne
    private Timeslot timeslot;
+   
    @OneToOne
    private Room room;
 

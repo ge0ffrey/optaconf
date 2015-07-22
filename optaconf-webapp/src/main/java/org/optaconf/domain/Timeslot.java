@@ -11,7 +11,6 @@ import org.apache.commons.lang.builder.CompareToBuilder;
 @Entity(name = "optaconf_timeslot")
 public class Timeslot extends AbstractPersistable implements Comparable<Timeslot>
 {
-
    @Column(length = 255, nullable = false)
    private String name;
 

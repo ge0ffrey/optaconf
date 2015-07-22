@@ -11,6 +11,7 @@ public class SpeakingRelation extends AbstractPersistable
 
    @OneToOne
    private Speaker speaker;
+   
    @OneToOne
    private Talk talk;
    

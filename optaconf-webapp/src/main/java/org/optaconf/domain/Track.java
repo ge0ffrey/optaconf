@@ -18,6 +18,7 @@ public class Track extends AbstractPersistable
 {
    @Column
    private String title;
+   
    @Column
    private String cssStyleClass;
    

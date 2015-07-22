@@ -5,8 +5,10 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
 import org.optaplanner.core.api.domain.solution.PlanningEntityCollectionProperty;
 import org.optaplanner.core.api.domain.solution.PlanningSolution;
@@ -20,23 +22,38 @@ public class Schedule extends AbstractPersistable implements Solution<HardSoftSc
 {
    @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL)
    private List<Day> dayList = new ArrayList<Day>();
+   
    @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL)
    private List<Timeslot> timeslotList = new ArrayList<Timeslot>();
+   
    @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL)
    private List<Room> roomList = new ArrayList<Room>();
+   
    @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL)
    private List<UnavailableTimeslotRoomPenalty> unavailableTimeslotRoomPenaltyList = new ArrayList<UnavailableTimeslotRoomPenalty>();
+   
    @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL)
    private List<Track> trackList = new ArrayList<Track>();
+   
    @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL)
    private List<Speaker> speakerList = new ArrayList<Speaker>();
+   
    @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL)
    private List<Talk> talkList = new ArrayList<Talk>();
+   
    @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL)
    private List<SpeakingRelation> speakingRelationList = new ArrayList<SpeakingRelation>();
+   
    @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL)
    private List<TalkExclusion> talkExclusionList = new ArrayList<TalkExclusion>();
 
+   @Column (nullable=true)
+   private Integer hardScore;
+   
+   @Column (nullable=true)
+   private Integer softScore;
+   
+   @Transient
    private HardSoftScore score;
 
    public Schedule()
@@ -167,5 +184,33 @@ public class Schedule extends AbstractPersistable implements Solution<HardSoftSc
       // Do not add the planning entity's (processList) because that will be done automatically
       return facts;
    }
+
+   public Integer getHardScore()
+   {
+      if(hardScore == null){
+         hardScore = getScore().getHardScore();
+      }
+      return hardScore;
+   }
+
+   public void setHardScore(Integer hardScore)
+   {
+      this.hardScore = getScore().getHardScore();
+   }
+
+   public Integer getSoftScore()
+   {
+      if(hardScore == null){
+         hardScore = getScore().getSoftScore();
+      }
+      return softScore;
+   }
+
+   public void setSoftScore(Integer softScore)
+   {
+      this.softScore = getScore().getSoftScore();
+   }
+   
+   
 
 }
