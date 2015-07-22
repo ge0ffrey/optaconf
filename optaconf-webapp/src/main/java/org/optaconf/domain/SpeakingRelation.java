@@ -1,40 +1,61 @@
 package org.optaconf.domain;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
-import org.optaconf.service.DayService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+@Entity(name = "optaconf_speakingrelation")
+public class SpeakingRelation extends AbstractPersistable
+{
 
-@Entity(name="optaconf_speakingrelation")
-public class SpeakingRelation extends AbstractPersistable {
-	
-    private Speaker speaker;
-    private Talk talk;
+   @OneToOne
+   private Speaker speaker;
+   @OneToOne
+   private Talk talk;
+   
+   @ManyToOne
+   @JoinColumn(name="schedule_id", nullable=false)
+   private Schedule schedule;
 
-    public SpeakingRelation() {
-    }
+   public SpeakingRelation()
+   {}
 
-    public SpeakingRelation(String id, Talk talk, Speaker speaker) {
-        super(id);
-        this.talk = talk;
-        this.speaker = speaker;
-    }
+   public SpeakingRelation(String id, Talk talk, Speaker speaker)
+   {
+      super(id);
+      this.talk = talk;
+      this.speaker = speaker;
+   }
 
-    public Speaker getSpeaker() {
-        return speaker;
-    }
+   public Speaker getSpeaker()
+   {
+      return speaker;
+   }
 
-    public void setSpeaker(Speaker speaker) {
-        this.speaker = speaker;
-    }
+   public void setSpeaker(Speaker speaker)
+   {
+      this.speaker = speaker;
+   }
 
-    public Talk getTalk() {
-        return talk;
-    }
+   public Talk getTalk()
+   {
+      return talk;
+   }
 
-    public void setTalk(Talk talk) {
-        this.talk = talk;
-    }
+   public void setTalk(Talk talk)
+   {
+      this.talk = talk;
+   }
+   
+   public Schedule getSchedule()
+   {
+      return schedule;
+   }
+
+   public void setSchedule(Schedule schedule)
+   {
+      this.schedule = schedule;
+   }
 
 }

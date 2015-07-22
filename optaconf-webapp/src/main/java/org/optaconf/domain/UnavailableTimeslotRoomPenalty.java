@@ -16,39 +16,61 @@
 
 package org.optaconf.domain;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
-@Entity(name="optaconf_unavailtimeslotroompenalty")
-public class UnavailableTimeslotRoomPenalty extends AbstractPersistable {
-   @Column
-    private Timeslot timeslot;
-   @Column
-    private Room room;
+@Entity(name = "optaconf_unavailtimeslotroompenalty")
+public class UnavailableTimeslotRoomPenalty extends AbstractPersistable
+{
+   @OneToOne
+   private Timeslot timeslot;
+   @OneToOne
+   private Room room;
 
-    public UnavailableTimeslotRoomPenalty() {
-    }
+   @ManyToOne
+   @JoinColumn(name="schedule_id", nullable=false)
+   private Schedule schedule;
+   
+   public UnavailableTimeslotRoomPenalty()
+   {}
 
-    public UnavailableTimeslotRoomPenalty(String id, Timeslot timeslot, Room room) {
-        super(id);
-        this.timeslot = timeslot;
-        this.room = room;
-    }
+   public UnavailableTimeslotRoomPenalty(String id, Timeslot timeslot, Room room)
+   {
+      super(id);
+      this.timeslot = timeslot;
+      this.room = room;
+   }
 
-    public Timeslot getTimeslot() {
-        return timeslot;
-    }
+   public Timeslot getTimeslot()
+   {
+      return timeslot;
+   }
 
-    public void setTimeslot(Timeslot timeslot) {
-        this.timeslot = timeslot;
-    }
+   public void setTimeslot(Timeslot timeslot)
+   {
+      this.timeslot = timeslot;
+   }
 
-    public Room getRoom() {
-        return room;
-    }
+   public Room getRoom()
+   {
+      return room;
+   }
 
-    public void setRoom(Room room) {
-        this.room = room;
-    }
+   public void setRoom(Room room)
+   {
+      this.room = room;
+   }
+   
+   public Schedule getSchedule()
+   {
+      return schedule;
+   }
+
+   public void setSchedule(Schedule schedule)
+   {
+      this.schedule = schedule;
+   }
 
 }
