@@ -67,6 +67,15 @@ public class TalkService {
         return dayTimeslotRoomToTalkMap;
     }
 
+    
+    @GET
+    @Path("/schedule")
+    public Schedule getSchedule(@PathParam("conferenceId") Long conferenceId) {
+        Schedule schedule = scheduleManager.getSchedule();
+        
+        return schedule;
+    }
+    
     @GET
     @Path("/{talkId}/exclusion")
     public List<TalkExclusion> getTalkExclusionList(@PathParam("conferenceId") Long conferenceId,

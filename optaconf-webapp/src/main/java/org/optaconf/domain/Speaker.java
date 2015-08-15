@@ -1,12 +1,17 @@
 package org.optaconf.domain;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.builder.CompareToBuilder;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity(name = "optaconf_speaker")
 public class Speaker extends AbstractPersistable implements Comparable<Speaker>
@@ -16,23 +21,25 @@ public class Speaker extends AbstractPersistable implements Comparable<Speaker>
    private String name;
    
    @Column
-   private Boolean rockstar;
+   private Boolean rockstar = false;
 
-   @OneToOne(optional = false)
-   @JoinColumn(name = "speaking_relation_id", nullable = false)
+   @OneToOne(optional = true, cascade=CascadeType.ALL)
+   @JoinColumn(name = "speaking_relation_id", nullable = true)
    private SpeakingRelation relation;
    
-   @ManyToOne
+   @ManyToOne(cascade=CascadeType.ALL)
    @JoinColumn(name="schedule_id", nullable=false)
+   @JsonBackReference
    private Schedule schedule;
 
    public Speaker()
    {}
 
-   public Speaker(String id, String name)
+   public Speaker(String id, String name, Schedule schedule)
    {
       super(id);
       this.name = name;
+      this.schedule = schedule;
    }
 
    public String getName()

@@ -33,8 +33,8 @@ public abstract class AbstractPersistable implements Serializable {
     @Column(name="external_id")
     protected String externalId;
     
-    @Version 
-    protected int version;
+    @Version
+    protected Long version;
 
     protected AbstractPersistable() {
     }
@@ -59,11 +59,11 @@ public abstract class AbstractPersistable implements Serializable {
       this.externalId = externalId;
     }
 
-    public int getVersion() {
+    public Long getVersion() {
       return version;
     }
 
-    public void setVersion(int version) {
+    protected void setVersion(Long version) {
       this.version = version;
     }
 

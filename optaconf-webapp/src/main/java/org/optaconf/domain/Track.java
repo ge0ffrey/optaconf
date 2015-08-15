@@ -9,6 +9,12 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 /**
  * Group of tracks
@@ -25,18 +31,20 @@ public class Track extends AbstractPersistable
    @OneToMany(mappedBy="track", cascade=CascadeType.ALL)
    private List<Talk> talks = new ArrayList<Talk>();
 
-   @ManyToOne
+   @ManyToOne(cascade=CascadeType.ALL)
    @JoinColumn(name="schedule_id", nullable=false)
+   @JsonBackReference
    private Schedule schedule;
    
    public Track()
    {}
 
-   public Track(String id, String title, String cssStyleClass)
+   public Track(String id, String title, String cssStyleClass, Schedule schedule)
    {
       super(id);
       this.title = title;
       this.cssStyleClass = cssStyleClass;
+      this.schedule = schedule;
    }
 
    public String getTitle()

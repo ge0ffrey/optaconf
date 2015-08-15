@@ -1,38 +1,48 @@
 package org.optaconf.domain;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity(name = "optaconf_talkexclusion")
 public class TalkExclusion extends AbstractPersistable
 {
 
-   @OneToOne
+   @OneToOne(cascade=CascadeType.ALL)
+   @JsonBackReference
    private Talk firstTalk;
    
-   @OneToOne
+   @OneToOne(cascade=CascadeType.ALL)
+   @JsonBackReference
    private Talk secondTalk;
    
    @Enumerated(EnumType.STRING)
    private TalkExclusionType type;
    
-   @ManyToOne
+   @ManyToOne(cascade=CascadeType.ALL)
    @JoinColumn(name="schedule_id", nullable=false)
+   @JsonBackReference
    private Schedule schedule;
 
    public TalkExclusion()
    {}
 
-   public TalkExclusion(String id, Talk firstTalk, Talk secondTalk, TalkExclusionType type)
+   public TalkExclusion(String id, Talk firstTalk, Talk secondTalk, TalkExclusionType type, Schedule schedule)
    {
       super(id);
       this.firstTalk = firstTalk;
       this.secondTalk = secondTalk;
       this.type = type;
+      this.schedule = schedule;
    }
 
    public Talk getFirstTalk()

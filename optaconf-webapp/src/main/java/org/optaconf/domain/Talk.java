@@ -1,13 +1,19 @@
 package org.optaconf.domain;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import org.optaplanner.core.api.domain.entity.PlanningEntity;
 import org.optaplanner.core.api.domain.variable.PlanningVariable;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @PlanningEntity
 @Entity(name = "optaconf_talk")
@@ -17,38 +23,42 @@ public class Talk extends AbstractPersistable
    @Column(length=255, nullable=false)
    private String title;
 
-   @ManyToOne
+   @ManyToOne(cascade=CascadeType.ALL)
    @JoinColumn(name="track_id", nullable=false)
    private Track track;
    
-   @ManyToOne
+   @ManyToOne(cascade=CascadeType.ALL)
    @JoinColumn(name="timeslot_id", nullable=false)
    private Timeslot timeslot;
    
-   @ManyToOne
-   @JoinColumn(name="room_id", nullable=false)
+   @ManyToOne(cascade=CascadeType.ALL)
+   @JoinColumn(name="room_id", nullable=true)
    private Room room;
    
-   @OneToOne(optional=false)
-   @JoinColumn(name="speaking_relation_id", nullable=false)
+   @OneToOne(optional=true, cascade=CascadeType.ALL)
+   @JoinColumn(name="speaking_relation_id", nullable=true)
    private SpeakingRelation speakingRelation;
    
-   @OneToOne(optional = true)
+   @OneToOne(optional = true, cascade=CascadeType.ALL)
    @JoinColumn(name = "talk_exclusion_id")
    private TalkExclusion talkExclusion;
    
-   @ManyToOne
+   @ManyToOne(cascade=CascadeType.ALL)
    @JoinColumn(name="schedule_id", nullable=false)
+   @JsonBackReference
    private Schedule schedule;
 
    public Talk()
    {}
 
-   public Talk(String id, String title, Track track)
+   public Talk(String id, String title, Schedule schedule, Room room, Track track, Timeslot timeslot)
    {
       super(id);
       this.title = title;
       this.track = track;
+      this.schedule = schedule;
+      this.room = room;
+      this.timeslot = timeslot;
    }
 
    public String getTitle()

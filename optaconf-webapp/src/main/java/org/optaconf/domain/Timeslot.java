@@ -1,12 +1,22 @@
 package org.optaconf.domain;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import org.apache.commons.lang.builder.CompareToBuilder;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity(name = "optaconf_timeslot")
 public class Timeslot extends AbstractPersistable implements Comparable<Timeslot>
@@ -20,32 +30,35 @@ public class Timeslot extends AbstractPersistable implements Comparable<Timeslot
    @Column(length = 255, nullable = false)
    private String toTime;
 
-   @ManyToOne
+   @ManyToOne(cascade=CascadeType.ALL)
    @JoinColumn(name = "day_id", nullable = false)
+   @JsonBackReference
    private Day day;
 
-   @ManyToOne
-   @JoinColumn(name = "talk_id", nullable = false)
-   private Talk talk;
+   @OneToMany(mappedBy="timeslot", cascade=CascadeType.ALL)
+   private List<Talk> talks;
    
-   @OneToOne(optional = false)
+   @OneToOne(optional = true, cascade=CascadeType.ALL)
    @JoinColumn(name = "timeslot_room_penalty_id")
    private UnavailableTimeslotRoomPenalty penalty;
 
-   @ManyToOne
+   @ManyToOne(cascade=CascadeType.ALL)
    @JoinColumn(name="schedule_id", nullable=false)
+   @JsonBackReference
    private Schedule schedule;
+   
    
    public Timeslot()
    {}
 
-   public Timeslot(String id, String name, Day day, String fromTime, String toTime)
+   public Timeslot(String id, String name, Day day, String fromTime, String toTime, Schedule schedule)
    {
       super(id);
       this.name = name;
       this.day = day;
       this.fromTime = fromTime;
       this.toTime = toTime;
+      this.schedule = schedule;
    }
 
    public String getName()
@@ -98,14 +111,14 @@ public class Timeslot extends AbstractPersistable implements Comparable<Timeslot
                .toComparison();
    }
 
-   public Talk getTalk()
+   public List<Talk> getTalks()
    {
-      return talk;
+      return talks;
    }
 
-   public void setTalk(Talk talk)
+   public void setTalks(List<Talk> talks)
    {
-      this.talk = talk;
+      this.talks = talks;
    }
 
    public UnavailableTimeslotRoomPenalty getPenalty()

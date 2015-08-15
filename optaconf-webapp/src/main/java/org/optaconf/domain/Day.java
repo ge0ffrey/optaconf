@@ -9,6 +9,10 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.xml.bind.annotation.XmlRootElement;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity(name="optaconf_day")
 public class Day extends AbstractPersistable implements Comparable<Day> {
@@ -20,19 +24,22 @@ public class Day extends AbstractPersistable implements Comparable<Day> {
     private String date;
     
     @OneToMany(mappedBy="day", cascade=CascadeType.ALL)
+    @JsonManagedReference
     private List<Timeslot> timeslots = new ArrayList<Timeslot>();
     
-    @ManyToOne
+    @ManyToOne(cascade=CascadeType.ALL)
     @JoinColumn(name="schedule_id", nullable=false)
+    @JsonBackReference
     private Schedule schedule;
     
     public Day() {
     }
 
-    public Day(String id, String name, String date) {
+    public Day(String id, String name, String date, Schedule schedule) {
         super(id);
         this.name = name;
         this.date = date;
+        this.schedule = schedule;
     }
 
     public String getName() {

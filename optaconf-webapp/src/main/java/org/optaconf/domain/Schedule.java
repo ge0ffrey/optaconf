@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,35 +17,46 @@ import org.optaplanner.core.api.domain.solution.Solution;
 import org.optaplanner.core.api.domain.valuerange.ValueRangeProvider;
 import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @PlanningSolution
 @Entity(name="optaconf_schedule")
 public class Schedule extends AbstractPersistable implements Solution<HardSoftScore>
 {
    @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL)
+   @JsonManagedReference
    private List<Day> dayList = new ArrayList<Day>();
    
    @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL)
+   @JsonManagedReference
    private List<Timeslot> timeslotList = new ArrayList<Timeslot>();
    
    @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL)
+   @JsonManagedReference
    private List<Room> roomList = new ArrayList<Room>();
    
    @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL)
+   @JsonManagedReference
    private List<UnavailableTimeslotRoomPenalty> unavailableTimeslotRoomPenaltyList = new ArrayList<UnavailableTimeslotRoomPenalty>();
    
    @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL)
+   @JsonManagedReference
    private List<Track> trackList = new ArrayList<Track>();
    
    @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL)
+   @JsonManagedReference
    private List<Speaker> speakerList = new ArrayList<Speaker>();
    
    @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL)
+   @JsonManagedReference
    private List<Talk> talkList = new ArrayList<Talk>();
    
    @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL)
+   @JsonManagedReference
    private List<SpeakingRelation> speakingRelationList = new ArrayList<SpeakingRelation>();
    
    @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL)
+   @JsonManagedReference
    private List<TalkExclusion> talkExclusionList = new ArrayList<TalkExclusion>();
 
    @Column (nullable=true)
@@ -52,6 +64,12 @@ public class Schedule extends AbstractPersistable implements Solution<HardSoftSc
    
    @Column (nullable=true)
    private Integer softScore;
+   
+   @Column (nullable=false)
+   private String name;
+   
+   @Column (nullable=false)
+   private String comment;
    
    @Transient
    private HardSoftScore score;
@@ -210,7 +228,27 @@ public class Schedule extends AbstractPersistable implements Solution<HardSoftSc
    {
       this.softScore = getScore().getSoftScore();
    }
+
+   public String getName()
+   {
+      return name;
+   }
+
+   public void setName(String name)
+   {
+      this.name = name;
+   }
    
+
+   public String getComment()
+   {
+      return comment;
+   }
+
+   public void setComment(String comment)
+   {
+      this.comment = comment;
+   }
    
 
 }

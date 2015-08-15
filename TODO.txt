@@ -1,7 +1,7 @@
 - Tests: unit tests, etc
 -- testdata => serialize a schedule to a file (let's just xstream dump it)
 -- just testing the solver?
-(-- test the jaxrs calls with arquillian maybe? or cargo? or soapui?)
+(-- test the jaxrs calls with arquillian maybe? or cargo? or soapui?)... Still thinking about what would be the best solution for this
 
 
 
@@ -11,8 +11,9 @@
 -- hsql with example datasource - FINISHED
 -- auto-generate tables => "just works" - FINISHED
 -- optimistic locking - introduced @version column - FINISHED
--- annotate relationships with proper jpa @OneToMany, @ManyToMany, @ManyToOne (currently not done and thus composition treated as binary)
--- add proper constraints to fields other than @Column, for instance field level validation, and null constraints
+-- annotate relationships with proper jpa @OneToMany, @ManyToMany, @ManyToOne - FINISHED
+-- add proper constraints to fields other than @Column, for instance field level validation, and null constraints - FINISHED, UNTIL I NEED TO RELAX OR TIGHTEN SOMETHING 
+-- add @Json annotations to prevent circular references - FINISHED
 
 - extra constraints (ge0ffrey)
 -- Add domain + constraint + CRUD for SpeakerTimeslotUnavailability

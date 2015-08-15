@@ -6,16 +6,20 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.Collections;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.ejb.LocalBean;
 import javax.enterprise.context.ApplicationScoped;
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import org.apache.commons.io.IOUtils;
 import org.optaconf.domain.Day;
@@ -32,8 +36,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @ApplicationScoped
+@LocalBean
 public class DevoxxImporter {
 
+   @PersistenceContext(unitName="optaconf-webapp-persistence-unit")
+   private EntityManager em;
+   
     private static final Logger LOG = LoggerFactory
             .getLogger(DevoxxImporter.class);
 
@@ -42,12 +50,21 @@ public class DevoxxImporter {
     private static final String REST_URL_ROOT = "http://cfp.devoxx.fr/api/conferences/DevoxxFR2015";
 
     public Schedule importSchedule() {
+        StringBuilder scheduleComment = new StringBuilder("Imported on ").append(new Date().toString()).append(" from ").append(REST_URL_ROOT);
+        
         Schedule schedule = new Schedule();
+        schedule.setName("DEVOXX FR 2015");
+        schedule.setComment(scheduleComment.toString());
+        schedule.setExternalId(REST_URL_ROOT);
+        
         Map<String, Track> titleToTrackMap = mapTracks(schedule);
         Map<String, Speaker> speakerMap = mapSpeakers(schedule);
         Map<String, Room> roomMap = mapRooms(schedule);
         mapDays(schedule, titleToTrackMap, speakerMap, roomMap);
         buildUnavailableTimeslotRoomPenaltyList(schedule);
+        
+        em.persist(schedule);
+        
         return schedule;
     }
 
@@ -61,7 +78,8 @@ public class DevoxxImporter {
             String id = dTrack.getString("id");
             String title = dTrack.getString("title");
             String colorHex = tangoColorFactory.pickCssClass(id);
-            Track track = new Track(id, title, colorHex);
+            Track track = new Track(id, title, colorHex, schedule);
+            em.persist(track);
             schedule.getTrackList().add(track);
             titleToTrackMap.put(title, track);
         }
@@ -77,7 +95,8 @@ public class DevoxxImporter {
             String firstName = dSpeaker.getString("firstName");
             String lastName = dSpeaker.getString("lastName");
             String name = firstName + " " + lastName;
-            Speaker speaker = new Speaker(id, name);
+            Speaker speaker = new Speaker(id, name, schedule);
+            em.persist(speaker);
             schedule.getSpeakerList().add(speaker);
             speakerMap.put(id, speaker);
         }
@@ -98,7 +117,8 @@ public class DevoxxImporter {
             if (!dRoom.getString("setup").equals("theatre")) {
                 continue;
             }
-            Room room = new Room(id, name, capacity);
+            Room room = new Room(id, name, capacity, schedule);
+            em.persist(room);
             schedule.getRoomList().add(room);
             roomMap.put(id, room);
         }
@@ -124,7 +144,8 @@ public class DevoxxImporter {
             }
             String name = dTitleMatcher.group(1);
             String date = dTitleMatcher.group(2);
-            Day day = new Day(dHref.replaceAll(".*\\/(.*)/", "$1"), name, date);
+            Day day = new Day(dHref.replaceAll(".*\\/(.*)/", "$1"), name, date, schedule);
+            em.persist(day);
             schedule.getDayList().add(day);
             mapTalks(schedule, titleToTrackMap, speakerMap, roomMap, dHref, day);
         }
@@ -156,23 +177,19 @@ public class DevoxxImporter {
             }
             if (trackTitle
                     .equalsIgnoreCase("Architecture, Performance and Security")) {
-                // Workaround to a bug in the Devoxx REST API, because
-                // "Startups" doesn't exist as a track id or title
+                // Workaround to a bug in the Devoxx REST API
                 trackTitle = "Architecture, Performance & Security";
             }
             if (trackTitle.equalsIgnoreCase("Cloud & DevOps")) {
-                // Workaround to a bug in the Devoxx REST API, because
-                // "Startups" doesn't exist as a track id or title
+                // Workaround to a bug in the Devoxx REST API
                 trackTitle = "Cloud, DevOps and Tools";
             }
             if (trackTitle.equalsIgnoreCase("Web, Mobile & UX")) {
-                // Workaround to a bug in the Devoxx REST API, because
-                // "Startups" doesn't exist as a track id or title
+                // Workaround to a bug in the Devoxx REST API
                 trackTitle = "Web, Mobile &  UX";
             }
             if (trackTitle.equalsIgnoreCase("Agility, Methodology & Tests")) {
-                // Workaround to a bug in the Devoxx REST API, because
-                // "Startups" doesn't exist as a track id or title
+                // Workaround to a bug in the Devoxx REST API
                 trackTitle = "Agility, Methodology & Test";
             }
             String id = dTalk.getString("id");
@@ -183,7 +200,29 @@ public class DevoxxImporter {
                         + trackTitle + ") is not part of the titleToTrackMap ("
                         + titleToTrackMap + ").");
             }
-            Talk talk = new Talk(id, title, track);
+            
+            String roomId = dSlot.getString("roomId");
+            Room room = roomMap.get(roomId);
+            
+            String fromTime = dSlot.getString("fromTime");
+            String toTime = dSlot.getString("toTime");
+            
+            String timeslotId = fromTime + " - " + toTime;
+            
+            Timeslot timeslot = timeslotMap.get(timeslotId);
+            if (timeslot == null) {
+                timeslot = new Timeslot(timeslotId, timeslotId, day, fromTime,
+                        toTime, schedule);
+                
+                em.persist(timeslot);
+                schedule.getTimeslotList().add(timeslot);
+                timeslotMap.put(timeslotId, timeslot);
+            }
+            
+            Talk talk = new Talk(id, title, schedule, room, track, timeslot);
+            
+            em.persist(talk);
+            
             schedule.getTalkList().add(talk);
 
             JsonArray speakersArray = dTalk.getJsonArray("speakers");
@@ -203,25 +242,11 @@ public class DevoxxImporter {
                     // ").");
                 }
                 SpeakingRelation speakingRelation = new SpeakingRelation(
-                        talk.getExternalId() + "_" + speaker.getExternalId(), talk, speaker);
+                        talk.getExternalId() + "_" + speaker.getExternalId(), talk, speaker, schedule);
                 schedule.getSpeakingRelationList().add(speakingRelation);
             }
 
-            String roomId = dSlot.getString("roomId");
-            Room room = roomMap.get(roomId);
-            talk.setRoom(room);
-
-            String fromTime = dSlot.getString("fromTime");
-            String toTime = dSlot.getString("toTime");
-            String timeslotId = fromTime + " - " + toTime;
-            Timeslot timeslot = timeslotMap.get(timeslotId);
-            if (timeslot == null) {
-                timeslot = new Timeslot(timeslotId, timeslotId, day, fromTime,
-                        toTime);
-                schedule.getTimeslotList().add(timeslot);
-                timeslotMap.put(timeslotId, timeslot);
-            }
-            talk.setTimeslot(timeslot);
+            
         }
         Collections.sort(schedule.getTimeslotList());
     }
@@ -247,7 +272,8 @@ public class DevoxxImporter {
                 if (roomToTalkMap == null || !roomToTalkMap.containsKey(room)) {
                     UnavailableTimeslotRoomPenalty penalty = new UnavailableTimeslotRoomPenalty(
                             timeslot.getExternalId() + "_" + room.getExternalId(), timeslot,
-                            room);
+                            room, schedule);
+                    em.persist(penalty);
                     schedule.getUnavailableTimeslotRoomPenaltyList().add(
                             penalty);
                 }

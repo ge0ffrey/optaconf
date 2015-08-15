@@ -55,11 +55,9 @@ public class ScheduleService {
 	@POST
 	@Path("/import/devoxx")
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public Response importDevoxx(@PathParam("conferenceId") Long conferenceId) {
+	public Response importDevoxx() {
 		Schedule schedule = devoxxImporter.importSchedule();
 		scheduleManager.setSchedule(schedule);
-		
-		em.persist(schedule);
 		
 		StringBuilder message = new StringBuilder()
 				.append("Devoxx schedule with ")

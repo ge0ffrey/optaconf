@@ -16,32 +16,40 @@
 
 package org.optaconf.domain;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.xml.bind.annotation.XmlRootElement;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity(name = "optaconf_unavailtimeslotroompenalty")
 public class UnavailableTimeslotRoomPenalty extends AbstractPersistable
 {
-   @OneToOne
+   @OneToOne(cascade=CascadeType.ALL)
+   @JsonBackReference
    private Timeslot timeslot;
    
-   @OneToOne
+   @OneToOne(cascade=CascadeType.ALL)
+   @JsonBackReference
    private Room room;
 
-   @ManyToOne
+   @ManyToOne(cascade=CascadeType.ALL)
    @JoinColumn(name="schedule_id", nullable=false)
+   @JsonBackReference
    private Schedule schedule;
    
    public UnavailableTimeslotRoomPenalty()
    {}
 
-   public UnavailableTimeslotRoomPenalty(String id, Timeslot timeslot, Room room)
+   public UnavailableTimeslotRoomPenalty(String id, Timeslot timeslot, Room room, Schedule schedule)
    {
       super(id);
       this.timeslot = timeslot;
       this.room = room;
+      this.schedule = schedule;
    }
 
    public Timeslot getTimeslot()
