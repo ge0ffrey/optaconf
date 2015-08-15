@@ -1,8 +1,14 @@
 package org.optaconf.service;
 
 import javax.annotation.Resource;
+import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.enterprise.concurrent.ManagedExecutorService;
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -24,10 +30,15 @@ import org.slf4j.LoggerFactory;
 @Path("/{conferenceId}/schedule")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@Stateless
+@LocalBean
 public class ScheduleService {
 
 	private static final Logger LOG = LoggerFactory
 			.getLogger(ScheduleService.class);
+	
+	@PersistenceContext(unitName="optaconf-webapp-persistence-unit")
+	private EntityManager em;
 
 	@Inject
 	private ScheduleManager scheduleManager;
@@ -43,9 +54,12 @@ public class ScheduleService {
 
 	@POST
 	@Path("/import/devoxx")
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public Response importDevoxx(@PathParam("conferenceId") Long conferenceId) {
 		Schedule schedule = devoxxImporter.importSchedule();
 		scheduleManager.setSchedule(schedule);
+		
+		em.persist(schedule);
 		
 		StringBuilder message = new StringBuilder()
 				.append("Devoxx schedule with ")
