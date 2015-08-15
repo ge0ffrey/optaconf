@@ -31,12 +31,12 @@ public class Day extends AbstractPersistable implements Comparable<Day> {
     @ManyToOne(cascade=CascadeType.ALL)
     @JoinColumn(name="schedule_id", nullable=false)
     @JsonBackReference
-    private Schedule schedule;
+    private Conference schedule;
     
     public Day() {
     }
 
-    public Day(String id, String name, String date, Schedule schedule) {
+    public Day(String id, String name, String date, Conference schedule) {
         super(id);
         this.name = name;
         this.date = date;
@@ -74,12 +74,12 @@ public class Day extends AbstractPersistable implements Comparable<Day> {
       this.timeslots = timeslots;
    }
 
-   public Schedule getSchedule()
+   public Conference getSchedule()
    {
       return schedule;
    }
 
-   public void setSchedule(Schedule schedule)
+   public void setSchedule(Conference schedule)
    {
       this.schedule = schedule;
    } 

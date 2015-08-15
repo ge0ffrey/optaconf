@@ -12,7 +12,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.optaconf.cdi.ScheduleManager;
 import org.optaconf.domain.Room;
-import org.optaconf.domain.Schedule;
+import org.optaconf.domain.Conference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +30,7 @@ public class RoomService {
     @GET
     @Path("/")
     public List<Room> getRoomList(@PathParam("conferenceId") Long conferenceId) {
-        Schedule schedule = scheduleManager.getSchedule();
+        Conference schedule = scheduleManager.getSchedule();
         return schedule.getRoomList();
     }
 

@@ -35,12 +35,12 @@ public class Track extends AbstractPersistable
    @ManyToOne(cascade=CascadeType.ALL)
    @JoinColumn(name="schedule_id", nullable=false)
    @JsonBackReference
-   private Schedule schedule;
+   private Conference schedule;
    
    public Track()
    {}
 
-   public Track(String id, String title, String cssStyleClass, Schedule schedule)
+   public Track(String id, String title, String cssStyleClass, Conference schedule)
    {
       super(id);
       this.title = title;
@@ -68,12 +68,12 @@ public class Track extends AbstractPersistable
       this.cssStyleClass = cssStyleClass;
    }
    
-   public Schedule getSchedule()
+   public Conference getSchedule()
    {
       return schedule;
    }
 
-   public void setSchedule(Schedule schedule)
+   public void setSchedule(Conference schedule)
    {
       this.schedule = schedule;
    }

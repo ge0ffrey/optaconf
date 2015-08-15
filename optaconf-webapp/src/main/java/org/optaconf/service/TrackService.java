@@ -11,7 +11,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.optaconf.cdi.ScheduleManager;
-import org.optaconf.domain.Schedule;
+import org.optaconf.domain.Conference;
 import org.optaconf.domain.Track;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +29,7 @@ public class TrackService {
     @GET
     @Path("/")
     public List<Track> getTrackList(@PathParam("conferenceId") Long conferenceId) {
-        Schedule schedule = scheduleManager.getSchedule();
+        Conference schedule = scheduleManager.getSchedule();
         return schedule.getTrackList();
     }
 

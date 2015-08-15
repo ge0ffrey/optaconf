@@ -24,7 +24,7 @@ import javax.persistence.PersistenceContext;
 import org.apache.commons.io.IOUtils;
 import org.optaconf.domain.Day;
 import org.optaconf.domain.Room;
-import org.optaconf.domain.Schedule;
+import org.optaconf.domain.Conference;
 import org.optaconf.domain.Speaker;
 import org.optaconf.domain.SpeakingRelation;
 import org.optaconf.domain.Talk;
@@ -49,10 +49,10 @@ public class DevoxxImporter {
     // "http://cfp.devoxx.be/api/conferences/DevoxxBe2015";
     private static final String REST_URL_ROOT = "http://cfp.devoxx.fr/api/conferences/DevoxxFR2015";
 
-    public Schedule importSchedule() {
+    public Conference importSchedule() {
         StringBuilder scheduleComment = new StringBuilder("Imported on ").append(new Date().toString()).append(" from ").append(REST_URL_ROOT);
         
-        Schedule schedule = new Schedule();
+        Conference schedule = new Conference();
         schedule.setName("DEVOXX FR 2015");
         schedule.setComment(scheduleComment.toString());
         schedule.setExternalId(REST_URL_ROOT);
@@ -68,7 +68,7 @@ public class DevoxxImporter {
         return schedule;
     }
 
-    private Map<String, Track> mapTracks(Schedule schedule) {
+    private Map<String, Track> mapTracks(Conference schedule) {
         Map<String, Track> titleToTrackMap = new LinkedHashMap<String, Track>();
         JsonObject rootObject = readJsonObject(REST_URL_ROOT + "/tracks");
         JsonArray array = rootObject.getJsonArray("tracks");
@@ -86,7 +86,7 @@ public class DevoxxImporter {
         return titleToTrackMap;
     }
 
-    private Map<String, Speaker> mapSpeakers(Schedule schedule) {
+    private Map<String, Speaker> mapSpeakers(Conference schedule) {
         Map<String, Speaker> speakerMap = new LinkedHashMap<String, Speaker>();
         JsonArray array = readJsonArray(REST_URL_ROOT + "/speakers");
         for (int i = 0; i < array.size(); i++) {
@@ -104,7 +104,7 @@ public class DevoxxImporter {
         return speakerMap;
     }
 
-    private Map<String, Room> mapRooms(Schedule schedule) {
+    private Map<String, Room> mapRooms(Conference schedule) {
         Map<String, Room> roomMap = new LinkedHashMap<String, Room>();
         JsonObject rootObject = readJsonObject(REST_URL_ROOT + "/rooms");
         JsonArray array = rootObject.getJsonArray("rooms");
@@ -126,7 +126,7 @@ public class DevoxxImporter {
         return roomMap;
     }
 
-    private void mapDays(Schedule schedule, Map<String, Track> titleToTrackMap,
+    private void mapDays(Conference schedule, Map<String, Track> titleToTrackMap,
             Map<String, Speaker> speakerMap, Map<String, Room> roomMap) {
         JsonObject rootObject = readJsonObject(REST_URL_ROOT + "/schedules");
         JsonArray array = rootObject.getJsonArray("links");
@@ -152,7 +152,7 @@ public class DevoxxImporter {
         Collections.sort(schedule.getDayList());
     }
 
-    private void mapTalks(Schedule schedule,
+    private void mapTalks(Conference schedule,
             Map<String, Track> titleToTrackMap,
             Map<String, Speaker> speakerMap, Map<String, Room> roomMap,
             String dayUrl, Day day) {
@@ -251,7 +251,7 @@ public class DevoxxImporter {
         Collections.sort(schedule.getTimeslotList());
     }
 
-    private void buildUnavailableTimeslotRoomPenaltyList(Schedule schedule) {
+    private void buildUnavailableTimeslotRoomPenaltyList(Conference schedule) {
         Map<Timeslot, Map<Room, Talk>> timeslotRoomToTalkMap = new LinkedHashMap<>();
         for (Talk talk : schedule.getTalkList()) {
             Timeslot timeslot = talk.getTimeslot();

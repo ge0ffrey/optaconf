@@ -22,8 +22,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @PlanningSolution
-@Entity(name="optaconf_schedule")
-public class Schedule extends AbstractPersistable implements Solution<HardSoftScore>
+@Entity(name="optaconf_conference")
+public class Conference extends AbstractPersistable implements Solution<HardSoftScore>
 {
    @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
    @JsonManagedReference
@@ -79,10 +79,10 @@ public class Schedule extends AbstractPersistable implements Solution<HardSoftSc
    @JsonIgnore
    private HardSoftScore score;
 
-   public Schedule()
+   public Conference()
    {}
 
-   public Schedule(String id)
+   public Conference(String id)
    {
       super(id);
    }

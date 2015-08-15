@@ -30,12 +30,12 @@ public class Speaker extends AbstractPersistable implements Comparable<Speaker>
    @ManyToOne(cascade=CascadeType.ALL)
    @JoinColumn(name="schedule_id", nullable=false)
    @JsonBackReference
-   private Schedule schedule;
+   private Conference schedule;
 
    public Speaker()
    {}
 
-   public Speaker(String id, String name, Schedule schedule)
+   public Speaker(String id, String name, Conference schedule)
    {
       super(id);
       this.name = name;
@@ -86,12 +86,12 @@ public class Speaker extends AbstractPersistable implements Comparable<Speaker>
       this.relation = relation;
    }
    
-   public Schedule getSchedule()
+   public Conference getSchedule()
    {
       return schedule;
    }
 
-   public void setSchedule(Schedule schedule)
+   public void setSchedule(Conference schedule)
    {
       this.schedule = schedule;
    }

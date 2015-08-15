@@ -16,7 +16,7 @@ import javax.ws.rs.core.MediaType;
 import org.optaconf.cdi.ScheduleManager;
 import org.optaconf.domain.Day;
 import org.optaconf.domain.Room;
-import org.optaconf.domain.Schedule;
+import org.optaconf.domain.Conference;
 import org.optaconf.domain.Talk;
 import org.optaconf.domain.TalkExclusion;
 import org.optaconf.domain.Timeslot;
@@ -36,14 +36,14 @@ public class TalkService {
     @GET
     @Path("/")
     public List<Talk> getTalkList(@PathParam("conferenceId") Long conferenceId) {
-        Schedule schedule = scheduleManager.getSchedule();
+        Conference schedule = scheduleManager.getSchedule();
         return schedule.getTalkList();
     }
 
     @GET
     @Path("/map")
     public Map<String, Map<String, Map<String, Talk>>> getDayTimeslotRoomToTalkMap(@PathParam("conferenceId") Long conferenceId) {
-        Schedule schedule = scheduleManager.getSchedule();
+        Conference schedule = scheduleManager.getSchedule();
         Map<String, Map<String, Map<String, Talk>>> dayTimeslotRoomToTalkMap = new LinkedHashMap<String, Map<String, Map<String, Talk>>>();
         for (Day day : schedule.getDayList()) {
             dayTimeslotRoomToTalkMap.put(day.getExternalId(), new LinkedHashMap<String, Map<String, Talk>>());
@@ -70,8 +70,8 @@ public class TalkService {
     
     @GET
     @Path("/schedule")
-    public Schedule getSchedule(@PathParam("conferenceId") Long conferenceId) {
-        Schedule schedule = scheduleManager.getSchedule();
+    public Conference getSchedule(@PathParam("conferenceId") Long conferenceId) {
+        Conference schedule = scheduleManager.getSchedule();
         
         return schedule;
     }
@@ -80,7 +80,7 @@ public class TalkService {
     @Path("/{talkId}/exclusion")
     public List<TalkExclusion> getTalkExclusionList(@PathParam("conferenceId") Long conferenceId,
             @PathParam("talkId") Long talkId) {
-        Schedule schedule = scheduleManager.getSchedule();
+        Conference schedule = scheduleManager.getSchedule();
         // TODO do proper query to DB instead of filtering here
         List<TalkExclusion> globalTalkExclusionList = schedule.getTalkExclusionList();
         List<TalkExclusion> talkExclusionList = new ArrayList<TalkExclusion>(globalTalkExclusionList.size());

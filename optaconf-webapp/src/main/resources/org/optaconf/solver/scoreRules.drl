@@ -6,7 +6,7 @@ import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScoreHolder;
 import org.optaconf.domain.Day;
 import org.optaconf.domain.Room;
 import org.optaconf.domain.UnavailableTimeslotRoomPenalty;
-import org.optaconf.domain.Schedule;
+import org.optaconf.domain.Conference;
 import org.optaconf.domain.Talk;
 import org.optaconf.domain.TalkExclusion;
 import org.optaconf.domain.TalkExclusionType;

@@ -3,7 +3,7 @@
   <environmentMode>FAST_ASSERT</environmentMode>
 
   <!-- Domain model configuration -->
-  <solutionClass>org.optaconf.domain.Schedule</solutionClass>
+  <solutionClass>org.optaconf.domain.Conference</solutionClass>
   <entityClass>org.optaconf.domain.Talk</entityClass>
 
   <!-- Score configuration -->

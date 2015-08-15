@@ -23,8 +23,8 @@
 -- ConferenceParametrization object
 
 - Multitenancy or multiple conferences
--- refactor rename Schedule to Conference
--- Add a String name to Conference
+-- refactor rename Schedule to Conference - FINISHED
+-- Add a String name to Conference - FINISHED
 -- Opening screen: list of conferences (if a conf is imported multiple times, it shows up multiple times)
 -- and a button "new conference" => from scratch or import (from devoxx BE or FR or ...)
 

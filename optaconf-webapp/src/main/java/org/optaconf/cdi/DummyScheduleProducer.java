@@ -10,7 +10,7 @@ import javax.enterprise.inject.Produces;
 
 import org.optaconf.domain.Day;
 import org.optaconf.domain.Room;
-import org.optaconf.domain.Schedule;
+import org.optaconf.domain.Conference;
 import org.optaconf.domain.Talk;
 import org.optaconf.domain.TalkExclusion;
 import org.optaconf.domain.TalkExclusionType;
@@ -27,7 +27,7 @@ public class DummyScheduleProducer implements Serializable {
 	
     @Produces @SessionScoped
     public ScheduleManager createDummySchedule() {
-        Schedule schedule = new Schedule();
+        Conference schedule = new Conference();
 
         List<Day> dayList = new ArrayList<Day>();
         Day wedDay = new Day("1", "Wed", "2014-11-13", schedule);

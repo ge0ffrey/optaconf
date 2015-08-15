@@ -48,12 +48,12 @@ public class Talk extends AbstractPersistable
    @ManyToOne(cascade=CascadeType.ALL)
    @JoinColumn(name="schedule_id", nullable=false)
    @JsonBackReference
-   private Schedule schedule;
+   private Conference schedule;
 
    public Talk()
    {}
 
-   public Talk(String id, String title, Schedule schedule, Room room, Track track, Timeslot timeslot)
+   public Talk(String id, String title, Conference schedule, Room room, Track track, Timeslot timeslot)
    {
       super(id);
       this.title = title;
@@ -125,12 +125,12 @@ public class Talk extends AbstractPersistable
       this.talkExclusion = talkExclusion;
    }
    
-   public Schedule getSchedule()
+   public Conference getSchedule()
    {
       return schedule;
    }
 
-   public void setSchedule(Schedule schedule)
+   public void setSchedule(Conference schedule)
    {
       this.schedule = schedule;
    }

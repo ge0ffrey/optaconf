@@ -39,12 +39,12 @@ public class Room extends AbstractPersistable implements Comparable<Room>
    @ManyToOne(cascade=CascadeType.ALL)
    @JoinColumn(name = "schedule_id", nullable = false)
    @JsonBackReference
-   private Schedule schedule;
+   private Conference schedule;
 
    public Room()
    {}
 
-   public Room(String id, String name, int seatingCapacity, Schedule schedule)
+   public Room(String id, String name, int seatingCapacity, Conference schedule)
    {
       super(id);
       this.name = name;
@@ -101,12 +101,12 @@ public class Room extends AbstractPersistable implements Comparable<Room>
       this.penalty = penalty;
    }
 
-   public Schedule getSchedule()
+   public Conference getSchedule()
    {
       return schedule;
    }
 
-   public void setSchedule(Schedule schedule)
+   public void setSchedule(Conference schedule)
    {
       this.schedule = schedule;
    }
