@@ -8,6 +8,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
@@ -23,39 +24,39 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Entity(name="optaconf_schedule")
 public class Schedule extends AbstractPersistable implements Solution<HardSoftScore>
 {
-   @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL)
+   @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
    @JsonManagedReference
    private List<Day> dayList = new ArrayList<Day>();
    
-   @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL)
+   @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
    @JsonManagedReference
    private List<Timeslot> timeslotList = new ArrayList<Timeslot>();
    
-   @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL)
+   @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
    @JsonManagedReference
    private List<Room> roomList = new ArrayList<Room>();
    
-   @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL)
+   @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
    @JsonManagedReference
    private List<UnavailableTimeslotRoomPenalty> unavailableTimeslotRoomPenaltyList = new ArrayList<UnavailableTimeslotRoomPenalty>();
    
-   @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL)
+   @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
    @JsonManagedReference
    private List<Track> trackList = new ArrayList<Track>();
    
-   @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL)
+   @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
    @JsonManagedReference
    private List<Speaker> speakerList = new ArrayList<Speaker>();
    
-   @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL)
+   @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
    @JsonManagedReference
    private List<Talk> talkList = new ArrayList<Talk>();
    
-   @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL)
+   @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
    @JsonManagedReference
    private List<SpeakingRelation> speakingRelationList = new ArrayList<SpeakingRelation>();
    
-   @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL)
+   @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
    @JsonManagedReference
    private List<TalkExclusion> talkExclusionList = new ArrayList<TalkExclusion>();
 

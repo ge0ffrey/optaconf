@@ -29,10 +29,12 @@ public class Talk extends AbstractPersistable
    
    @ManyToOne(cascade=CascadeType.ALL)
    @JoinColumn(name="timeslot_id", nullable=false)
+   @JsonBackReference
    private Timeslot timeslot;
    
    @ManyToOne(cascade=CascadeType.ALL)
    @JoinColumn(name="room_id", nullable=true)
+   @JsonBackReference
    private Room room;
    
    @OneToOne(optional=true, cascade=CascadeType.ALL)

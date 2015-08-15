@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -27,10 +28,11 @@ public class Room extends AbstractPersistable implements Comparable<Room>
    @Column
    private int seatingCapacity;
 
-   @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
+   @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+   @JsonManagedReference
    private List<Talk> talks = new ArrayList<Talk>();
 
-   @OneToOne(optional = true, cascade=CascadeType.ALL)
+   @OneToOne(optional = true, cascade=CascadeType.ALL, fetch = FetchType.EAGER)
    @JoinColumn(name = "timeslot_room_penalty_id")
    private UnavailableTimeslotRoomPenalty penalty;
 

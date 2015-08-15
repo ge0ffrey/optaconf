@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -35,10 +36,11 @@ public class Timeslot extends AbstractPersistable implements Comparable<Timeslot
    @JsonBackReference
    private Day day;
 
-   @OneToMany(mappedBy="timeslot", cascade=CascadeType.ALL)
+   @OneToMany(mappedBy="timeslot", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+   @JsonManagedReference
    private List<Talk> talks;
    
-   @OneToOne(optional = true, cascade=CascadeType.ALL)
+   @OneToOne(optional = true, cascade=CascadeType.ALL, fetch = FetchType.EAGER)
    @JoinColumn(name = "timeslot_room_penalty_id")
    private UnavailableTimeslotRoomPenalty penalty;
 

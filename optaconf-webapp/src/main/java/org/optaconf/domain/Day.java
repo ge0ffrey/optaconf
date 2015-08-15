@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -23,7 +24,7 @@ public class Day extends AbstractPersistable implements Comparable<Day> {
     @Column(length=255, nullable=false)
     private String date;
     
-    @OneToMany(mappedBy="day", cascade=CascadeType.ALL)
+    @OneToMany(mappedBy="day", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<Timeslot> timeslots = new ArrayList<Timeslot>();
     
