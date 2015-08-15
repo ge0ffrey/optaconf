@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,6 +18,7 @@ import org.optaplanner.core.api.domain.valuerange.ValueRangeProvider;
 import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @PlanningSolution
@@ -27,46 +27,55 @@ public class Conference extends AbstractPersistable implements Solution<HardSoft
 {
    @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
    @JsonManagedReference
+   @JsonInclude(JsonInclude.Include.NON_EMPTY)
    private List<Day> dayList = new ArrayList<Day>();
    
    @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
    @JsonManagedReference
+   @JsonInclude(JsonInclude.Include.NON_EMPTY)
    private List<Timeslot> timeslotList = new ArrayList<Timeslot>();
    
    @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
    @JsonManagedReference
+   @JsonInclude(JsonInclude.Include.NON_EMPTY)
    private List<Room> roomList = new ArrayList<Room>();
    
    @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
    @JsonManagedReference
+   @JsonInclude(JsonInclude.Include.NON_EMPTY)
    private List<UnavailableTimeslotRoomPenalty> unavailableTimeslotRoomPenaltyList = new ArrayList<UnavailableTimeslotRoomPenalty>();
    
    @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
    @JsonManagedReference
+   @JsonInclude(JsonInclude.Include.NON_EMPTY)
    private List<Track> trackList = new ArrayList<Track>();
    
    @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
    @JsonManagedReference
+   @JsonInclude(JsonInclude.Include.NON_EMPTY)
    private List<Speaker> speakerList = new ArrayList<Speaker>();
    
    @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
    @JsonManagedReference
+   @JsonInclude(JsonInclude.Include.NON_EMPTY)
    private List<Talk> talkList = new ArrayList<Talk>();
    
    @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
    @JsonManagedReference
+   @JsonInclude(JsonInclude.Include.NON_EMPTY)
    private List<SpeakingRelation> speakingRelationList = new ArrayList<SpeakingRelation>();
    
    @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
    @JsonManagedReference
+   @JsonInclude(JsonInclude.Include.NON_EMPTY)
    private List<TalkExclusion> talkExclusionList = new ArrayList<TalkExclusion>();
 
    @Column (nullable=true)
-   @JsonIgnore
+   @JsonInclude(JsonInclude.Include.NON_EMPTY)
    private Integer hardScore;
    
    @Column (nullable=true)
-   @JsonIgnore
+   @JsonInclude(JsonInclude.Include.NON_EMPTY)
    private Integer softScore;
    
    @Column (nullable=false)
@@ -89,6 +98,9 @@ public class Conference extends AbstractPersistable implements Solution<HardSoft
 
    public List<Day> getDayList()
    {
+      if(dayList == null){
+         
+      }
       return dayList;
    }
 
@@ -210,7 +222,7 @@ public class Conference extends AbstractPersistable implements Solution<HardSoft
 
    public Integer getHardScore()
    {
-      if(hardScore == null){
+      if(hardScore == null && getScore() != null){
          hardScore = getScore().getHardScore();
       }
       return hardScore;
@@ -223,7 +235,7 @@ public class Conference extends AbstractPersistable implements Solution<HardSoft
 
    public Integer getSoftScore()
    {
-      if(hardScore == null){
+      if(hardScore == null && getScore() != null){
          hardScore = getScore().getSoftScore();
       }
       return softScore;

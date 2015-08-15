@@ -1,11 +1,16 @@
 'use strict';
 
 angular.module('dashboard', [])
-    .controller('DashboardController', ['ScheduleImport', 'ScheduleSolve', '$log','$modal', '$timeout', '$location' , function(ScheduleImport, ScheduleSolve, $log, $modal, $timeout, $location) {
+    .controller('DashboardController', ['ScheduleImport', 'ScheduleSolve', '$log','$modal', '$timeout', '$location', 'ConferenceService', function(ScheduleImport, ScheduleSolve, $log, $modal, $timeout, $location, ConferenceService) {
         
     	var vm = this;
-        vm.title = 'Import and Optimize Devoxx FR 2015 Schedule';
         vm.feedback = '';
+        
+        ConferenceService.getAll().then(function(result) {
+            vm.conferences = result.data;
+            $log.info(vm.conferences);
+        });
+        
         
         vm.import = function() {
         	$log.info("Importing devoxx schedule...");
@@ -64,4 +69,11 @@ angular.module('dashboard', [])
 			});
 
 		};
-    }]);
+    }]).factory('ConferenceService', function($http, $window) {
+        var contextPath = $window.location.pathname.substr(1).split('/')[0];
+        return {
+            getAll: function() {
+                return $http.get('rest/conference');
+            }
+        };
+    });
