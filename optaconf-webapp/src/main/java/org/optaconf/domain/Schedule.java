@@ -18,6 +18,7 @@ import org.optaplanner.core.api.domain.solution.Solution;
 import org.optaplanner.core.api.domain.valuerange.ValueRangeProvider;
 import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @PlanningSolution
@@ -61,9 +62,11 @@ public class Schedule extends AbstractPersistable implements Solution<HardSoftSc
    private List<TalkExclusion> talkExclusionList = new ArrayList<TalkExclusion>();
 
    @Column (nullable=true)
+   @JsonIgnore
    private Integer hardScore;
    
    @Column (nullable=true)
+   @JsonIgnore
    private Integer softScore;
    
    @Column (nullable=false)
@@ -73,6 +76,7 @@ public class Schedule extends AbstractPersistable implements Solution<HardSoftSc
    private String comment;
    
    @Transient
+   @JsonIgnore
    private HardSoftScore score;
 
    public Schedule()
