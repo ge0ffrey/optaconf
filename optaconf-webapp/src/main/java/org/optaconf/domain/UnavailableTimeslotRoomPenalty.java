@@ -16,34 +16,70 @@
 
 package org.optaconf.domain;
 
-public class UnavailableTimeslotRoomPenalty extends AbstractPersistable {
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.xml.bind.annotation.XmlRootElement;
 
-    private Timeslot timeslot;
-    private Room room;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
-    public UnavailableTimeslotRoomPenalty() {
-    }
+@Entity(name = "optaconf_unavailtimeslotroompenalty")
+public class UnavailableTimeslotRoomPenalty extends AbstractPersistable
+{
+   @OneToOne(cascade=CascadeType.ALL)
+   @JsonBackReference
+   private Timeslot timeslot;
+   
+   @OneToOne(cascade=CascadeType.ALL)
+   @JsonBackReference
+   private Room room;
 
-    public UnavailableTimeslotRoomPenalty(String id, Timeslot timeslot, Room room) {
-        super(id);
-        this.timeslot = timeslot;
-        this.room = room;
-    }
+   @ManyToOne(cascade=CascadeType.ALL)
+   @JoinColumn(name="schedule_id", nullable=false)
+   @JsonBackReference
+   private Conference schedule;
+   
+   public UnavailableTimeslotRoomPenalty()
+   {}
 
-    public Timeslot getTimeslot() {
-        return timeslot;
-    }
+   public UnavailableTimeslotRoomPenalty(String id, Timeslot timeslot, Room room, Conference schedule)
+   {
+      super(id);
+      this.timeslot = timeslot;
+      this.room = room;
+      this.schedule = schedule;
+   }
 
-    public void setTimeslot(Timeslot timeslot) {
-        this.timeslot = timeslot;
-    }
+   public Timeslot getTimeslot()
+   {
+      return timeslot;
+   }
 
-    public Room getRoom() {
-        return room;
-    }
+   public void setTimeslot(Timeslot timeslot)
+   {
+      this.timeslot = timeslot;
+   }
 
-    public void setRoom(Room room) {
-        this.room = room;
-    }
+   public Room getRoom()
+   {
+      return room;
+   }
+
+   public void setRoom(Room room)
+   {
+      this.room = room;
+   }
+   
+   public Conference getSchedule()
+   {
+      return schedule;
+   }
+
+   public void setSchedule(Conference schedule)
+   {
+      this.schedule = schedule;
+   }
 
 }

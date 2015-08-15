@@ -1,8 +1,18 @@
 package org.optaconf.service;
 
+import java.util.List;
+
 import javax.annotation.Resource;
+import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
 import javax.enterprise.concurrent.ManagedExecutorService;
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -15,7 +25,7 @@ import javax.ws.rs.core.Response;
 
 import org.optaconf.bridge.devoxx.DevoxxImporter;
 import org.optaconf.cdi.ScheduleManager;
-import org.optaconf.domain.Schedule;
+import org.optaconf.domain.Conference;
 import org.optaplanner.core.api.solver.Solver;
 import org.optaplanner.core.api.solver.SolverFactory;
 import org.slf4j.Logger;
@@ -24,10 +34,15 @@ import org.slf4j.LoggerFactory;
 @Path("/{conferenceId}/schedule")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@Stateless
+@LocalBean
 public class ScheduleService {
 
 	private static final Logger LOG = LoggerFactory
 			.getLogger(ScheduleService.class);
+	
+	@PersistenceContext(unitName="optaconf-webapp-persistence-unit")
+	private EntityManager em;
 
 	@Inject
 	private ScheduleManager scheduleManager;
@@ -43,8 +58,8 @@ public class ScheduleService {
 
 	@POST
 	@Path("/import/devoxx")
-	public Response importDevoxx(@PathParam("conferenceId") Long conferenceId) {
-		Schedule schedule = devoxxImporter.importSchedule();
+	public Response importDevoxx() {
+		Conference schedule = devoxxImporter.importSchedule();
 		scheduleManager.setSchedule(schedule);
 		
 		StringBuilder message = new StringBuilder()
@@ -63,6 +78,17 @@ public class ScheduleService {
 
 	}
 
+	@GET
+	@Path("/all")
+	public List<Conference> getAll(){
+	   CriteriaBuilder cb = em.getCriteriaBuilder();
+      CriteriaQuery<Conference> cq = cb.createQuery(Conference.class);
+      Root<Conference> rootEntry = cq.from(Conference.class);
+      CriteriaQuery<Conference> all = cq.select(rootEntry);
+      TypedQuery<Conference> allQuery = em.createQuery(all);
+      return allQuery.getResultList();
+	}
+	
 	@PUT
 	@Path("/solve")
 	public Response solveSchedule(@PathParam("conferenceId") Long conferenceId) {
@@ -77,7 +103,7 @@ public class ScheduleService {
 		// scheduleManager.getSchedule()));
 		// return "Solved started.";
 		solver.solve(scheduleManager.getSchedule());
-		scheduleManager.setSchedule((Schedule) solver.getBestSolution());
+		scheduleManager.setSchedule((Conference) solver.getBestSolution());
 		return Response.ok("Solved!").build();
 	}
 

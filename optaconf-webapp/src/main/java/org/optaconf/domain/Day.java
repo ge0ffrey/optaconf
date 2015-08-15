@@ -1,17 +1,46 @@
 package org.optaconf.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.xml.bind.annotation.XmlRootElement;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+@Entity(name="optaconf_day")
 public class Day extends AbstractPersistable implements Comparable<Day> {
 
+    @Column(length=255, nullable=false)
     private String name;
+    
+    @Column(length=255, nullable=false)
     private String date;
-
+    
+    @OneToMany(mappedBy="day", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonManagedReference
+    private List<Timeslot> timeslots = new ArrayList<Timeslot>();
+    
+    @ManyToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name="schedule_id", nullable=false)
+    @JsonBackReference
+    private Conference schedule;
+    
     public Day() {
     }
 
-    public Day(String id, String name, String date) {
+    public Day(String id, String name, String date, Conference schedule) {
         super(id);
         this.name = name;
         this.date = date;
+        this.schedule = schedule;
     }
 
     public String getName() {
@@ -35,4 +64,24 @@ public class Day extends AbstractPersistable implements Comparable<Day> {
         return date.compareTo(other.date);
     }
 
+   public List<Timeslot> getTimeslots()
+   {
+      return timeslots;
+   }
+
+   public void setTimeslots(List<Timeslot> timeslots)
+   {
+      this.timeslots = timeslots;
+   }
+
+   public Conference getSchedule()
+   {
+      return schedule;
+   }
+
+   public void setSchedule(Conference schedule)
+   {
+      this.schedule = schedule;
+   } 
+    
 }

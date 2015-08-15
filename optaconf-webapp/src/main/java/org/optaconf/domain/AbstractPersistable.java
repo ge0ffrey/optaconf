@@ -18,30 +18,57 @@ package org.optaconf.domain;
 
 import java.io.Serializable;
 
-import org.apache.commons.lang.builder.CompareToBuilder;
-import org.optaplanner.core.api.score.constraint.ConstraintMatch;
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.Version;
 
+@MappedSuperclass
 public abstract class AbstractPersistable implements Serializable {
-
-    protected String id;
+    @Id @GeneratedValue(strategy=GenerationType.AUTO)
+    protected Long id;
+    
+    @Column(name="external_id")
+    protected String externalId;
+    
+    @Version
+    protected Long version;
 
     protected AbstractPersistable() {
     }
 
-    protected AbstractPersistable(String id) {
-        this.id = id;
+    protected AbstractPersistable(String  externalId) {
+        this.externalId = externalId;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
+    }
+    
+    public String getExternalId() {
+      return externalId;
+    }
+
+    public void setExternalId(String externalId) {
+      this.externalId = externalId;
+    }
+
+    public Long getVersion() {
+      return version;
+    }
+
+    protected void setVersion(Long version) {
+      this.version = version;
     }
 
     public String toString() {
-        return "[" + getClass().getName().replaceAll(".*\\.", "") + "-" + id + "]";
+        return "[" + getClass().getName().replaceAll(".*\\.", "") + "=> ID: " + id + ", External ID: "+externalId+"]";
     }
 
 }

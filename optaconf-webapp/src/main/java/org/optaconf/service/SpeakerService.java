@@ -11,7 +11,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.optaconf.cdi.ScheduleManager;
-import org.optaconf.domain.Schedule;
+import org.optaconf.domain.Conference;
 import org.optaconf.domain.Speaker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +29,7 @@ public class SpeakerService {
     @GET
     @Path("/")
     public List<Speaker> getSpeakerList(@PathParam("conferenceId") Long conferenceId) {
-        Schedule schedule = scheduleManager.getSchedule();
+        Conference schedule = scheduleManager.getSchedule();
         return schedule.getSpeakerList();
     }
 

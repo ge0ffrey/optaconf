@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import javax.enterprise.inject.Vetoed;
 
-import org.optaconf.domain.Schedule;
+import org.optaconf.domain.Conference;
 import org.optaplanner.core.api.solver.Solver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,21 +14,21 @@ public class ScheduleManager implements Serializable {
 
     private static final Logger LOG = LoggerFactory.getLogger(ScheduleManager.class);
 
-    private Schedule schedule;
+    private Conference schedule;
     private Solver solver;
 
     public ScheduleManager() {
     }
 
-    public ScheduleManager(Schedule schedule) {
+    public ScheduleManager(Conference schedule) {
         this.schedule = schedule;
     }
 
-    public Schedule getSchedule() {
+    public Conference getSchedule() {
         return schedule;
     }
 
-    public void setSchedule(Schedule schedule) {
+    public void setSchedule(Conference schedule) {
         this.schedule = schedule;
     }
 

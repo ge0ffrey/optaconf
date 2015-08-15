@@ -1,26 +1,30 @@
 - Tests: unit tests, etc
 -- testdata => serialize a schedule to a file (let's just xstream dump it)
 -- just testing the solver?
-(-- test the jaxrs calls with arquillian maybe? or cargo? or soapui?)
+(-- test the jaxrs calls with arquillian maybe? or cargo? or soapui?)... Still thinking about what would be the best solution for this
 
-- refactor String id to String externalId
+
 
 - Add JPA (matyas)
--- Add numberic id which is the database id
--- hsql with example datasource
--- auto-generate tables => "just works"
--- optimistic locking
+-- Refactor String id to String externalId - FINISHED
+-- Add numeric id which is the database id - FINISHED
+-- hsql with example datasource - FINISHED
+-- auto-generate tables => "just works" - FINISHED
+-- optimistic locking - introduced @version column - FINISHED
+-- annotate relationships with proper jpa @OneToMany, @ManyToMany, @ManyToOne - FINISHED
+-- add proper constraints to fields other than @Column, for instance field level validation, and null constraints - FINISHED, UNTIL I NEED TO RELAX OR TIGHTEN SOMETHING 
+-- add @Json annotations to prevent circular references - FINISHED
 
 - extra constraints (ge0ffrey)
 -- Add domain + constraint + CRUD for SpeakerTimeslotUnavailability
--- Add domain + constraint + CRUD for prepareTime for certain Talks. (for example to set up the robots that they 'll be showing)
+-- Add domain + constraint + CRUD for prepareTime for certain Talks. (for example to set up the robots that they'll be showing)
 -- Add domain + constraint for language "en", "fr", etc
 -- other constraint on ge0ffrey's list
 -- ConferenceParametrization object
 
 - Multitenancy or multiple conferences
--- refactor rename Schedule to Conference
--- Add a String name to Conference
+-- refactor rename Schedule to Conference - FINISHED
+-- Add a String name to Conference - FINISHED
 -- Opening screen: list of conferences (if a conf is imported multiple times, it shows up multiple times)
 -- and a button "new conference" => from scratch or import (from devoxx BE or FR or ...)
 

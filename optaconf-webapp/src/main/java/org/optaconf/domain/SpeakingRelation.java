@@ -1,37 +1,69 @@
 package org.optaconf.domain;
 
-import org.optaconf.service.DayService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.xml.bind.annotation.XmlTransient;
 
-public class SpeakingRelation extends AbstractPersistable {
-	
-    private Speaker speaker;
-    private Talk talk;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-    public SpeakingRelation() {
-    }
+@Entity(name = "optaconf_speakingrelation")
+public class SpeakingRelation extends AbstractPersistable
+{
 
-    public SpeakingRelation(String id, Talk talk, Speaker speaker) {
-        super(id);
-        this.talk = talk;
-        this.speaker = speaker;
-    }
+   @OneToOne(cascade=CascadeType.ALL)
+   private Speaker speaker;
+   
+   @OneToOne(cascade=CascadeType.ALL)
+   private Talk talk;
+   
+   @ManyToOne(cascade=CascadeType.ALL)
+   @JoinColumn(name="schedule_id", nullable=false)
+   @JsonBackReference
+   private Conference schedule;
 
-    public Speaker getSpeaker() {
-        return speaker;
-    }
+   public SpeakingRelation()
+   {}
 
-    public void setSpeaker(Speaker speaker) {
-        this.speaker = speaker;
-    }
+   public SpeakingRelation(String id, Talk talk, Speaker speaker, Conference schedule)
+   {
+      super(id);
+      this.talk = talk;
+      this.speaker = speaker;
+      this.schedule = schedule;
+   }
 
-    public Talk getTalk() {
-        return talk;
-    }
+   public Speaker getSpeaker()
+   {
+      return speaker;
+   }
 
-    public void setTalk(Talk talk) {
-        this.talk = talk;
-    }
+   public void setSpeaker(Speaker speaker)
+   {
+      this.speaker = speaker;
+   }
+
+   public Talk getTalk()
+   {
+      return talk;
+   }
+
+   public void setTalk(Talk talk)
+   {
+      this.talk = talk;
+   }
+   
+   public Conference getSchedule()
+   {
+      return schedule;
+   }
+
+   public void setSchedule(Conference schedule)
+   {
+      this.schedule = schedule;
+   }
 
 }

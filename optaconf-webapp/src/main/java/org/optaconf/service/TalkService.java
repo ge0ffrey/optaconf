@@ -16,7 +16,7 @@ import javax.ws.rs.core.MediaType;
 import org.optaconf.cdi.ScheduleManager;
 import org.optaconf.domain.Day;
 import org.optaconf.domain.Room;
-import org.optaconf.domain.Schedule;
+import org.optaconf.domain.Conference;
 import org.optaconf.domain.Talk;
 import org.optaconf.domain.TalkExclusion;
 import org.optaconf.domain.Timeslot;
@@ -36,48 +36,57 @@ public class TalkService {
     @GET
     @Path("/")
     public List<Talk> getTalkList(@PathParam("conferenceId") Long conferenceId) {
-        Schedule schedule = scheduleManager.getSchedule();
+        Conference schedule = scheduleManager.getSchedule();
         return schedule.getTalkList();
     }
 
     @GET
     @Path("/map")
     public Map<String, Map<String, Map<String, Talk>>> getDayTimeslotRoomToTalkMap(@PathParam("conferenceId") Long conferenceId) {
-        Schedule schedule = scheduleManager.getSchedule();
+        Conference schedule = scheduleManager.getSchedule();
         Map<String, Map<String, Map<String, Talk>>> dayTimeslotRoomToTalkMap = new LinkedHashMap<String, Map<String, Map<String, Talk>>>();
         for (Day day : schedule.getDayList()) {
-            dayTimeslotRoomToTalkMap.put(day.getId(), new LinkedHashMap<String, Map<String, Talk>>());
+            dayTimeslotRoomToTalkMap.put(day.getExternalId(), new LinkedHashMap<String, Map<String, Talk>>());
         }
         for (Timeslot timeslot : schedule.getTimeslotList()) {
             Day day = timeslot.getDay();
             LinkedHashMap<String, Talk> roomToTalkMap = new LinkedHashMap<String, Talk>();
-            dayTimeslotRoomToTalkMap.get(day.getId()).put(timeslot.getId(), roomToTalkMap);
+            dayTimeslotRoomToTalkMap.get(day.getExternalId()).put(timeslot.getExternalId(), roomToTalkMap);
             for (Room room : schedule.getRoomList()) {
-                roomToTalkMap.put(room.getId(), null);
+                roomToTalkMap.put(room.getExternalId(), null);
             }
         }
         for (Talk talk : schedule.getTalkList()) {
             Timeslot timeslot = talk.getTimeslot();
             Day day = timeslot.getDay();
             Room room = talk.getRoom();
-            if(room != null && room.getId() != null){
-               dayTimeslotRoomToTalkMap.get(day.getId()).get(timeslot.getId()).put(room.getId(), talk);
+            if(room != null && room.getExternalId() != null){
+               dayTimeslotRoomToTalkMap.get(day.getExternalId()).get(timeslot.getExternalId()).put(room.getExternalId(), talk);
             }
         }
         return dayTimeslotRoomToTalkMap;
     }
 
+    
+    @GET
+    @Path("/schedule")
+    public Conference getSchedule(@PathParam("conferenceId") Long conferenceId) {
+        Conference schedule = scheduleManager.getSchedule();
+        
+        return schedule;
+    }
+    
     @GET
     @Path("/{talkId}/exclusion")
     public List<TalkExclusion> getTalkExclusionList(@PathParam("conferenceId") Long conferenceId,
             @PathParam("talkId") Long talkId) {
-        Schedule schedule = scheduleManager.getSchedule();
+        Conference schedule = scheduleManager.getSchedule();
         // TODO do proper query to DB instead of filtering here
         List<TalkExclusion> globalTalkExclusionList = schedule.getTalkExclusionList();
         List<TalkExclusion> talkExclusionList = new ArrayList<TalkExclusion>(globalTalkExclusionList.size());
         for (TalkExclusion talkExclusion : globalTalkExclusionList) {
-            if (talkExclusion.getFirstTalk().getId().equals(talkId)
-                    || talkExclusion.getSecondTalk().getId().equals(talkId)) {
+            if (talkExclusion.getFirstTalk().getExternalId().equals(talkId)
+                    || talkExclusion.getSecondTalk().getExternalId().equals(talkId)) {
                 talkExclusionList.add(talkExclusion);
             }
         }

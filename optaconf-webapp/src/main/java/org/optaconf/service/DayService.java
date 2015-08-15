@@ -16,7 +16,7 @@ import javax.ws.rs.core.MediaType;
 import org.optaconf.cdi.ScheduleManager;
 import org.optaconf.domain.Day;
 import org.optaconf.domain.Room;
-import org.optaconf.domain.Schedule;
+import org.optaconf.domain.Conference;
 import org.optaconf.domain.Talk;
 import org.optaconf.domain.Timeslot;
 import org.slf4j.Logger;
@@ -35,19 +35,19 @@ public class DayService {
     @GET
     @Path("/")
     public List<Day> getDayList(@PathParam("conferenceId") Long conferenceId) {
-        Schedule schedule = scheduleManager.getSchedule();
+        Conference schedule = scheduleManager.getSchedule();
         return schedule.getDayList();
     }
     @GET
     @Path("/{dayId}/timeslot")
     public List<Timeslot> getTimeslotList(@PathParam("conferenceId") Long conferenceId,
             @PathParam("dayId") String dayId) {
-        Schedule schedule = scheduleManager.getSchedule();
+        Conference schedule = scheduleManager.getSchedule();
         // TODO do proper query to DB instead of filtering here
         List<Timeslot> globalTimeslotList = schedule.getTimeslotList();
         List<Timeslot> timeslotList = new ArrayList<Timeslot>(globalTimeslotList.size());
         for (Timeslot timeslot : globalTimeslotList) {
-            if (timeslot.getDay().getId().equals(dayId)) {
+            if (timeslot.getDay().getExternalId().equals(dayId)) {
                 timeslotList.add(timeslot);
             }
         }
@@ -58,7 +58,7 @@ public class DayService {
     @Path("/{dayId}/talk")
     public Map<String, Map<String, Talk>> getTimeslotRoomToTalkMap(@PathParam("conferenceId") Long conferenceId,
             @PathParam("dayId") String dayId) {
-        Schedule schedule = scheduleManager.getSchedule();
+        Conference schedule = scheduleManager.getSchedule();
         Map<String, Map<String, Talk>> timeslotRoomToTalkMap = new LinkedHashMap<String, Map<String, Talk>>();
         List<Timeslot> timeslotList = getTimeslotList(conferenceId, dayId);
         for (Timeslot timeslot : timeslotList) {
@@ -73,9 +73,9 @@ public class DayService {
                         break;
                     }
                 }
-                roomToTalkMap.put(room.getId(), talk);
+                roomToTalkMap.put(room.getExternalId(), talk);
             }
-            timeslotRoomToTalkMap.put(timeslot.getId(), roomToTalkMap);
+            timeslotRoomToTalkMap.put(timeslot.getExternalId(), roomToTalkMap);
         }
         return timeslotRoomToTalkMap;
     }
