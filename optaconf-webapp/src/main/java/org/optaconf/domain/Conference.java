@@ -25,58 +25,50 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Entity(name="optaconf_conference")
 public class Conference extends AbstractPersistable implements Solution<HardSoftScore>
 {
-   @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+   @OneToMany(mappedBy="conference", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
    @JsonManagedReference
-   @JsonInclude(JsonInclude.Include.NON_EMPTY)
+//   @JsonIgnore
    private List<Day> dayList = new ArrayList<Day>();
    
-   @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+   @OneToMany(mappedBy="conference", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
    @JsonManagedReference
-   @JsonInclude(JsonInclude.Include.NON_EMPTY)
+   @JsonIgnore
    private List<Timeslot> timeslotList = new ArrayList<Timeslot>();
    
-   @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+   @OneToMany(mappedBy="conference", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
    @JsonManagedReference
-   @JsonInclude(JsonInclude.Include.NON_EMPTY)
+   @JsonIgnore
    private List<Room> roomList = new ArrayList<Room>();
    
-   @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+   @OneToMany(mappedBy="conference", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
    @JsonManagedReference
-   @JsonInclude(JsonInclude.Include.NON_EMPTY)
+   @JsonIgnore
    private List<UnavailableTimeslotRoomPenalty> unavailableTimeslotRoomPenaltyList = new ArrayList<UnavailableTimeslotRoomPenalty>();
    
-   @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+   @OneToMany(mappedBy="conference", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
    @JsonManagedReference
-   @JsonInclude(JsonInclude.Include.NON_EMPTY)
+   @JsonIgnore
    private List<Track> trackList = new ArrayList<Track>();
    
-   @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+   @OneToMany(mappedBy="conference", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
    @JsonManagedReference
-   @JsonInclude(JsonInclude.Include.NON_EMPTY)
+   @JsonIgnore
    private List<Speaker> speakerList = new ArrayList<Speaker>();
    
-   @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+   @OneToMany(mappedBy="conference", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
    @JsonManagedReference
-   @JsonInclude(JsonInclude.Include.NON_EMPTY)
+//   @JsonIgnore
    private List<Talk> talkList = new ArrayList<Talk>();
    
-   @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+   @OneToMany(mappedBy="conference", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
    @JsonManagedReference
-   @JsonInclude(JsonInclude.Include.NON_EMPTY)
+   @JsonIgnore
    private List<SpeakingRelation> speakingRelationList = new ArrayList<SpeakingRelation>();
    
-   @OneToMany(mappedBy="schedule", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+   @OneToMany(mappedBy="conference", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
    @JsonManagedReference
-   @JsonInclude(JsonInclude.Include.NON_EMPTY)
+   @JsonIgnore
    private List<TalkExclusion> talkExclusionList = new ArrayList<TalkExclusion>();
-
-   @Column (nullable=true)
-   @JsonInclude(JsonInclude.Include.NON_EMPTY)
-   private Integer hardScore;
-   
-   @Column (nullable=true)
-   @JsonInclude(JsonInclude.Include.NON_EMPTY)
-   private Integer softScore;
    
    @Column (nullable=false)
    private String name;
@@ -84,8 +76,7 @@ public class Conference extends AbstractPersistable implements Solution<HardSoft
    @Column (nullable=false)
    private String comment;
    
-   @Transient
-   @JsonIgnore
+   @Column
    private HardSoftScore score;
 
    public Conference()
@@ -204,6 +195,7 @@ public class Conference extends AbstractPersistable implements Solution<HardSoft
    }
 
    @Override
+   @JsonIgnore
    public Collection<?> getProblemFacts()
    {
       List<Object> facts = new ArrayList<Object>();
@@ -218,32 +210,6 @@ public class Conference extends AbstractPersistable implements Solution<HardSoft
       facts.addAll(talkExclusionList);
       // Do not add the planning entity's (processList) because that will be done automatically
       return facts;
-   }
-
-   public Integer getHardScore()
-   {
-      if(hardScore == null && getScore() != null){
-         hardScore = getScore().getHardScore();
-      }
-      return hardScore;
-   }
-
-   public void setHardScore(Integer hardScore)
-   {
-      this.hardScore = getScore().getHardScore();
-   }
-
-   public Integer getSoftScore()
-   {
-      if(hardScore == null && getScore() != null){
-         hardScore = getScore().getSoftScore();
-      }
-      return softScore;
-   }
-
-   public void setSoftScore(Integer softScore)
-   {
-      this.softScore = getScore().getSoftScore();
    }
 
    public String getName()

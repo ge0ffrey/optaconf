@@ -31,7 +31,7 @@ public class Timeslot extends AbstractPersistable implements Comparable<Timeslot
    @Column(length = 255, nullable = false)
    private String toTime;
 
-   @ManyToOne(cascade=CascadeType.ALL)
+   @ManyToOne()
    @JoinColumn(name = "day_id", nullable = false)
    @JsonBackReference
    private Day day;
@@ -44,23 +44,23 @@ public class Timeslot extends AbstractPersistable implements Comparable<Timeslot
    @JoinColumn(name = "timeslot_room_penalty_id")
    private UnavailableTimeslotRoomPenalty penalty;
 
-   @ManyToOne(cascade=CascadeType.ALL)
-   @JoinColumn(name="schedule_id", nullable=false)
+   @ManyToOne()
+   @JoinColumn(name="conference_id", nullable=false)
    @JsonBackReference
-   private Conference schedule;
+   private Conference conference;
    
    
    public Timeslot()
    {}
 
-   public Timeslot(String id, String name, Day day, String fromTime, String toTime, Conference schedule)
+   public Timeslot(String id, String name, Day day, String fromTime, String toTime, Conference conference)
    {
       super(id);
       this.name = name;
       this.day = day;
       this.fromTime = fromTime;
       this.toTime = toTime;
-      this.schedule = schedule;
+      this.conference = conference;
    }
 
    public String getName()
@@ -133,14 +133,14 @@ public class Timeslot extends AbstractPersistable implements Comparable<Timeslot
       this.penalty = penalty;
    }
 
-   public Conference getSchedule()
+   public Conference getConference()
    {
-      return schedule;
+      return conference;
    }
 
-   public void setSchedule(Conference schedule)
+   public void setConference(Conference conference)
    {
-      this.schedule = schedule;
+      this.conference = conference;
    }
    
 }

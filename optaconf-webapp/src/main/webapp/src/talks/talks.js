@@ -1,40 +1,38 @@
 'use strict';
 
 angular.module('talks', [])
-    .controller('TalkController', ['Talk', '$log','TalkService','$q', function(Talk, $log, TalkService, $q) {
+    .controller('TalkController', ['$log','TalkFactory','$routeParams', function($log, TalkFactory, $routeParams) {
         var vm = this;
         vm.title = 'Talk Schedule';
-
+        
         vm.weekDays = ["monday","tuesday","wednesday","thursday","friday"];
         
-        TalkService.getRooms().then(function(result) {
+        TalkFactory.getRooms($routeParams.conferenceId).then(function(result) {
             vm.rooms = result.data;
-            TalkService.getMap().then(function(map) {
+            TalkFactory.getMap($routeParams.conferenceId).then(function(map) {
                 vm.schedule = map.data;
             });
         });
     }])
-    .factory('TalkService', function($http, $window) {
+    .factory('TalkFactory', function($http, $window, $log) {
         var contextPath = $window.location.pathname.substr(1).split('/')[0];
         return {
-            getMap: function() {
-                return $http.get('rest/123/talk/map');
+            getMap: function(conferenceId) {
+            	$log.info('Getting schedule for Conference ID: '+conferenceId);
+            	var API = 'rest/'+conferenceId+'/talk/map';
+                return $http.get(API);
             },
-            getRooms: function() {
-                return $http.get('rest/123/room');
+            getRooms: function(conferenceId) {
+                return $http.get('rest/'+conferenceId+'/room');
             },
-            getDayTalks: function(day) {
-                return $http.get('rest/123/day/'+day.id+'/talk');
+            getDayTalks: function(conferenceId, day) {
+                return $http.get('rest/'+conferenceId+'/day/'+day.id+'/talk');
             },
-            getDays: function() {
-                return $http.get('rest/123/day')
+            getDays: function(conferenceId) {
+                return $http.get('rest/'+conferenceId+'/day')
             },
-            getTimeslotsForDay: function(day) {
-                return $http.get('rest/123/day/'+day.id+'/timeslot');
+            getTimeslotsForDay: function(conferenceId, day) {
+                return $http.get('rest/'+conferenceId+'/day/'+day.id+'/timeslot');
             }
         };
-    })
-    .factory('Talk', ['$resource', '$window', function($resource, $window) {
-        var contextPath = $window.location.pathname.substr(1).split('/')[0];
-        return $resource("/" + contextPath + "/rest/123/talk");
-    }]);
+    });

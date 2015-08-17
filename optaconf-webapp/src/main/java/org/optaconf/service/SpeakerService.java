@@ -2,7 +2,8 @@ package org.optaconf.service;
 
 import java.util.List;
 
-import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -10,7 +11,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.optaconf.cdi.ScheduleManager;
 import org.optaconf.domain.Conference;
 import org.optaconf.domain.Speaker;
 import org.slf4j.Logger;
@@ -23,14 +23,14 @@ public class SpeakerService {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(SpeakerService.class);
 
-    @Inject
-    private ScheduleManager scheduleManager;
+   @PersistenceContext(unitName = "optaconf-webapp-persistence-unit")
+   private EntityManager em;
 
     @GET
     @Path("/")
     public List<Speaker> getSpeakerList(@PathParam("conferenceId") Long conferenceId) {
-        Conference schedule = scheduleManager.getSchedule();
-        return schedule.getSpeakerList();
+        Conference conference = em.find(Conference.class, conferenceId);
+        return conference.getSpeakerList();
     }
 
 }

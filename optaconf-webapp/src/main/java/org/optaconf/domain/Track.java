@@ -33,19 +33,19 @@ public class Track extends AbstractPersistable
    private List<Talk> talks = new ArrayList<Talk>();
 
    @ManyToOne(cascade=CascadeType.ALL)
-   @JoinColumn(name="schedule_id", nullable=false)
+   @JoinColumn(name="conference_id", nullable=false)
    @JsonBackReference
-   private Conference schedule;
+   private Conference conference;
    
    public Track()
    {}
 
-   public Track(String id, String title, String cssStyleClass, Conference schedule)
+   public Track(String id, String title, String cssStyleClass, Conference conference)
    {
       super(id);
       this.title = title;
       this.cssStyleClass = cssStyleClass;
-      this.schedule = schedule;
+      this.conference = conference;
    }
 
    public String getTitle()
@@ -68,14 +68,14 @@ public class Track extends AbstractPersistable
       this.cssStyleClass = cssStyleClass;
    }
    
-   public Conference getSchedule()
+   public Conference getConference()
    {
-      return schedule;
+      return conference;
    }
 
-   public void setSchedule(Conference schedule)
+   public void setConference(Conference conference)
    {
-      this.schedule = schedule;
+      this.conference = conference;
    }
 
 }

@@ -8,15 +8,11 @@ app.config(["$routeProvider", function($routeProvider) {
                 templateUrl: 'src/dashboard/dashboard.html',
                 controller: 'DashboardController as vm'
         }).
-        when('/rooms', {
+        when('/rooms/:conferenceId', {
             templateUrl: 'src/rooms/rooms.html',
             controller: 'RoomController as vm'
         }).
-        when('/schedule', {
-            templateUrl: 'src/schedule/schedule.html',
-            controller: 'ScheduleController as vm'
-        }).
-        when('/talks', {
+        when('/schedule/:conferenceId', {
             templateUrl: 'src/talks/talks.html',
             controller: 'TalkController as vm'
         }).

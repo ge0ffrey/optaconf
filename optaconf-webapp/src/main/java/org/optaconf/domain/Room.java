@@ -37,19 +37,19 @@ public class Room extends AbstractPersistable implements Comparable<Room>
    private UnavailableTimeslotRoomPenalty penalty;
 
    @ManyToOne(cascade=CascadeType.ALL)
-   @JoinColumn(name = "schedule_id", nullable = false)
+   @JoinColumn(name = "conference_id", nullable = false)
    @JsonBackReference
-   private Conference schedule;
+   private Conference conference;
 
    public Room()
    {}
 
-   public Room(String id, String name, int seatingCapacity, Conference schedule)
+   public Room(String id, String name, int seatingCapacity, Conference conference)
    {
       super(id);
       this.name = name;
       this.seatingCapacity = seatingCapacity;
-      this.schedule = schedule;
+      this.conference = conference;
    }
 
    public String getName()
@@ -101,14 +101,14 @@ public class Room extends AbstractPersistable implements Comparable<Room>
       this.penalty = penalty;
    }
 
-   public Conference getSchedule()
+   public Conference getConference()
    {
-      return schedule;
+      return conference;
    }
 
-   public void setSchedule(Conference schedule)
+   public void setConference(Conference conference)
    {
-      this.schedule = schedule;
+      this.conference = conference;
    }
 
 }

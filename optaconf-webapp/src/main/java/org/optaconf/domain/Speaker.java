@@ -28,18 +28,18 @@ public class Speaker extends AbstractPersistable implements Comparable<Speaker>
    private SpeakingRelation relation;
    
    @ManyToOne(cascade=CascadeType.ALL)
-   @JoinColumn(name="schedule_id", nullable=false)
+   @JoinColumn(name="conference_id", nullable=false)
    @JsonBackReference
-   private Conference schedule;
+   private Conference conference;
 
    public Speaker()
    {}
 
-   public Speaker(String id, String name, Conference schedule)
+   public Speaker(String id, String name, Conference conference)
    {
       super(id);
       this.name = name;
-      this.schedule = schedule;
+      this.conference = conference;
    }
 
    public String getName()
@@ -86,14 +86,14 @@ public class Speaker extends AbstractPersistable implements Comparable<Speaker>
       this.relation = relation;
    }
    
-   public Conference getSchedule()
+   public Conference getConference()
    {
-      return schedule;
+      return conference;
    }
 
-   public void setSchedule(Conference schedule)
+   public void setConference(Conference conference)
    {
-      this.schedule = schedule;
+      this.conference = conference;
    }
 
 }

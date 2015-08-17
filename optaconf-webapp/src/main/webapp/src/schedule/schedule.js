@@ -28,7 +28,7 @@ angular.module('schedule', [])
     }])
     .factory('Day', ['$resource', '$window', function($resource, $window) {
         var contextPath = $window.location.pathname.substr(1).split('/')[0];
-        var url = "/" + contextPath + "/rest/123/day";
+        var url = "/" + contextPath + "/rest/2/day";
         return $resource(url, null, {
             'getTimeslots': {
                 url: url + '/:id/timeslot',
@@ -40,7 +40,7 @@ angular.module('schedule', [])
     .factory('ScheduleImport', ['$resource', '$window', function($resource, $window) {
         var contextPath = $window.location.pathname.substr(1).split('/')[0];
 
-        return $resource("/" + contextPath + "/rest/123/schedule/import/devoxx", null, {
+        return $resource("/" + contextPath + "/rest/conference/import/devoxx", null, {
             'import': {
                 method: 'POST',
                 responseType: 'text',
@@ -48,14 +48,23 @@ angular.module('schedule', [])
             }
         });
     }])
-    .factory('ScheduleSolve', ['$resource', '$window', function($resource, $window) {
+    .factory('ScheduleSolve', ['$http', '$log','$window', function($http, $log, $window) {
         var contextPath = $window.location.pathname.substr(1).split('/')[0];
+        
+        return {
+			solve : function(conferenceId) {
+				$log.info(conferenceId);
+				
+				var solveAPI = "/" + contextPath + "/rest/conference/"+conferenceId+"/solve";
+				var headers = {
+					'Content-Type' : 'application/json'
+				};
+				$log.info('Solving schedule ID: '+conferenceId);
+				$log.info(solveAPI);
+				return $http.put(solveAPI, null, headers);
 
-        return $resource("/" + contextPath + "/rest/123/schedule/solve", null, {
-            'solve': {
-                method: 'PUT',
-                responseType: 'text',
-                transformResponse: []
-            }
-        });
+			}		
+        };
+        
+        
     }]);

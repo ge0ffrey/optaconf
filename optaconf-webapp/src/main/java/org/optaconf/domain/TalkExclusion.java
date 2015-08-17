@@ -29,20 +29,20 @@ public class TalkExclusion extends AbstractPersistable
    private TalkExclusionType type;
    
    @ManyToOne(cascade=CascadeType.ALL)
-   @JoinColumn(name="schedule_id", nullable=false)
+   @JoinColumn(name="conference_id", nullable=false)
    @JsonBackReference
-   private Conference schedule;
+   private Conference conference;
 
    public TalkExclusion()
    {}
 
-   public TalkExclusion(String id, Talk firstTalk, Talk secondTalk, TalkExclusionType type, Conference schedule)
+   public TalkExclusion(String id, Talk firstTalk, Talk secondTalk, TalkExclusionType type, Conference conference)
    {
       super(id);
       this.firstTalk = firstTalk;
       this.secondTalk = secondTalk;
       this.type = type;
-      this.schedule = schedule;
+      this.conference = conference;
    }
 
    public Talk getFirstTalk()
@@ -75,14 +75,14 @@ public class TalkExclusion extends AbstractPersistable
       this.type = type;
    }
 
-   public Conference getSchedule()
+   public Conference getConference()
    {
-      return schedule;
+      return conference;
    }
 
-   public void setSchedule(Conference schedule)
+   public void setConference(Conference conference)
    {
-      this.schedule = schedule;
+      this.conference = conference;
    }
 
 }

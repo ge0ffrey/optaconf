@@ -5,7 +5,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -13,10 +14,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.optaconf.cdi.ScheduleManager;
+import org.optaconf.domain.Conference;
 import org.optaconf.domain.Day;
 import org.optaconf.domain.Room;
-import org.optaconf.domain.Conference;
 import org.optaconf.domain.Talk;
 import org.optaconf.domain.Timeslot;
 import org.slf4j.Logger;
@@ -28,23 +28,24 @@ import org.slf4j.LoggerFactory;
 public class DayService {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(DayService.class);
-
-    @Inject
-    private ScheduleManager scheduleManager;
-
+   
+   @PersistenceContext(unitName = "optaconf-webapp-persistence-unit")
+   private EntityManager em;
+	
     @GET
     @Path("/")
     public List<Day> getDayList(@PathParam("conferenceId") Long conferenceId) {
-        Conference schedule = scheduleManager.getSchedule();
-        return schedule.getDayList();
+        Conference conference = em.find(Conference.class, conferenceId);
+        conference.getDayList().iterator().hasNext();
+        return conference.getDayList();
     }
     @GET
     @Path("/{dayId}/timeslot")
     public List<Timeslot> getTimeslotList(@PathParam("conferenceId") Long conferenceId,
             @PathParam("dayId") String dayId) {
-        Conference schedule = scheduleManager.getSchedule();
+        Conference conference = em.find(Conference.class, conferenceId);
         // TODO do proper query to DB instead of filtering here
-        List<Timeslot> globalTimeslotList = schedule.getTimeslotList();
+        List<Timeslot> globalTimeslotList = conference.getTimeslotList();
         List<Timeslot> timeslotList = new ArrayList<Timeslot>(globalTimeslotList.size());
         for (Timeslot timeslot : globalTimeslotList) {
             if (timeslot.getDay().getExternalId().equals(dayId)) {
@@ -56,18 +57,17 @@ public class DayService {
 
     @GET
     @Path("/{dayId}/talk")
-    public Map<String, Map<String, Talk>> getTimeslotRoomToTalkMap(@PathParam("conferenceId") Long conferenceId,
-            @PathParam("dayId") String dayId) {
-        Conference schedule = scheduleManager.getSchedule();
+    public Map<String, Map<String, Talk>> getTimeslotRoomToTalkMap(@PathParam("conferenceId") Long conferenceId, @PathParam("dayId") String dayId) {
+        Conference conference = em.find(Conference.class, conferenceId);
         Map<String, Map<String, Talk>> timeslotRoomToTalkMap = new LinkedHashMap<String, Map<String, Talk>>();
         List<Timeslot> timeslotList = getTimeslotList(conferenceId, dayId);
         for (Timeslot timeslot : timeslotList) {
             Map<String, Talk> roomToTalkMap = new LinkedHashMap<String, Talk>();
-            List<Room> roomList = schedule.getRoomList();
+            List<Room> roomList = conference.getRoomList();
             for (Room room : roomList) {
                 Talk talk = null;
                 // TODO refactor this performance drain
-                for (Talk selectedTalk : schedule.getTalkList()) {
+                for (Talk selectedTalk : conference.getTalkList()) {
                     if (selectedTalk.getTimeslot() == timeslot && selectedTalk.getRoom() == room) {
                         talk = selectedTalk;
                         break;

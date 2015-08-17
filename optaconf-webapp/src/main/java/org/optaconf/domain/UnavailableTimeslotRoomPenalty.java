@@ -37,19 +37,19 @@ public class UnavailableTimeslotRoomPenalty extends AbstractPersistable
    private Room room;
 
    @ManyToOne(cascade=CascadeType.ALL)
-   @JoinColumn(name="schedule_id", nullable=false)
+   @JoinColumn(name="conference_id", nullable=false)
    @JsonBackReference
-   private Conference schedule;
+   private Conference conference;
    
    public UnavailableTimeslotRoomPenalty()
    {}
 
-   public UnavailableTimeslotRoomPenalty(String id, Timeslot timeslot, Room room, Conference schedule)
+   public UnavailableTimeslotRoomPenalty(String id, Timeslot timeslot, Room room, Conference conference)
    {
       super(id);
       this.timeslot = timeslot;
       this.room = room;
-      this.schedule = schedule;
+      this.conference = conference;
    }
 
    public Timeslot getTimeslot()
@@ -72,14 +72,14 @@ public class UnavailableTimeslotRoomPenalty extends AbstractPersistable
       this.room = room;
    }
    
-   public Conference getSchedule()
+   public Conference getConference()
    {
-      return schedule;
+      return conference;
    }
 
-   public void setSchedule(Conference schedule)
+   public void setConference(Conference conference)
    {
-      this.schedule = schedule;
+      this.conference = conference;
    }
 
 }

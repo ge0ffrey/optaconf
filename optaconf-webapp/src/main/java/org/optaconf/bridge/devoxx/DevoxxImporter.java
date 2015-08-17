@@ -50,25 +50,25 @@ public class DevoxxImporter {
     private static final String REST_URL_ROOT = "http://cfp.devoxx.fr/api/conferences/DevoxxFR2015";
 
     public Conference importSchedule() {
-        StringBuilder scheduleComment = new StringBuilder("Imported on ").append(new Date().toString()).append(" from ").append(REST_URL_ROOT);
+        StringBuilder comment = new StringBuilder("Imported on ").append(new Date().toString()).append(" from ").append(REST_URL_ROOT);
         
-        Conference schedule = new Conference();
-        schedule.setName("DEVOXX FR 2015");
-        schedule.setComment(scheduleComment.toString());
-        schedule.setExternalId(REST_URL_ROOT);
+        Conference conference = new Conference();
+        conference.setName("DEVOXX FR 2015");
+        conference.setComment(comment.toString());
+        conference.setExternalId(REST_URL_ROOT);
         
-        Map<String, Track> titleToTrackMap = mapTracks(schedule);
-        Map<String, Speaker> speakerMap = mapSpeakers(schedule);
-        Map<String, Room> roomMap = mapRooms(schedule);
-        mapDays(schedule, titleToTrackMap, speakerMap, roomMap);
-        buildUnavailableTimeslotRoomPenaltyList(schedule);
+        Map<String, Track> titleToTrackMap = mapTracks(conference);
+        Map<String, Speaker> speakerMap = mapSpeakers(conference);
+        Map<String, Room> roomMap = mapRooms(conference);
+        mapDays(conference, titleToTrackMap, speakerMap, roomMap);
+        buildUnavailableTimeslotRoomPenaltyList(conference);
         
-        em.persist(schedule);
+        em.persist(conference);
         
-        return schedule;
+        return conference;
     }
 
-    private Map<String, Track> mapTracks(Conference schedule) {
+    private Map<String, Track> mapTracks(Conference conferencee) {
         Map<String, Track> titleToTrackMap = new LinkedHashMap<String, Track>();
         JsonObject rootObject = readJsonObject(REST_URL_ROOT + "/tracks");
         JsonArray array = rootObject.getJsonArray("tracks");
@@ -78,15 +78,15 @@ public class DevoxxImporter {
             String id = dTrack.getString("id");
             String title = dTrack.getString("title");
             String colorHex = tangoColorFactory.pickCssClass(id);
-            Track track = new Track(id, title, colorHex, schedule);
+            Track track = new Track(id, title, colorHex, conferencee);
             em.persist(track);
-            schedule.getTrackList().add(track);
+            conferencee.getTrackList().add(track);
             titleToTrackMap.put(title, track);
         }
         return titleToTrackMap;
     }
 
-    private Map<String, Speaker> mapSpeakers(Conference schedule) {
+    private Map<String, Speaker> mapSpeakers(Conference conference) {
         Map<String, Speaker> speakerMap = new LinkedHashMap<String, Speaker>();
         JsonArray array = readJsonArray(REST_URL_ROOT + "/speakers");
         for (int i = 0; i < array.size(); i++) {
@@ -95,16 +95,16 @@ public class DevoxxImporter {
             String firstName = dSpeaker.getString("firstName");
             String lastName = dSpeaker.getString("lastName");
             String name = firstName + " " + lastName;
-            Speaker speaker = new Speaker(id, name, schedule);
+            Speaker speaker = new Speaker(id, name, conference);
             em.persist(speaker);
-            schedule.getSpeakerList().add(speaker);
+            conference.getSpeakerList().add(speaker);
             speakerMap.put(id, speaker);
         }
-        Collections.sort(schedule.getSpeakerList());
+        Collections.sort(conference.getSpeakerList());
         return speakerMap;
     }
 
-    private Map<String, Room> mapRooms(Conference schedule) {
+    private Map<String, Room> mapRooms(Conference conference) {
         Map<String, Room> roomMap = new LinkedHashMap<String, Room>();
         JsonObject rootObject = readJsonObject(REST_URL_ROOT + "/rooms");
         JsonArray array = rootObject.getJsonArray("rooms");
@@ -117,16 +117,16 @@ public class DevoxxImporter {
             if (!dRoom.getString("setup").equals("theatre")) {
                 continue;
             }
-            Room room = new Room(id, name, capacity, schedule);
+            Room room = new Room(id, name, capacity, conference);
             em.persist(room);
-            schedule.getRoomList().add(room);
+            conference.getRoomList().add(room);
             roomMap.put(id, room);
         }
-        Collections.sort(schedule.getRoomList());
+        Collections.sort(conference.getRoomList());
         return roomMap;
     }
 
-    private void mapDays(Conference schedule, Map<String, Track> titleToTrackMap,
+    private void mapDays(Conference conference, Map<String, Track> titleToTrackMap,
             Map<String, Speaker> speakerMap, Map<String, Room> roomMap) {
         JsonObject rootObject = readJsonObject(REST_URL_ROOT + "/schedules");
         JsonArray array = rootObject.getJsonArray("links");
@@ -144,15 +144,15 @@ public class DevoxxImporter {
             }
             String name = dTitleMatcher.group(1);
             String date = dTitleMatcher.group(2);
-            Day day = new Day(dHref.replaceAll(".*\\/(.*)/", "$1"), name, date, schedule);
+            Day day = new Day(dHref.replaceAll(".*\\/(.*)/", "$1"), name, date, conference);
             em.persist(day);
-            schedule.getDayList().add(day);
-            mapTalks(schedule, titleToTrackMap, speakerMap, roomMap, dHref, day);
+            conference.getDayList().add(day);
+            mapTalks(conference, titleToTrackMap, speakerMap, roomMap, dHref, day);
         }
-        Collections.sort(schedule.getDayList());
+        Collections.sort(conference.getDayList());
     }
 
-    private void mapTalks(Conference schedule,
+    private void mapTalks(Conference conference,
             Map<String, Track> titleToTrackMap,
             Map<String, Speaker> speakerMap, Map<String, Room> roomMap,
             String dayUrl, Day day) {
@@ -212,18 +212,18 @@ public class DevoxxImporter {
             Timeslot timeslot = timeslotMap.get(timeslotId);
             if (timeslot == null) {
                 timeslot = new Timeslot(timeslotId, timeslotId, day, fromTime,
-                        toTime, schedule);
+                        toTime, conference);
                 
                 em.persist(timeslot);
-                schedule.getTimeslotList().add(timeslot);
+                conference.getTimeslotList().add(timeslot);
                 timeslotMap.put(timeslotId, timeslot);
             }
             
-            Talk talk = new Talk(id, title, schedule, room, track, timeslot);
+            Talk talk = new Talk(id, title, conference, room, track, timeslot);
             
             em.persist(talk);
             
-            schedule.getTalkList().add(talk);
+            conference.getTalkList().add(talk);
 
             JsonArray speakersArray = dTalk.getJsonArray("speakers");
             for (int j = 0; j < speakersArray.size(); j++) {
@@ -242,18 +242,18 @@ public class DevoxxImporter {
                     // ").");
                 }
                 SpeakingRelation speakingRelation = new SpeakingRelation(
-                        talk.getExternalId() + "_" + speaker.getExternalId(), talk, speaker, schedule);
-                schedule.getSpeakingRelationList().add(speakingRelation);
+                        talk.getExternalId() + "_" + speaker.getExternalId(), talk, speaker, conference);
+                conference.getSpeakingRelationList().add(speakingRelation);
             }
 
             
         }
-        Collections.sort(schedule.getTimeslotList());
+        Collections.sort(conference.getTimeslotList());
     }
 
-    private void buildUnavailableTimeslotRoomPenaltyList(Conference schedule) {
+    private void buildUnavailableTimeslotRoomPenaltyList(Conference conference) {
         Map<Timeslot, Map<Room, Talk>> timeslotRoomToTalkMap = new LinkedHashMap<>();
-        for (Talk talk : schedule.getTalkList()) {
+        for (Talk talk : conference.getTalkList()) {
             Timeslot timeslot = talk.getTimeslot();
             Room room = talk.getRoom();
             if (timeslot == null || room == null) {
@@ -266,15 +266,15 @@ public class DevoxxImporter {
             }
             roomToTalkMap.put(room, talk);
         }
-        for (Timeslot timeslot : schedule.getTimeslotList()) {
+        for (Timeslot timeslot : conference.getTimeslotList()) {
             Map<Room, Talk> roomToTalkMap = timeslotRoomToTalkMap.get(timeslot);
-            for (Room room : schedule.getRoomList()) {
+            for (Room room : conference.getRoomList()) {
                 if (roomToTalkMap == null || !roomToTalkMap.containsKey(room)) {
                     UnavailableTimeslotRoomPenalty penalty = new UnavailableTimeslotRoomPenalty(
                             timeslot.getExternalId() + "_" + room.getExternalId(), timeslot,
-                            room, schedule);
+                            room, conference);
                     em.persist(penalty);
-                    schedule.getUnavailableTimeslotRoomPenaltyList().add(
+                    conference.getUnavailableTimeslotRoomPenaltyList().add(
                             penalty);
                 }
             }

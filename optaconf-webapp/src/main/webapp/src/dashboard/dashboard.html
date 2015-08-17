@@ -1,20 +1,20 @@
 <div data-ng-show="vm.feedback !== ''" class="well">
 {{vm.feedback}}		
 </div>
-<div class=" row col-md-12">
+<!-- <div class=" row col-md-12">
     <h2>Welcome</h2>
-</div>
+</div> -->
 <div class=" row col-md-6">
 	<button class="btn btn-primary col-md-12" data-ng-click="vm.import()"><span class="glyphicon glyphicon-download"></span> Import Devoxx FR 2015 Schedule</button>
 </div>
 <div class=" row col-md-12">&nbsp;</div>
 <div class=" row col-md-12">
-    <h3>last few conferences</h3>
+    <h3>Conference List</h3>
 </div>
 <div class=" row col-md-12">
 	<table class="table table-striped col-md-12">
 		<thead><tr>
-			<th>ID</th><th>name</th><th>options</th>
+			<th>ID</th><th>name</th><th>options</th><th>SCORE</th>
 		</tr></thead>
 		<tbody>
 		    <tr data-ng-repeat="conference in vm.conferences">
@@ -22,9 +22,10 @@
 		    	<td>
 		    	    <a class="btn-sm btn-primary" href="#/schedule/{{conference.id}}">view schedule</a>
 		    	    <a class="btn-sm btn-primary" href="#/rooms/{{conference.id}}">view rooms</a> 
-		    	    <a class="btn-sm btn-success" hre="#" data-ng-click="vm.solve(conference.id)">solve</a>  
+		    	    <a class="btn-sm btn-success" hre="#" data-ng-click="vm.solve(conference.id)">optimize</a>  
 		    	    <a class="btn-sm btn-warning" data-ng-click="vm.delete(conference.id)">remove</a>
 		    	</td>
+		    	<td><b>HARD:</b>{{conference.score.hardScore}}/<b>SOFT:</b>{{conference.score.softScore}}/<b>FEASIBLE:</b>{{conference.score.feasible}}</td>
 		    </tr>
 		</tbody>
 	</table>

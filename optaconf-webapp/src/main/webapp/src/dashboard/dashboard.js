@@ -6,18 +6,23 @@ angular.module('dashboard', [])
     	var vm = this;
         vm.feedback = '';
         
-        ConferenceService.getAll().then(function(result) {
-            vm.conferences = result.data;
-            $log.info(vm.conferences);
-        });
         
+        vm.init = function(){
+	        ConferenceService.getAll().then(function(result) {
+	            vm.conferences = result.data;
+	            $log.info(vm.conferences);
+	        });
+        }
+        
+        
+        vm.init();
         
         vm.import = function() {
         	$log.info("Importing devoxx schedule...");
         	vm.busyModal = vm.openBusyImport();
             ScheduleImport.import(function() {
             	vm.busyModal.close();
-            	
+            	vm.init();
             	$log.info('imported devoxx schedule!');
                 
             	vm.feedback = "imported devoxx schedule";
@@ -30,21 +35,21 @@ angular.module('dashboard', [])
             });
         };
 
-        vm.solve = function() {
-            $log.info("Solving schedule...");
+        vm.solve = function(conferenceId) {
+            $log.info("Solving schedule for conference id " + conferenceId);
          
 			vm.busyModal = vm.openBusySolve();
 			
-            ScheduleSolve.solve(function() {
+            ScheduleSolve.solve(conferenceId).then(function() {
                 $log.info("solved devoxx schedule!");
-                
+                vm.init();
                 vm.busyModal.close();
                 
                 vm.feedback = "solved devoxx schedule, redirecting to Talk Schedule in 5 seconds.";
                 
                 $timeout(function() {
 					vm.feedback = '';
-					$location.path('/talks');
+					$location.path('/schedule/'+conferenceId);
 					
 				}, 5000);
             });

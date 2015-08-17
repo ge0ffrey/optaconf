@@ -23,16 +23,16 @@ public class Talk extends AbstractPersistable
    @Column(length=255, nullable=false)
    private String title;
 
-   @ManyToOne(cascade=CascadeType.ALL)
+   @ManyToOne()
    @JoinColumn(name="track_id", nullable=false)
    private Track track;
    
-   @ManyToOne(cascade=CascadeType.ALL)
+   @ManyToOne()
    @JoinColumn(name="timeslot_id", nullable=false)
    @JsonBackReference
    private Timeslot timeslot;
    
-   @ManyToOne(cascade=CascadeType.ALL)
+   @ManyToOne()
    @JoinColumn(name="room_id", nullable=true)
    @JsonBackReference
    private Room room;
@@ -45,20 +45,20 @@ public class Talk extends AbstractPersistable
    @JoinColumn(name = "talk_exclusion_id")
    private TalkExclusion talkExclusion;
    
-   @ManyToOne(cascade=CascadeType.ALL)
-   @JoinColumn(name="schedule_id", nullable=false)
+   @ManyToOne()
+   @JoinColumn(name="conference_id", nullable=false)
    @JsonBackReference
-   private Conference schedule;
+   private Conference conference;
 
    public Talk()
    {}
 
-   public Talk(String id, String title, Conference schedule, Room room, Track track, Timeslot timeslot)
+   public Talk(String id, String title, Conference conference, Room room, Track track, Timeslot timeslot)
    {
       super(id);
       this.title = title;
       this.track = track;
-      this.schedule = schedule;
+      this.conference = conference;
       this.room = room;
       this.timeslot = timeslot;
    }
@@ -125,14 +125,14 @@ public class Talk extends AbstractPersistable
       this.talkExclusion = talkExclusion;
    }
    
-   public Conference getSchedule()
+   public Conference getConference()
    {
-      return schedule;
+      return conference;
    }
 
-   public void setSchedule(Conference schedule)
+   public void setConference(Conference conference)
    {
-      this.schedule = schedule;
+      this.conference = conference;
    }
 
 }
