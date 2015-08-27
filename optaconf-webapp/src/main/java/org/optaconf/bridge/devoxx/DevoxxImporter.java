@@ -123,6 +123,7 @@ public class DevoxxImporter {
             roomMap.put(id, room);
         }
         Collections.sort(conference.getRoomList());
+        
         return roomMap;
     }
 

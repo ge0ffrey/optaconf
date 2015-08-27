@@ -1,7 +1,8 @@
 package org.optaconf.service;
 
-import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -40,16 +41,16 @@ public class RoomService
 
    @GET
    @Path("/")
-   public List<Room> getRoomList(@PathParam("conferenceId") Long conferenceId)
+   public Set<Room> getRoomList(@PathParam("conferenceId") Long conferenceId)
    {
-      List<Room> rooms = new ArrayList<>();
+      Set<Room> rooms = new LinkedHashSet<>();
       try {
          utx.begin();
 
          em.joinTransaction();
          Conference conference = em.find(Conference.class, conferenceId);
          conference.getRoomList().iterator().hasNext();
-         rooms = conference.getRoomList();
+         rooms = new LinkedHashSet(conference.getRoomList());
       }
       catch (NotSupportedException | SystemException e) {
          // TODO Auto-generated catch block
