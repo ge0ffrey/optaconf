@@ -50,7 +50,7 @@ public class RoomService
          em.joinTransaction();
          Conference conference = em.find(Conference.class, conferenceId);
          conference.getRoomList().iterator().hasNext();
-         rooms = new LinkedHashSet(conference.getRoomList());
+         rooms = new LinkedHashSet<Room>(conference.getRoomList());
       }
       catch (NotSupportedException | SystemException e) {
          // TODO Auto-generated catch block
