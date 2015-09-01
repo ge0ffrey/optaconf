@@ -32,7 +32,7 @@ public class Track extends AbstractPersistable
    @OneToMany(mappedBy="track", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
    private List<Talk> talks = new ArrayList<Talk>();
 
-   @ManyToOne(cascade=CascadeType.MERGE)
+   @ManyToOne(cascade=CascadeType.ALL)
    @JoinColumn(name="conference_id", nullable=false)
    @JsonIgnore
    private Conference conference;

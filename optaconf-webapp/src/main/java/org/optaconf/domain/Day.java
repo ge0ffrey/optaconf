@@ -29,7 +29,7 @@ public class Day extends AbstractPersistable implements Comparable<Day> {
     @JsonManagedReference
     private List<Timeslot> timeslots = new ArrayList<Timeslot>();
     
-    @ManyToOne(cascade=CascadeType.MERGE)
+    @ManyToOne(cascade=CascadeType.ALL)
     @JoinColumn(name="conference_id", nullable=false)
     @JsonIgnore
     private Conference conference;

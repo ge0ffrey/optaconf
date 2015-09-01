@@ -20,7 +20,7 @@ public class SpeakingRelation extends AbstractPersistable
    @OneToOne(cascade=CascadeType.ALL)
    private Talk talk;
    
-   @ManyToOne(cascade=CascadeType.MERGE)
+   @ManyToOne(cascade=CascadeType.ALL)
    @JoinColumn(name="conference_id", nullable=false)
    @JsonIgnore
    private Conference conference;

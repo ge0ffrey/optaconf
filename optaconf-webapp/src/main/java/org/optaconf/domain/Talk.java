@@ -45,7 +45,7 @@ public class Talk extends AbstractPersistable
    @JoinColumn(name = "talk_exclusion_id")
    private TalkExclusion talkExclusion;
    
-   @ManyToOne(cascade=CascadeType.MERGE)
+   @ManyToOne(cascade=CascadeType.ALL)
    @JoinColumn(name="conference_id", nullable=false)
    @JsonIgnore
    private Conference conference;

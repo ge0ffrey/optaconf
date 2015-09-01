@@ -28,7 +28,7 @@ public class Speaker extends AbstractPersistable implements Comparable<Speaker>
    @JoinColumn(name = "speaking_relation_id", nullable = true)
    private SpeakingRelation relation;
    
-   @ManyToOne(cascade=CascadeType.MERGE)
+   @ManyToOne(cascade=CascadeType.ALL)
    @JoinColumn(name="conference_id", nullable=false)
    @JsonIgnore
    private Conference conference;

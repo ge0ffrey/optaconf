@@ -37,7 +37,7 @@ public class UnavailableTimeslotRoomPenalty extends AbstractPersistable
    @JsonBackReference
    private Room room;
 
-   @ManyToOne(cascade=CascadeType.MERGE)
+   @ManyToOne(cascade=CascadeType.ALL)
    @JoinColumn(name="conference_id", nullable=false)
    @JsonIgnore
    private Conference conference;

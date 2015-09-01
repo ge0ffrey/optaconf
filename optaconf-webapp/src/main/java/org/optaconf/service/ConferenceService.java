@@ -29,7 +29,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.optaconf.bridge.devoxx.DevoxxImporter;
-import org.optaconf.bridge.optaplanner.JpaConferenceExporter;
 import org.optaconf.domain.Conference;
 import org.optaplanner.core.api.solver.Solver;
 import org.optaplanner.core.api.solver.SolverFactory;
@@ -56,8 +55,7 @@ public class ConferenceService
    @Inject
    private DevoxxImporter devoxxImporter;
 
-   @Inject
-   private JpaConferenceExporter exporter;
+
 
    @Inject
    private SolverFactory solverFactory;

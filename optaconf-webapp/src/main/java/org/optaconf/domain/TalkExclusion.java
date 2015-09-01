@@ -28,7 +28,7 @@ public class TalkExclusion extends AbstractPersistable
    @Enumerated(EnumType.STRING)
    private TalkExclusionType type;
    
-   @ManyToOne(cascade=CascadeType.MERGE)
+   @ManyToOne(cascade=CascadeType.ALL)
    @JoinColumn(name="conference_id", nullable=false)
    @JsonIgnore
    private Conference conference;
