@@ -99,8 +99,9 @@ public class TalkService
          Day day = timeslot.getDay();
          Room room = talk.getRoom();
          if (room != null && room.getExternalId() != null) {
-            dayTimeslotRoomToTalkMap.get(day.getExternalId()).get(timeslot.getExternalId()).put(room.getExternalId(),
-                     talk);
+            Map<String, Map<String, Talk>> map = dayTimeslotRoomToTalkMap.get(day.getExternalId());
+            Map<String, Talk> map2 = map.get(timeslot.getExternalId());
+            map2.put(room.getExternalId(), talk);
          }
       }
       return dayTimeslotRoomToTalkMap;

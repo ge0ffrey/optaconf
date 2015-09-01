@@ -13,6 +13,7 @@ import javax.persistence.OneToMany;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity(name="optaconf_day")
@@ -28,9 +29,9 @@ public class Day extends AbstractPersistable implements Comparable<Day> {
     @JsonManagedReference
     private List<Timeslot> timeslots = new ArrayList<Timeslot>();
     
-    @ManyToOne()
+    @ManyToOne(cascade=CascadeType.MERGE)
     @JoinColumn(name="conference_id", nullable=false)
-    @JsonBackReference
+    @JsonIgnore
     private Conference conference;
     
     public Day() {

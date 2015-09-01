@@ -1,7 +1,6 @@
 package org.optaconf.service;
 
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.annotation.Resource;
 import javax.enterprise.concurrent.ManagedExecutorService;
@@ -30,16 +29,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.optaconf.bridge.devoxx.DevoxxImporter;
+import org.optaconf.bridge.optaplanner.JpaConferenceExporter;
 import org.optaconf.domain.Conference;
-import org.optaconf.domain.Day;
-import org.optaconf.domain.Room;
-import org.optaconf.domain.Speaker;
-import org.optaconf.domain.SpeakingRelation;
-import org.optaconf.domain.Talk;
-import org.optaconf.domain.TalkExclusion;
-import org.optaconf.domain.Timeslot;
-import org.optaconf.domain.Track;
-import org.optaconf.domain.UnavailableTimeslotRoomPenalty;
 import org.optaplanner.core.api.solver.Solver;
 import org.optaplanner.core.api.solver.SolverFactory;
 import org.slf4j.Logger;
@@ -66,6 +57,9 @@ public class ConferenceService
    private DevoxxImporter devoxxImporter;
 
    @Inject
+   private JpaConferenceExporter exporter;
+
+   @Inject
    private SolverFactory solverFactory;
 
    @Resource(name = "DefaultManagedExecutorService")
@@ -81,7 +75,7 @@ public class ConferenceService
 
          em.joinTransaction();
 
-         Conference conference = devoxxImporter.importSchedule();
+         Conference conference = devoxxImporter.importConference(true);
 
          message.append("Devoxx conference with ")
                   .append(conference.getDayList().size()).append(" days, ")
@@ -95,8 +89,7 @@ public class ConferenceService
          LOG.info(message.toString());
       }
       catch (NotSupportedException | SystemException e) {
-         // TODO Auto-generated catch block
-         e.printStackTrace();
+         LOG.error(e.getLocalizedMessage(), e);
       }
       finally {
          try {
@@ -104,8 +97,7 @@ public class ConferenceService
          }
          catch (SecurityException | IllegalStateException | RollbackException | HeuristicMixedException
                   | HeuristicRollbackException | SystemException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOG.error(e.getLocalizedMessage(), e);
          }
       }
 
@@ -149,85 +141,30 @@ public class ConferenceService
    public Response solveSchedule(@PathParam("conferenceId") Long conferenceId)
    {
 
-      Conference conference = new Conference();
+      Conference conference = null;
+
+      Solver oldSolver = solver;
+      if (oldSolver != null && oldSolver.isSolving()) {
+         oldSolver.terminateEarly();
+      }
+      Solver solver = solverFactory.buildSolver();
+      // TODO Use async solving https://developer.jboss.org/message/910391
+      // executor.submit(new SolverCallable(solver,
+      // scheduleManager.getSchedule()));
+      // return "Solving started.";
+      solver.solve(devoxxImporter.importConference(false));
+
+      conference = (Conference) solver.getBestSolution();
 
       try {
          utx.begin();
 
          em.joinTransaction();
 
-         conference = em.find(Conference.class, conferenceId);
-         conference.getDayList().iterator().hasNext();
-         conference.getTalkList().iterator().hasNext();
-         conference.getTalkExclusionList().iterator().hasNext();
-         conference.getTimeslotList().iterator().hasNext();
-         conference.getRoomList().iterator().hasNext();
-         conference.getSpeakerList().iterator().hasNext();
-         conference.getSpeakingRelationList().iterator().hasNext();
-         conference.getTrackList().iterator().hasNext();
-         conference.getUnavailableTimeslotRoomPenaltyList().iterator().hasNext();
-
-//         em.remove(conference);
-//         em.flush();
-         Solver oldSolver = solver;
-         if (oldSolver != null && oldSolver.isSolving()) {
-            oldSolver.terminateEarly();
-         }
-         Solver solver = solverFactory.buildSolver();
-         // TODO Use async solving https://developer.jboss.org/message/910391
-         // executor.submit(new SolverCallable(solver,
-         // scheduleManager.getSchedule()));
-         // return "Solving started.";
-         solver.solve(conference);
-
-         conference = (Conference) solver.getBestSolution();
-//         em.merge(conference);
-
-//         CopyOnWriteArrayList<Day> conferenceDays = new CopyOnWriteArrayList<>(conference.getDayList());
-//         for (Day day : conferenceDays)
-//            em.merge(day);
-//
-//         CopyOnWriteArrayList<Talk> conferenceTalks = new CopyOnWriteArrayList<>(conference.getTalkList());
-//         for (Talk talk : conferenceTalks)
-//            em.merge(talk);
-//
-//         CopyOnWriteArrayList<TalkExclusion> conferenceTalkExclusions = new CopyOnWriteArrayList<>(
-//                  conference.getTalkExclusionList());
-//         for (TalkExclusion te : conferenceTalkExclusions)
-//            em.merge(te);
-//
-//         CopyOnWriteArrayList<Timeslot> conferenceTimeslots = new CopyOnWriteArrayList<>(conference.getTimeslotList());
-//         for (Timeslot timeslot : conferenceTimeslots)
-//            em.merge(timeslot);
-//
-//         CopyOnWriteArrayList<Room> conferenceRooms = new CopyOnWriteArrayList<>(conference.getRoomList());
-//         for (Room room : conferenceRooms)
-//            em.merge(room);
-//
-//         CopyOnWriteArrayList<Speaker> conferenceSpeakers = new CopyOnWriteArrayList<>(conference.getSpeakerList());
-//         for (Speaker speaker : conferenceSpeakers)
-//            em.merge(speaker);
-//
-//         CopyOnWriteArrayList<SpeakingRelation> conferenceSpeakingRelations = new CopyOnWriteArrayList<>(
-//                  conference.getSpeakingRelationList());
-//         for (SpeakingRelation sr : conferenceSpeakingRelations)
-//            em.merge(sr);
-//
-//         CopyOnWriteArrayList<Track> conferenceTracks = new CopyOnWriteArrayList<>(conference.getTrackList());
-//         for (Track track : conferenceTracks)
-//            em.merge(track);
-//
-//         CopyOnWriteArrayList<UnavailableTimeslotRoomPenalty> conferenceUnavailableTimeslotRoomPenaltys = new CopyOnWriteArrayList<>(
-//                  conference.getUnavailableTimeslotRoomPenaltyList());
-//         for (UnavailableTimeslotRoomPenalty utrp : conferenceUnavailableTimeslotRoomPenaltys)
-//            em.merge(utrp);
-
-//         em.flush();
-
+         em.merge(conference);
       }
       catch (NotSupportedException | SystemException e) {
-         // TODO Auto-generated catch block
-         e.printStackTrace();
+         LOG.error(e.getLocalizedMessage(), e);
       }
       finally {
          try {
@@ -235,10 +172,10 @@ public class ConferenceService
          }
          catch (SecurityException | IllegalStateException | RollbackException | HeuristicMixedException
                   | HeuristicRollbackException | SystemException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOG.error(e.getLocalizedMessage(), e);
          }
       }
+
       return Response.ok(conference).build();
    }
 

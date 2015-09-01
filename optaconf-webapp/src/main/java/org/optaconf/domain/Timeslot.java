@@ -44,9 +44,9 @@ public class Timeslot extends AbstractPersistable implements Comparable<Timeslot
    @JoinColumn(name = "timeslot_room_penalty_id")
    private UnavailableTimeslotRoomPenalty penalty;
 
-   @ManyToOne()
+   @ManyToOne(cascade=CascadeType.MERGE)
    @JoinColumn(name="conference_id", nullable=false)
-   @JsonBackReference
+   @JsonIgnore
    private Conference conference;
    
    

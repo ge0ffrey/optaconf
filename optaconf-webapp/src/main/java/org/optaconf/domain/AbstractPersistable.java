@@ -71,4 +71,34 @@ public abstract class AbstractPersistable implements Serializable {
         return "[" + getClass().getName().replaceAll(".*\\.", "") + "=> ID: " + id + ", External ID: "+externalId+"]";
     }
 
+   @Override
+   public int hashCode()
+   {
+      final int prime = 31;
+      int result = 1;
+      result = prime * result + ((getExternalId() == null) ? 0 : getExternalId().hashCode());
+      return result;
+   }
+
+   @Override
+   public boolean equals(Object obj)
+   {
+      if (this == obj)
+         return true;
+      if (obj == null)
+         return false;
+      if (getClass() != obj.getClass())
+         return false;
+      AbstractPersistable other = (AbstractPersistable) obj;
+      if (getExternalId() == null) {
+         if (other.getExternalId() != null)
+            return false;
+      }
+      else if (!getExternalId().equals(other.getExternalId()))
+         return false;
+      return true;
+   }
+    
+    
+
 }

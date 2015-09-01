@@ -16,6 +16,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.apache.commons.lang.builder.CompareToBuilder;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity(name = "optaconf_room")
@@ -36,9 +37,9 @@ public class Room extends AbstractPersistable implements Comparable<Room>
    @JoinColumn(name = "timeslot_room_penalty_id")
    private UnavailableTimeslotRoomPenalty penalty;
 
-   @ManyToOne(cascade=CascadeType.ALL)
+   @ManyToOne(cascade=CascadeType.MERGE)
    @JoinColumn(name = "conference_id", nullable = false)
-   @JsonBackReference
+   @JsonIgnore
    private Conference conference;
 
    public Room()

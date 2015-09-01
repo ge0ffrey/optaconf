@@ -11,6 +11,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.apache.commons.lang.builder.CompareToBuilder;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity(name = "optaconf_speaker")
@@ -27,9 +28,9 @@ public class Speaker extends AbstractPersistable implements Comparable<Speaker>
    @JoinColumn(name = "speaking_relation_id", nullable = true)
    private SpeakingRelation relation;
    
-   @ManyToOne(cascade=CascadeType.ALL)
+   @ManyToOne(cascade=CascadeType.MERGE)
    @JoinColumn(name="conference_id", nullable=false)
-   @JsonBackReference
+   @JsonIgnore
    private Conference conference;
 
    public Speaker()

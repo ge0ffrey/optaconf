@@ -27,47 +27,38 @@ public class Conference extends AbstractPersistable implements Solution<HardSoft
 {
    @OneToMany(mappedBy="conference", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
    @JsonManagedReference
-//   @JsonIgnore
    private List<Day> dayList = new ArrayList<Day>();
    
    @OneToMany(mappedBy="conference", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
    @JsonManagedReference
-   @JsonIgnore
    private List<Timeslot> timeslotList = new ArrayList<Timeslot>();
    
    @OneToMany(mappedBy="conference", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
    @JsonManagedReference
-   @JsonIgnore
    private List<Room> roomList = new ArrayList<Room>();
    
    @OneToMany(mappedBy="conference", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
    @JsonManagedReference
-   @JsonIgnore
    private List<UnavailableTimeslotRoomPenalty> unavailableTimeslotRoomPenaltyList = new ArrayList<UnavailableTimeslotRoomPenalty>();
    
    @OneToMany(mappedBy="conference", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
    @JsonManagedReference
-   @JsonIgnore
    private List<Track> trackList = new ArrayList<Track>();
    
    @OneToMany(mappedBy="conference", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
    @JsonManagedReference
-   @JsonIgnore
    private List<Speaker> speakerList = new ArrayList<Speaker>();
    
    @OneToMany(mappedBy="conference", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
    @JsonManagedReference
-//   @JsonIgnore
    private List<Talk> talkList = new ArrayList<Talk>();
    
    @OneToMany(mappedBy="conference", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
    @JsonManagedReference
-   @JsonIgnore
    private List<SpeakingRelation> speakingRelationList = new ArrayList<SpeakingRelation>();
    
    @OneToMany(mappedBy="conference", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
    @JsonManagedReference
-   @JsonIgnore
    private List<TalkExclusion> talkExclusionList = new ArrayList<TalkExclusion>();
    
    @Column (nullable=false)

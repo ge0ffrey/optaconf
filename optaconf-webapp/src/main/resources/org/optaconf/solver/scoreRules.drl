@@ -22,8 +22,8 @@ global HardSoftScoreHolder scoreHolder;
 
 rule "roomConflict"
     when
-        Talk($id: id, $timeslot : timeslot, $room : room)
-        Talk(id > $id, timeslot == $timeslot, room == $room)
+        Talk($externalId: externalId, $timeslot : timeslot, $room : room)
+        Talk(externalId > $externalId, timeslot == $timeslot, room == $room)
     then
         scoreHolder.addHardConstraintMatch(kcontext, -1);
 end
@@ -38,9 +38,9 @@ end
 
 rule "speakerConflict"
     when
-        $leftTalk : Talk($id: id, $timeslot : timeslot)
+        $leftTalk : Talk($externalId: externalId, $timeslot : timeslot)
         SpeakingRelation(talk == $leftTalk, $speaker : speaker)
-        $rightTalk : Talk(id > $id, timeslot == $timeslot)
+        $rightTalk : Talk(externalId > $externalId, timeslot == $timeslot)
         SpeakingRelation(talk == $rightTalk, speaker == $speaker)
     then
         scoreHolder.addHardConstraintMatch(kcontext, -1);
@@ -70,8 +70,8 @@ end
 
 rule "trackConflict"
     when
-        Talk($id: id, $track : track, $timeslot : timeslot)
-        Talk(id > $id, track == $track, timeslot == $timeslot)
+        Talk($externalId: externalId, $track : track, $timeslot : timeslot)
+        Talk(externalId > $externalId, track == $track, timeslot == $timeslot)
     then
         scoreHolder.addSoftConstraintMatch(kcontext, -1);
 end

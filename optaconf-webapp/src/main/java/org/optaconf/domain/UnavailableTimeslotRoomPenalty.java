@@ -24,6 +24,7 @@ import javax.persistence.OneToOne;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity(name = "optaconf_unavailtimeslotroompenalty")
 public class UnavailableTimeslotRoomPenalty extends AbstractPersistable
@@ -36,9 +37,9 @@ public class UnavailableTimeslotRoomPenalty extends AbstractPersistable
    @JsonBackReference
    private Room room;
 
-   @ManyToOne(cascade=CascadeType.ALL)
+   @ManyToOne(cascade=CascadeType.MERGE)
    @JoinColumn(name="conference_id", nullable=false)
-   @JsonBackReference
+   @JsonIgnore
    private Conference conference;
    
    public UnavailableTimeslotRoomPenalty()
