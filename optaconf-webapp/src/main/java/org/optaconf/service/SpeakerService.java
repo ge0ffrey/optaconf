@@ -23,8 +23,8 @@ public class SpeakerService {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(SpeakerService.class);
 
-   @PersistenceContext(unitName = "optaconf-webapp-persistence-unit")
-   private EntityManager em;
+    @PersistenceContext(unitName = "optaconf-webapp-persistence-unit")
+    private EntityManager em;
 
     @GET
     @Path("/")
