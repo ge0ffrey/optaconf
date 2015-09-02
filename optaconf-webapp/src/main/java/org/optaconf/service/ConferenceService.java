@@ -134,7 +134,6 @@ public class ConferenceService
    }
 
    @PUT
-   @GET
    @Path("/{conferenceId}/solve")
    public Response solveSchedule(@PathParam("conferenceId") Long conferenceId)
    {
