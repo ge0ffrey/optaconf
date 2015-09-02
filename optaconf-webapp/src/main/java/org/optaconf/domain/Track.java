@@ -16,10 +16,12 @@ import javax.xml.bind.annotation.XmlTransient;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.optaplanner.core.api.domain.solution.cloner.DeepPlanningClone;
 
 /**
  * Group of tracks
  */
+@DeepPlanningClone
 @Entity(name = "optaconf_track")
 public class Track extends AbstractPersistable
 {

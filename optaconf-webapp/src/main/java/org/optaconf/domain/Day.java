@@ -15,7 +15,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.optaplanner.core.api.domain.solution.cloner.DeepPlanningClone;
 
+@DeepPlanningClone
 @Entity(name="optaconf_day")
 public class Day extends AbstractPersistable implements Comparable<Day> {
 

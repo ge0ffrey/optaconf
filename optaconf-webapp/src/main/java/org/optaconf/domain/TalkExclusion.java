@@ -12,7 +12,9 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.optaplanner.core.api.domain.solution.cloner.DeepPlanningClone;
 
+@DeepPlanningClone
 @Entity(name = "optaconf_talkexclusion")
 public class TalkExclusion extends AbstractPersistable
 {

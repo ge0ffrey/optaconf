@@ -13,7 +13,9 @@ import org.apache.commons.lang.builder.CompareToBuilder;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.optaplanner.core.api.domain.solution.cloner.DeepPlanningClone;
 
+@DeepPlanningClone
 @Entity(name = "optaconf_speaker")
 public class Speaker extends AbstractPersistable implements Comparable<Speaker>
 {

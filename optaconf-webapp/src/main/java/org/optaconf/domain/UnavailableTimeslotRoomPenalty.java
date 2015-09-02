@@ -25,7 +25,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.optaplanner.core.api.domain.solution.cloner.DeepPlanningClone;
 
+@DeepPlanningClone
 @Entity(name = "optaconf_unavailtimeslotroompenalty")
 public class UnavailableTimeslotRoomPenalty extends AbstractPersistable
 {
