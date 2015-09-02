@@ -138,7 +138,7 @@ public class ConferenceService
    public Response solveSchedule(@PathParam("conferenceId") Long conferenceId)
    {
 
-      Conference conference = null;
+      Conference conference = em.find(Conference.class, conferenceId);
 
       Solver oldSolver = solver;
       if (oldSolver != null && oldSolver.isSolving()) {
@@ -149,7 +149,7 @@ public class ConferenceService
       // executor.submit(new SolverCallable(solver,
       // scheduleManager.getSchedule()));
       // return "Solving started.";
-      solver.solve(devoxxImporter.importConference(false));
+      solver.solve(conference);
 
       conference = (Conference) solver.getBestSolution();
 
