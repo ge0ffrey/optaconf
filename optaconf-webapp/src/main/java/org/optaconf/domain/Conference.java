@@ -21,6 +21,12 @@ import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
 @Entity(name = "optaconf_conference")
 public class Conference extends AbstractPersistable implements Solution<HardSoftScore> {
 
+    @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false)
+    private String comment;
+
     @OneToMany(mappedBy = "conference", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<Day> dayList = new ArrayList<Day>();
@@ -57,12 +63,6 @@ public class Conference extends AbstractPersistable implements Solution<HardSoft
     @JsonManagedReference
     private List<TalkExclusion> talkExclusionList = new ArrayList<TalkExclusion>();
 
-    @Column(nullable = false)
-    private String name;
-
-    @Column(nullable = false)
-    private String comment;
-
     @Column
     private HardSoftScore score;
 
@@ -71,6 +71,22 @@ public class Conference extends AbstractPersistable implements Solution<HardSoft
 
     public Conference(String id) {
         super(id);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public List<Day> getDayList() {
@@ -172,22 +188,6 @@ public class Conference extends AbstractPersistable implements Solution<HardSoft
         facts.addAll(talkExclusionList);
         // Do not add the planning entity's (processList) because that will be done automatically
         return facts;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
     }
 
 }
