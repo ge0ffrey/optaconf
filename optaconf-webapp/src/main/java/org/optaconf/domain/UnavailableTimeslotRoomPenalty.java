@@ -21,7 +21,6 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-import javax.xml.bind.annotation.XmlRootElement;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -29,60 +28,53 @@ import org.optaplanner.core.api.domain.solution.cloner.DeepPlanningClone;
 
 @DeepPlanningClone
 @Entity(name = "optaconf_unavailtimeslotroompenalty")
-public class UnavailableTimeslotRoomPenalty extends AbstractPersistable
-{
-   @OneToOne(cascade=CascadeType.ALL)
-   @JsonBackReference
-   private Timeslot timeslot;
-   
-   @OneToOne(cascade=CascadeType.ALL)
-   @JsonBackReference
-   private Room room;
+public class UnavailableTimeslotRoomPenalty extends AbstractPersistable {
 
-   @ManyToOne(cascade=CascadeType.ALL)
-   @JoinColumn(name="conference_id", nullable=false)
-   @JsonIgnore
-   private Conference conference;
-   
-   public UnavailableTimeslotRoomPenalty()
-   {}
+    @OneToOne(cascade = CascadeType.ALL)
+    @JsonBackReference
+    private Timeslot timeslot;
 
-   public UnavailableTimeslotRoomPenalty(String id, Timeslot timeslot, Room room, Conference conference)
-   {
-      super(id);
-      this.timeslot = timeslot;
-      this.room = room;
-      this.conference = conference;
-   }
+    @OneToOne(cascade = CascadeType.ALL)
+    @JsonBackReference
+    private Room room;
 
-   public Timeslot getTimeslot()
-   {
-      return timeslot;
-   }
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "conference_id", nullable = false)
+    @JsonIgnore
+    private Conference conference;
 
-   public void setTimeslot(Timeslot timeslot)
-   {
-      this.timeslot = timeslot;
-   }
+    public UnavailableTimeslotRoomPenalty() {
+    }
 
-   public Room getRoom()
-   {
-      return room;
-   }
+    public UnavailableTimeslotRoomPenalty(String id, Timeslot timeslot, Room room, Conference conference) {
+        super(id);
+        this.timeslot = timeslot;
+        this.room = room;
+        this.conference = conference;
+    }
 
-   public void setRoom(Room room)
-   {
-      this.room = room;
-   }
-   
-   public Conference getConference()
-   {
-      return conference;
-   }
+    public Timeslot getTimeslot() {
+        return timeslot;
+    }
 
-   public void setConference(Conference conference)
-   {
-      this.conference = conference;
-   }
+    public void setTimeslot(Timeslot timeslot) {
+        this.timeslot = timeslot;
+    }
+
+    public Room getRoom() {
+        return room;
+    }
+
+    public void setRoom(Room room) {
+        this.room = room;
+    }
+
+    public Conference getConference() {
+        return conference;
+    }
+
+    public void setConference(Conference conference) {
+        this.conference = conference;
+    }
 
 }

@@ -2,7 +2,6 @@ package org.optaconf.domain;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,12 +9,8 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.optaplanner.core.api.domain.solution.cloner.DeepPlanningClone;
 
 /**
@@ -23,61 +18,54 @@ import org.optaplanner.core.api.domain.solution.cloner.DeepPlanningClone;
  */
 @DeepPlanningClone
 @Entity(name = "optaconf_track")
-public class Track extends AbstractPersistable
-{
-   @Column
-   private String title;
-   
-   @Column
-   private String cssStyleClass;
-   
-   @OneToMany(mappedBy="track", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
-   private List<Talk> talks = new ArrayList<Talk>();
+public class Track extends AbstractPersistable {
 
-   @ManyToOne(cascade=CascadeType.ALL)
-   @JoinColumn(name="conference_id", nullable=false)
-   @JsonIgnore
-   private Conference conference;
-   
-   public Track()
-   {}
+    @Column
+    private String title;
 
-   public Track(String id, String title, String cssStyleClass, Conference conference)
-   {
-      super(id);
-      this.title = title;
-      this.cssStyleClass = cssStyleClass;
-      this.conference = conference;
-   }
+    @Column
+    private String cssStyleClass;
 
-   public String getTitle()
-   {
-      return title;
-   }
+    @OneToMany(mappedBy = "track", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Talk> talks = new ArrayList<Talk>();
 
-   public void setTitle(String title)
-   {
-      this.title = title;
-   }
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "conference_id", nullable = false)
+    @JsonIgnore
+    private Conference conference;
 
-   public String getCssStyleClass()
-   {
-      return cssStyleClass;
-   }
+    public Track() {
+    }
 
-   public void setCssStyleClass(String cssStyleClass)
-   {
-      this.cssStyleClass = cssStyleClass;
-   }
-   
-   public Conference getConference()
-   {
-      return conference;
-   }
+    public Track(String id, String title, String cssStyleClass, Conference conference) {
+        super(id);
+        this.title = title;
+        this.cssStyleClass = cssStyleClass;
+        this.conference = conference;
+    }
 
-   public void setConference(Conference conference)
-   {
-      this.conference = conference;
-   }
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getCssStyleClass() {
+        return cssStyleClass;
+    }
+
+    public void setCssStyleClass(String cssStyleClass) {
+        this.cssStyleClass = cssStyleClass;
+    }
+
+    public Conference getConference() {
+        return conference;
+    }
+
+    public void setConference(Conference conference) {
+        this.conference = conference;
+    }
 
 }

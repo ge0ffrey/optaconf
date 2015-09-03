@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
@@ -26,12 +25,12 @@ import org.slf4j.LoggerFactory;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class DayService {
-	
-	private static final Logger LOG = LoggerFactory.getLogger(DayService.class);
-   
-   @PersistenceContext(unitName = "optaconf-webapp-persistence-unit")
-   private EntityManager em;
-	
+
+    private static final Logger LOG = LoggerFactory.getLogger(DayService.class);
+
+    @PersistenceContext(unitName = "optaconf-webapp-persistence-unit")
+    private EntityManager em;
+
     @GET
     @Path("/")
     public List<Day> getDayList(@PathParam("conferenceId") Long conferenceId) {
@@ -39,6 +38,7 @@ public class DayService {
         conference.getDayList().iterator().hasNext();
         return conference.getDayList();
     }
+
     @GET
     @Path("/{dayId}/timeslot")
     public List<Timeslot> getTimeslotList(@PathParam("conferenceId") Long conferenceId,

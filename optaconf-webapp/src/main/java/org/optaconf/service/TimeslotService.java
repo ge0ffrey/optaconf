@@ -1,7 +1,6 @@
 package org.optaconf.service;
 
 import java.util.List;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
@@ -21,10 +20,10 @@ import org.slf4j.LoggerFactory;
 @Consumes(MediaType.APPLICATION_JSON)
 public class TimeslotService {
 
-	private static final Logger LOG = LoggerFactory.getLogger(TimeslotService.class);
-	
-   @PersistenceContext(unitName = "optaconf-webapp-persistence-unit")
-   private EntityManager em;
+    private static final Logger LOG = LoggerFactory.getLogger(TimeslotService.class);
+
+    @PersistenceContext(unitName = "optaconf-webapp-persistence-unit")
+    private EntityManager em;
 
     @GET
     @Path("/")

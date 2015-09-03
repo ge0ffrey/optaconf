@@ -17,7 +17,6 @@
 package org.optaconf.domain;
 
 import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,19 +26,21 @@ import javax.persistence.Version;
 
 @MappedSuperclass
 public abstract class AbstractPersistable implements Serializable {
-    @Id @GeneratedValue(strategy=GenerationType.AUTO)
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
-    
-    @Column(name="external_id")
+
+    @Column(name = "external_id")
     protected String externalId;
-    
+
     @Version
     protected Long version;
 
     protected AbstractPersistable() {
     }
 
-    protected AbstractPersistable(String  externalId) {
+    protected AbstractPersistable(String externalId) {
         this.externalId = externalId;
     }
 
@@ -50,55 +51,55 @@ public abstract class AbstractPersistable implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-    
+
     public String getExternalId() {
-      return externalId;
+        return externalId;
     }
 
     public void setExternalId(String externalId) {
-      this.externalId = externalId;
+        this.externalId = externalId;
     }
 
     public Long getVersion() {
-      return version;
+        return version;
     }
 
     protected void setVersion(Long version) {
-      this.version = version;
+        this.version = version;
     }
 
     public String toString() {
-        return "[" + getClass().getName().replaceAll(".*\\.", "") + "=> ID: " + id + ", External ID: "+externalId+"]";
+        return "[" + getClass().getName().replaceAll(".*\\.", "") + "=> ID: " + id + ", External ID: " + externalId + "]";
     }
 
-   @Override
-   public int hashCode()
-   {
-      final int prime = 31;
-      int result = 1;
-      result = prime * result + ((getExternalId() == null) ? 0 : getExternalId().hashCode());
-      return result;
-   }
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((getExternalId() == null) ? 0 : getExternalId().hashCode());
+        return result;
+    }
 
-   @Override
-   public boolean equals(Object obj)
-   {
-      if (this == obj)
-         return true;
-      if (obj == null)
-         return false;
-      if (getClass() != obj.getClass())
-         return false;
-      AbstractPersistable other = (AbstractPersistable) obj;
-      if (getExternalId() == null) {
-         if (other.getExternalId() != null)
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
-      }
-      else if (!getExternalId().equals(other.getExternalId()))
-         return false;
-      return true;
-   }
-    
-    
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        AbstractPersistable other = (AbstractPersistable) obj;
+        if (getExternalId() == null) {
+            if (other.getExternalId() != null) {
+                return false;
+            }
+        } else if (!getExternalId().equals(other.getExternalId())) {
+            return false;
+        }
+        return true;
+    }
 
 }

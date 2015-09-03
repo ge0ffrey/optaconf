@@ -6,135 +6,116 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.optaplanner.core.api.domain.entity.PlanningEntity;
 import org.optaplanner.core.api.domain.solution.cloner.DeepPlanningClone;
 import org.optaplanner.core.api.domain.variable.PlanningVariable;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 @PlanningEntity
 @DeepPlanningClone
 @Entity(name = "optaconf_talk")
-public class Talk extends AbstractPersistable
-{
+public class Talk extends AbstractPersistable {
 
-   @Column(length=255, nullable=false)
-   private String title;
+    @Column(length = 255, nullable = false)
+    private String title;
 
-   @ManyToOne()
-   @JoinColumn(name="track_id", nullable=false)
-   private Track track;
-   
-   @ManyToOne()
-   @JoinColumn(name="timeslot_id", nullable=false)
-   @JsonBackReference
-   private Timeslot timeslot;
-   
-   @ManyToOne()
-   @JoinColumn(name="room_id", nullable=true)
-   @JsonBackReference
-   private Room room;
-   
-   @OneToOne(optional=true, cascade=CascadeType.ALL)
-   @JoinColumn(name="speaking_relation_id", nullable=true)
-   private SpeakingRelation speakingRelation;
-   
-   @OneToOne(optional = true, cascade=CascadeType.ALL)
-   @JoinColumn(name = "talk_exclusion_id")
-   private TalkExclusion talkExclusion;
-   
-   @ManyToOne(cascade=CascadeType.ALL)
-   @JoinColumn(name="conference_id", nullable=false)
-   @JsonIgnore
-   private Conference conference;
+    @ManyToOne()
+    @JoinColumn(name = "track_id", nullable = false)
+    private Track track;
 
-   public Talk()
-   {}
+    @ManyToOne()
+    @JoinColumn(name = "timeslot_id", nullable = false)
+    @JsonBackReference
+    private Timeslot timeslot;
 
-   public Talk(String id, String title, Conference conference, Room room, Track track, Timeslot timeslot)
-   {
-      super(id);
-      this.title = title;
-      this.track = track;
-      this.conference = conference;
-      this.room = room;
-      this.timeslot = timeslot;
-   }
+    @ManyToOne()
+    @JoinColumn(name = "room_id", nullable = true)
+    @JsonBackReference
+    private Room room;
 
-   public String getTitle()
-   {
-      return title;
-   }
+    @OneToOne(optional = true, cascade = CascadeType.ALL)
+    @JoinColumn(name = "speaking_relation_id", nullable = true)
+    private SpeakingRelation speakingRelation;
 
-   public void setTitle(String title)
-   {
-      this.title = title;
-   }
+    @OneToOne(optional = true, cascade = CascadeType.ALL)
+    @JoinColumn(name = "talk_exclusion_id")
+    private TalkExclusion talkExclusion;
 
-   public Track getTrack()
-   {
-      return track;
-   }
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "conference_id", nullable = false)
+    @JsonIgnore
+    private Conference conference;
 
-   public void setTrack(Track track)
-   {
-      this.track = track;
-   }
+    public Talk() {
+    }
 
-   @PlanningVariable(valueRangeProviderRefs = { "timeslotRange" })
-   public Timeslot getTimeslot()
-   {
-      return timeslot;
-   }
+    public Talk(String id, String title, Conference conference, Room room, Track track, Timeslot timeslot) {
+        super(id);
+        this.title = title;
+        this.track = track;
+        this.conference = conference;
+        this.room = room;
+        this.timeslot = timeslot;
+    }
 
-   public void setTimeslot(Timeslot timeslot)
-   {
-      this.timeslot = timeslot;
-   }
+    public String getTitle() {
+        return title;
+    }
 
-   @PlanningVariable(valueRangeProviderRefs = { "roomRange" })
-   public Room getRoom()
-   {
-      return room;
-   }
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-   public void setRoom(Room room)
-   {
-      this.room = room;
-   }
+    public Track getTrack() {
+        return track;
+    }
 
-   public SpeakingRelation getSpeakingRelation()
-   {
-      return speakingRelation;
-   }
+    public void setTrack(Track track) {
+        this.track = track;
+    }
 
-   public void setSpeakingRelation(SpeakingRelation speakingRelation)
-   {
-      this.speakingRelation = speakingRelation;
-   }
+    @PlanningVariable(valueRangeProviderRefs = {"timeslotRange"})
+    public Timeslot getTimeslot() {
+        return timeslot;
+    }
 
-   public TalkExclusion getTalkExclusion()
-   {
-      return talkExclusion;
-   }
+    public void setTimeslot(Timeslot timeslot) {
+        this.timeslot = timeslot;
+    }
 
-   public void setTalkExclusion(TalkExclusion talkExclusion)
-   {
-      this.talkExclusion = talkExclusion;
-   }
-   
-   public Conference getConference()
-   {
-      return conference;
-   }
+    @PlanningVariable(valueRangeProviderRefs = {"roomRange"})
+    public Room getRoom() {
+        return room;
+    }
 
-   public void setConference(Conference conference)
-   {
-      this.conference = conference;
-   }
+    public void setRoom(Room room) {
+        this.room = room;
+    }
+
+    public SpeakingRelation getSpeakingRelation() {
+        return speakingRelation;
+    }
+
+    public void setSpeakingRelation(SpeakingRelation speakingRelation) {
+        this.speakingRelation = speakingRelation;
+    }
+
+    public TalkExclusion getTalkExclusion() {
+        return talkExclusion;
+    }
+
+    public void setTalkExclusion(TalkExclusion talkExclusion) {
+        this.talkExclusion = talkExclusion;
+    }
+
+    public Conference getConference() {
+        return conference;
+    }
+
+    public void setConference(Conference conference) {
+        this.conference = conference;
+    }
 
 }

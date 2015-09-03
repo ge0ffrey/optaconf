@@ -1,7 +1,6 @@
 package org.optaconf.service;
 
 import java.util.List;
-
 import javax.annotation.Resource;
 import javax.enterprise.concurrent.ManagedExecutorService;
 import javax.inject.Inject;
@@ -38,164 +37,148 @@ import org.slf4j.LoggerFactory;
 @Path("/conference")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class ConferenceService
-{
+public class ConferenceService {
 
-   private static final Logger LOG = LoggerFactory
+    private static final Logger LOG = LoggerFactory
             .getLogger(ConferenceService.class);
 
-   @Inject
-   UserTransaction utx;
+    @Inject
+    UserTransaction utx;
 
-   @PersistenceContext(unitName = "optaconf-webapp-persistence-unit")
-   private EntityManager em;
+    @PersistenceContext(unitName = "optaconf-webapp-persistence-unit")
+    private EntityManager em;
 
-   private Solver solver;
+    private Solver solver;
 
-   @Inject
-   private DevoxxImporter devoxxImporter;
+    @Inject
+    private DevoxxImporter devoxxImporter;
 
+    @Inject
+    private SolverFactory solverFactory;
 
+    @Resource(name = "DefaultManagedExecutorService")
+    private ManagedExecutorService executor;
 
-   @Inject
-   private SolverFactory solverFactory;
+    @POST
+    @Path("/import/devoxx")
+    public Response importDevoxx() {
+        StringBuilder message = new StringBuilder();
+        try {
+            utx.begin();
 
-   @Resource(name = "DefaultManagedExecutorService")
-   private ManagedExecutorService executor;
+            em.joinTransaction();
 
-   @POST
-   @Path("/import/devoxx")
-   public Response importDevoxx()
-   {
-      StringBuilder message = new StringBuilder();
-      try {
-         utx.begin();
+            Conference conference = devoxxImporter.importConference(true);
 
-         em.joinTransaction();
+            message.append("Devoxx conference with ")
+                    .append(conference.getDayList().size()).append(" days, ")
+                    .append(conference.getTimeslotList().size())
+                    .append(" timeslots, ").append(conference.getRoomList().size())
+                    .append(" rooms, ").append(conference.getTrackList().size())
+                    .append(" tracks, ").append(conference.getSpeakerList().size())
+                    .append(" speakers, ").append(conference.getTalkList().size())
+                    .append(" talks imported successfully.");
 
-         Conference conference = devoxxImporter.importConference(true);
-
-         message.append("Devoxx conference with ")
-                  .append(conference.getDayList().size()).append(" days, ")
-                  .append(conference.getTimeslotList().size())
-                  .append(" timeslots, ").append(conference.getRoomList().size())
-                  .append(" rooms, ").append(conference.getTrackList().size())
-                  .append(" tracks, ").append(conference.getSpeakerList().size())
-                  .append(" speakers, ").append(conference.getTalkList().size())
-                  .append(" talks imported successfully.");
-
-         LOG.info(message.toString());
-      }
-      catch (NotSupportedException | SystemException e) {
-         LOG.error(e.getLocalizedMessage(), e);
-      }
-      finally {
-         try {
-            utx.commit();
-         }
-         catch (SecurityException | IllegalStateException | RollbackException | HeuristicMixedException
-                  | HeuristicRollbackException | SystemException e) {
+            LOG.info(message.toString());
+        } catch (NotSupportedException | SystemException e) {
             LOG.error(e.getLocalizedMessage(), e);
-         }
-      }
+        } finally {
+            try {
+                utx.commit();
+            } catch (SecurityException | IllegalStateException | RollbackException | HeuristicMixedException
+                    | HeuristicRollbackException | SystemException e) {
+                LOG.error(e.getLocalizedMessage(), e);
+            }
+        }
 
-      return Response.ok(message).build();
+        return Response.ok(message).build();
 
-   }
+    }
 
-   @GET
-   @Path("")
-   public List<Conference> getAll()
-   {
-      CriteriaBuilder cb = em.getCriteriaBuilder();
-      CriteriaQuery<Conference> cq = cb.createQuery(Conference.class);
-      Root<Conference> rootEntry = cq.from(Conference.class);
-      CriteriaQuery<Conference> all = cq.select(rootEntry);
-      TypedQuery<Conference> allQuery = em.createQuery(all);
-      List<Conference> conferences = allQuery.getResultList();
+    @GET
+    @Path("")
+    public List<Conference> getAll() {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Conference> cq = cb.createQuery(Conference.class);
+        Root<Conference> rootEntry = cq.from(Conference.class);
+        CriteriaQuery<Conference> all = cq.select(rootEntry);
+        TypedQuery<Conference> allQuery = em.createQuery(all);
+        List<Conference> conferences = allQuery.getResultList();
 
-      return conferences;
-   }
+        return conferences;
+    }
 
-   @GET
-   @Path("/{conferenceId}")
-   public Conference getOne(@PathParam("conferenceId") Long conferenceId)
-   {
-      Conference conference = em.find(Conference.class, conferenceId);
-      return conference;
-   }
+    @GET
+    @Path("/{conferenceId}")
+    public Conference getOne(@PathParam("conferenceId") Long conferenceId) {
+        Conference conference = em.find(Conference.class, conferenceId);
+        return conference;
+    }
 
-   @DELETE
-   @Path("/{conferenceId}")
-   public void deleteOne(@PathParam("conferenceId") Long conferenceId)
-   {
-      // TODO: take care of orphaned entries
-      em.remove(em.find(Conference.class, conferenceId));
-   }
+    @DELETE
+    @Path("/{conferenceId}")
+    public void deleteOne(@PathParam("conferenceId") Long conferenceId) {
+        // TODO: take care of orphaned entries
+        em.remove(em.find(Conference.class, conferenceId));
+    }
 
-   @PUT
-   @Path("/{conferenceId}/solve")
-   public Response solveSchedule(@PathParam("conferenceId") Long conferenceId)
-   {
+    @PUT
+    @Path("/{conferenceId}/solve")
+    public Response solveSchedule(@PathParam("conferenceId") Long conferenceId) {
 
-      Conference conference = em.find(Conference.class, conferenceId);
+        Conference conference = em.find(Conference.class, conferenceId);
 
-      Solver oldSolver = solver;
-      if (oldSolver != null && oldSolver.isSolving()) {
-         oldSolver.terminateEarly();
-      }
-      Solver solver = solverFactory.buildSolver();
-      // TODO Use async solving https://developer.jboss.org/message/910391
-      // executor.submit(new SolverCallable(solver,
-      // scheduleManager.getSchedule()));
-      // return "Solving started.";
-      solver.solve(conference);
+        Solver oldSolver = solver;
+        if (oldSolver != null && oldSolver.isSolving()) {
+            oldSolver.terminateEarly();
+        }
+        Solver solver = solverFactory.buildSolver();
+        // TODO Use async solving https://developer.jboss.org/message/910391
+        // executor.submit(new SolverCallable(solver,
+        // scheduleManager.getSchedule()));
+        // return "Solving started.";
+        solver.solve(conference);
 
-      conference = (Conference) solver.getBestSolution();
+        conference = (Conference) solver.getBestSolution();
 
-      try {
-         utx.begin();
+        try {
+            utx.begin();
 
-         em.joinTransaction();
+            em.joinTransaction();
 
-         em.merge(conference);
-      }
-      catch (NotSupportedException | SystemException e) {
-         LOG.error(e.getLocalizedMessage(), e);
-      }
-      finally {
-         try {
-            utx.commit();
-         }
-         catch (SecurityException | IllegalStateException | RollbackException | HeuristicMixedException
-                  | HeuristicRollbackException | SystemException e) {
+            em.merge(conference);
+        } catch (NotSupportedException | SystemException e) {
             LOG.error(e.getLocalizedMessage(), e);
-         }
-      }
+        } finally {
+            try {
+                utx.commit();
+            } catch (SecurityException | IllegalStateException | RollbackException | HeuristicMixedException
+                    | HeuristicRollbackException | SystemException e) {
+                LOG.error(e.getLocalizedMessage(), e);
+            }
+        }
 
-      return Response.ok(conference).build();
-   }
+        return Response.ok(conference).build();
+    }
 
-   @GET
-   @Path("/{conferenceId}/isSolving")
-   public Response isSolving(@PathParam("conferenceId") Long conferenceId)
-   {
-      return Response.ok(solver != null && solver.isSolving()).build();
-   }
+    @GET
+    @Path("/{conferenceId}/isSolving")
+    public Response isSolving(@PathParam("conferenceId") Long conferenceId) {
+        return Response.ok(solver != null && solver.isSolving()).build();
+    }
 
-   @PUT
-   @Path("/{conferenceId}/terminateSolving")
-   public Response terminateSolving(@PathParam("conferenceId") Long conferenceId)
-   {
-      if (solver != null) {
-         solver.terminateEarly();
-         return Response.ok("Solving terminated!").build();
-      }
+    @PUT
+    @Path("/{conferenceId}/terminateSolving")
+    public Response terminateSolving(@PathParam("conferenceId") Long conferenceId) {
+        if (solver != null) {
+            solver.terminateEarly();
+            return Response.ok("Solving terminated!").build();
+        }
 
-      return Response.status(Response.Status.NOT_FOUND).entity("Solver not found.").build();
-   }
+        return Response.status(Response.Status.NOT_FOUND).entity("Solver not found.").build();
+    }
    /*
-   	private class SolverCallable implements Runnable {
+       private class SolverCallable implements Runnable {
    
    		private final Solver solver;
    		private final Schedule schedule;

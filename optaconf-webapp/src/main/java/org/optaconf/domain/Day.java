@@ -2,7 +2,6 @@ package org.optaconf.domain;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,32 +9,30 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.xml.bind.annotation.XmlRootElement;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.optaplanner.core.api.domain.solution.cloner.DeepPlanningClone;
 
 @DeepPlanningClone
-@Entity(name="optaconf_day")
+@Entity(name = "optaconf_day")
 public class Day extends AbstractPersistable implements Comparable<Day> {
 
-    @Column(length=255, nullable=false)
+    @Column(length = 255, nullable = false)
     private String name;
-    
-    @Column(length=255, nullable=false)
+
+    @Column(length = 255, nullable = false)
     private String date;
-    
-    @OneToMany(mappedBy="day", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+
+    @OneToMany(mappedBy = "day", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<Timeslot> timeslots = new ArrayList<Timeslot>();
-    
-    @ManyToOne(cascade=CascadeType.ALL)
-    @JoinColumn(name="conference_id", nullable=false)
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "conference_id", nullable = false)
     @JsonIgnore
     private Conference conference;
-    
+
     public Day() {
     }
 
@@ -67,24 +64,20 @@ public class Day extends AbstractPersistable implements Comparable<Day> {
         return date.compareTo(other.date);
     }
 
-   public List<Timeslot> getTimeslots()
-   {
-      return timeslots;
-   }
+    public List<Timeslot> getTimeslots() {
+        return timeslots;
+    }
 
-   public void setTimeslots(List<Timeslot> timeslots)
-   {
-      this.timeslots = timeslots;
-   }
+    public void setTimeslots(List<Timeslot> timeslots) {
+        this.timeslots = timeslots;
+    }
 
-   public Conference getConference()
-   {
-      return conference;
-   }
+    public Conference getConference() {
+        return conference;
+    }
 
-   public void setConference(Conference conference)
-   {
-      this.conference = conference;
-   } 
-    
+    public void setConference(Conference conference) {
+        this.conference = conference;
+    }
+
 }

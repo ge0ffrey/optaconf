@@ -1,9 +1,7 @@
 package org.optaconf.service;
 
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
-
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,46 +26,41 @@ import org.slf4j.LoggerFactory;
 @Path("/{conferenceId}/room")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class RoomService
-{
+public class RoomService {
 
-   private static final Logger LOG = LoggerFactory.getLogger(RoomService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(RoomService.class);
 
-   @PersistenceContext(unitName = "optaconf-webapp-persistence-unit")
-   private EntityManager em;
+    @PersistenceContext(unitName = "optaconf-webapp-persistence-unit")
+    private EntityManager em;
 
-   @Inject
-   private UserTransaction utx;
+    @Inject
+    private UserTransaction utx;
 
-   @GET
-   @Path("/")
-   public Set<Room> getRoomList(@PathParam("conferenceId") Long conferenceId)
-   {
-      Set<Room> rooms = new LinkedHashSet<>();
-      try {
-         utx.begin();
+    @GET
+    @Path("/")
+    public Set<Room> getRoomList(@PathParam("conferenceId") Long conferenceId) {
+        Set<Room> rooms = new LinkedHashSet<>();
+        try {
+            utx.begin();
 
-         em.joinTransaction();
-         Conference conference = em.find(Conference.class, conferenceId);
-         conference.getRoomList().iterator().hasNext();
-         rooms = new LinkedHashSet<Room>(conference.getRoomList());
-      }
-      catch (NotSupportedException | SystemException e) {
-         // TODO Auto-generated catch block
-         e.printStackTrace();
-      }
-      finally {
-         try {
-            utx.commit();
-         }
-         catch (SecurityException | IllegalStateException | RollbackException | HeuristicMixedException
-                  | HeuristicRollbackException | SystemException e) {
+            em.joinTransaction();
+            Conference conference = em.find(Conference.class, conferenceId);
+            conference.getRoomList().iterator().hasNext();
+            rooms = new LinkedHashSet<Room>(conference.getRoomList());
+        } catch (NotSupportedException | SystemException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-         }
-      }
+        } finally {
+            try {
+                utx.commit();
+            } catch (SecurityException | IllegalStateException | RollbackException | HeuristicMixedException
+                    | HeuristicRollbackException | SystemException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
 
-      return rooms;
-   }
+        return rooms;
+    }
 
 }

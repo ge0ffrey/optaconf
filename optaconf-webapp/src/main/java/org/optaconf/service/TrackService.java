@@ -2,7 +2,6 @@ package org.optaconf.service;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -27,47 +26,42 @@ import org.slf4j.LoggerFactory;
 @Path("/{conferenceId}/track")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class TrackService
-{
+public class TrackService {
 
-   private static final Logger LOG = LoggerFactory.getLogger(TrackService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TrackService.class);
 
-   @PersistenceContext(unitName = "optaconf-webapp-persistence-unit")
-   private EntityManager em;
+    @PersistenceContext(unitName = "optaconf-webapp-persistence-unit")
+    private EntityManager em;
 
-   @Inject
-   private UserTransaction utx;
+    @Inject
+    private UserTransaction utx;
 
-   @GET
-   @Path("/")
-   public List<Track> getTrackList(@PathParam("conferenceId") Long conferenceId)
-   {
+    @GET
+    @Path("/")
+    public List<Track> getTrackList(@PathParam("conferenceId") Long conferenceId) {
 
-      List<Track> trackList = new ArrayList<>();
-      try {
-         utx.begin();
+        List<Track> trackList = new ArrayList<>();
+        try {
+            utx.begin();
 
-         em.joinTransaction();
-         Conference conference = em.find(Conference.class, conferenceId);
-         conference.getTrackList().iterator().hasNext();
-         trackList =  conference.getTrackList();
-      }
-      catch (NotSupportedException | SystemException e) {
-         // TODO Auto-generated catch block
-         e.printStackTrace();
-      }
-      finally {
-         try {
-            utx.commit();
-         }
-         catch (SecurityException | IllegalStateException | RollbackException | HeuristicMixedException
-                  | HeuristicRollbackException | SystemException e) {
+            em.joinTransaction();
+            Conference conference = em.find(Conference.class, conferenceId);
+            conference.getTrackList().iterator().hasNext();
+            trackList = conference.getTrackList();
+        } catch (NotSupportedException | SystemException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-         }
-      }
-      
-      return trackList;
-   }
+        } finally {
+            try {
+                utx.commit();
+            } catch (SecurityException | IllegalStateException | RollbackException | HeuristicMixedException
+                    | HeuristicRollbackException | SystemException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+
+        return trackList;
+    }
 
 }

@@ -1,7 +1,6 @@
 package org.optaconf.domain;
 
 import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,139 +9,119 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-
-import org.apache.commons.lang.builder.CompareToBuilder;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.apache.commons.lang.builder.CompareToBuilder;
 import org.optaplanner.core.api.domain.solution.cloner.DeepPlanningClone;
 
 @DeepPlanningClone
 @Entity(name = "optaconf_timeslot")
-public class Timeslot extends AbstractPersistable implements Comparable<Timeslot>
-{
-   @Column(length = 255, nullable = false)
-   private String name;
+public class Timeslot extends AbstractPersistable implements Comparable<Timeslot> {
 
-   @Column(length = 255, nullable = false)
-   private String fromTime;
+    @Column(length = 255, nullable = false)
+    private String name;
 
-   @Column(length = 255, nullable = false)
-   private String toTime;
+    @Column(length = 255, nullable = false)
+    private String fromTime;
 
-   @ManyToOne()
-   @JoinColumn(name = "day_id", nullable = false)
-   @JsonBackReference
-   private Day day;
+    @Column(length = 255, nullable = false)
+    private String toTime;
 
-   @OneToMany(mappedBy="timeslot", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
-   @JsonManagedReference
-   private List<Talk> talks;
-   
-   @OneToOne(optional = true, cascade=CascadeType.ALL, fetch = FetchType.EAGER)
-   @JoinColumn(name = "timeslot_room_penalty_id")
-   private UnavailableTimeslotRoomPenalty penalty;
+    @ManyToOne()
+    @JoinColumn(name = "day_id", nullable = false)
+    @JsonBackReference
+    private Day day;
 
-   @ManyToOne(cascade=CascadeType.ALL)
-   @JoinColumn(name="conference_id", nullable=false)
-   @JsonIgnore
-   private Conference conference;
-   
-   
-   public Timeslot()
-   {}
+    @OneToMany(mappedBy = "timeslot", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonManagedReference
+    private List<Talk> talks;
 
-   public Timeslot(String id, String name, Day day, String fromTime, String toTime, Conference conference)
-   {
-      super(id);
-      this.name = name;
-      this.day = day;
-      this.fromTime = fromTime;
-      this.toTime = toTime;
-      this.conference = conference;
-   }
+    @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "timeslot_room_penalty_id")
+    private UnavailableTimeslotRoomPenalty penalty;
 
-   public String getName()
-   {
-      return name;
-   }
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "conference_id", nullable = false)
+    @JsonIgnore
+    private Conference conference;
 
-   public void setName(String name)
-   {
-      this.name = name;
-   }
+    public Timeslot() {
+    }
 
-   public Day getDay()
-   {
-      return day;
-   }
+    public Timeslot(String id, String name, Day day, String fromTime, String toTime, Conference conference) {
+        super(id);
+        this.name = name;
+        this.day = day;
+        this.fromTime = fromTime;
+        this.toTime = toTime;
+        this.conference = conference;
+    }
 
-   public void setDay(Day day)
-   {
-      this.day = day;
-   }
+    public String getName() {
+        return name;
+    }
 
-   public String getFromTime()
-   {
-      return fromTime;
-   }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-   public void setFromTime(String fromTime)
-   {
-      this.fromTime = fromTime;
-   }
+    public Day getDay() {
+        return day;
+    }
 
-   public String getToTime()
-   {
-      return toTime;
-   }
+    public void setDay(Day day) {
+        this.day = day;
+    }
 
-   public void setToTime(String toTime)
-   {
-      this.toTime = toTime;
-   }
+    public String getFromTime() {
+        return fromTime;
+    }
 
-   @Override
-   public int compareTo(Timeslot other)
-   {
-      return new CompareToBuilder()
-               .append(day, other.day)
-               .append(fromTime, other.fromTime)
-               .append(toTime, other.toTime)
-               .toComparison();
-   }
+    public void setFromTime(String fromTime) {
+        this.fromTime = fromTime;
+    }
 
-   public List<Talk> getTalks()
-   {
-      return talks;
-   }
+    public String getToTime() {
+        return toTime;
+    }
 
-   public void setTalks(List<Talk> talks)
-   {
-      this.talks = talks;
-   }
+    public void setToTime(String toTime) {
+        this.toTime = toTime;
+    }
 
-   public UnavailableTimeslotRoomPenalty getPenalty()
-   {
-      return penalty;
-   }
+    @Override
+    public int compareTo(Timeslot other) {
+        return new CompareToBuilder()
+                .append(day, other.day)
+                .append(fromTime, other.fromTime)
+                .append(toTime, other.toTime)
+                .toComparison();
+    }
 
-   public void setPenalty(UnavailableTimeslotRoomPenalty penalty)
-   {
-      this.penalty = penalty;
-   }
+    public List<Talk> getTalks() {
+        return talks;
+    }
 
-   public Conference getConference()
-   {
-      return conference;
-   }
+    public void setTalks(List<Talk> talks) {
+        this.talks = talks;
+    }
 
-   public void setConference(Conference conference)
-   {
-      this.conference = conference;
-   }
-   
+    public UnavailableTimeslotRoomPenalty getPenalty() {
+        return penalty;
+    }
+
+    public void setPenalty(UnavailableTimeslotRoomPenalty penalty) {
+        this.penalty = penalty;
+    }
+
+    public Conference getConference() {
+        return conference;
+    }
+
+    public void setConference(Conference conference) {
+        this.conference = conference;
+    }
+
 }

@@ -7,8 +7,6 @@ import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -16,75 +14,65 @@ import org.optaplanner.core.api.domain.solution.cloner.DeepPlanningClone;
 
 @DeepPlanningClone
 @Entity(name = "optaconf_talkexclusion")
-public class TalkExclusion extends AbstractPersistable
-{
+public class TalkExclusion extends AbstractPersistable {
 
-   @OneToOne(cascade=CascadeType.ALL)
-   @JsonBackReference
-   private Talk firstTalk;
-   
-   @OneToOne(cascade=CascadeType.ALL)
-   @JsonBackReference
-   private Talk secondTalk;
-   
-   @Enumerated(EnumType.STRING)
-   private TalkExclusionType type;
-   
-   @ManyToOne(cascade=CascadeType.ALL)
-   @JoinColumn(name="conference_id", nullable=false)
-   @JsonIgnore
-   private Conference conference;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JsonBackReference
+    private Talk firstTalk;
 
-   public TalkExclusion()
-   {}
+    @OneToOne(cascade = CascadeType.ALL)
+    @JsonBackReference
+    private Talk secondTalk;
 
-   public TalkExclusion(String id, Talk firstTalk, Talk secondTalk, TalkExclusionType type, Conference conference)
-   {
-      super(id);
-      this.firstTalk = firstTalk;
-      this.secondTalk = secondTalk;
-      this.type = type;
-      this.conference = conference;
-   }
+    @Enumerated(EnumType.STRING)
+    private TalkExclusionType type;
 
-   public Talk getFirstTalk()
-   {
-      return firstTalk;
-   }
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "conference_id", nullable = false)
+    @JsonIgnore
+    private Conference conference;
 
-   public void setFirstTalk(Talk firstTalk)
-   {
-      this.firstTalk = firstTalk;
-   }
+    public TalkExclusion() {
+    }
 
-   public Talk getSecondTalk()
-   {
-      return secondTalk;
-   }
+    public TalkExclusion(String id, Talk firstTalk, Talk secondTalk, TalkExclusionType type, Conference conference) {
+        super(id);
+        this.firstTalk = firstTalk;
+        this.secondTalk = secondTalk;
+        this.type = type;
+        this.conference = conference;
+    }
 
-   public void setSecondTalk(Talk secondTalk)
-   {
-      this.secondTalk = secondTalk;
-   }
+    public Talk getFirstTalk() {
+        return firstTalk;
+    }
 
-   public TalkExclusionType getType()
-   {
-      return type;
-   }
+    public void setFirstTalk(Talk firstTalk) {
+        this.firstTalk = firstTalk;
+    }
 
-   public void setType(TalkExclusionType type)
-   {
-      this.type = type;
-   }
+    public Talk getSecondTalk() {
+        return secondTalk;
+    }
 
-   public Conference getConference()
-   {
-      return conference;
-   }
+    public void setSecondTalk(Talk secondTalk) {
+        this.secondTalk = secondTalk;
+    }
 
-   public void setConference(Conference conference)
-   {
-      this.conference = conference;
-   }
+    public TalkExclusionType getType() {
+        return type;
+    }
+
+    public void setType(TalkExclusionType type) {
+        this.type = type;
+    }
+
+    public Conference getConference() {
+        return conference;
+    }
+
+    public void setConference(Conference conference) {
+        this.conference = conference;
+    }
 
 }

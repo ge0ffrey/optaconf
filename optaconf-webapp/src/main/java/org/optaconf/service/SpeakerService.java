@@ -1,7 +1,6 @@
 package org.optaconf.service;
 
 import java.util.List;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
@@ -20,8 +19,8 @@ import org.slf4j.LoggerFactory;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class SpeakerService {
-	
-	private static final Logger LOG = LoggerFactory.getLogger(SpeakerService.class);
+
+    private static final Logger LOG = LoggerFactory.getLogger(SpeakerService.class);
 
     @PersistenceContext(unitName = "optaconf-webapp-persistence-unit")
     private EntityManager em;
