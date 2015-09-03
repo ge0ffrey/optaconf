@@ -74,9 +74,6 @@ public class Conference extends AbstractPersistable implements Solution<HardSoft
     }
 
     public List<Day> getDayList() {
-        if (dayList == null) {
-
-        }
         return dayList;
     }
 
