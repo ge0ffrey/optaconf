@@ -31,9 +31,10 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-    <version.org.wildfly.plugins>1.0.2.Final</version.org.wildfly.plugins>
-    <version.org.wildfly.bom>8.1.0.Final</version.org.wildfly.bom>
+    <version.org.arquillian>1.1.9.Final</version.org.arquillian>
     <version.org.optaplanner>6.2.0.Final</version.org.optaplanner>
+    <version.org.wildfly.bom>8.1.0.Final</version.org.wildfly.bom>
+    <version.org.wildfly.plugins>1.0.2.Final</version.org.wildfly.plugins>
   </properties>
 
   <repositories>
@@ -81,6 +82,10 @@
             <target>1.8</target>
           </configuration>
         </plugin>
+        <plugin>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>2.18.1</version>
+        </plugin>
       </plugins>
     </pluginManagement>
   </build>
@@ -101,11 +106,19 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
+      <dependency>
+        <groupId>org.jboss.arquillian</groupId>
+        <artifactId>arquillian-bom</artifactId>
+        <version>${version.org.arquillian}</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
   <modules>
     <module>optaconf-webapp</module>
+    <module>optaconf-webapp-test</module>
   </modules>
 
 </project>
