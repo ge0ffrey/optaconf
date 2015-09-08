@@ -18,20 +18,29 @@ package org.optaconf.bridge.devoxx;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.List;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.HttpClients;
 import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
-import org.jboss.shrinkwrap.resolver.api.maven.Maven;
-import org.jboss.shrinkwrap.resolver.api.maven.ScopeType;
+import org.jboss.shrinkwrap.resolver.api.maven.archive.importer.MavenImporter;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.optaconf.domain.Conference;
 
 import static org.junit.Assert.*;
 
 @RunWith(Arquillian.class)
+@RunAsClient
 public class DevoxxImporterTest {
 
     @Deployment
@@ -46,23 +55,37 @@ public class DevoxxImporterTest {
         } catch (IOException e) {
             throw new IllegalStateException("Could not get cannonical file for file (" + file + ").", e);
         }
-        if (!file.getParentFile().getName().equals("optaconf-webapp-test")) {
+        if (!file.getParentFile().getName().equals("optaconf-webapp")) {
             throw new IllegalStateException("The file (" + file + ") is not correct.\n"
                     + "This test needs to be run with the working directory optaconf-webapp-test.");
         }
-        return Maven.resolver()
-                        .loadPomFromFile(file)
-                        .resolve("org.optaconf:optaconf-webapp:war:?")
-                        .withoutTransitivity()
-                        .asSingle(WebArchive.class);
+        return ShrinkWrap.create(MavenImporter.class)
+                .loadPomFromFile(file)
+                .importBuildOutput()
+                .as(WebArchive.class);
     }
 
     @Test
-    public void importConference() {
-        DevoxxImporter devoxxImporter = new DevoxxImporter();
-        Conference conference = devoxxImporter.importConference(false);
-        assertNotNull(conference);
+    public void importConference(@ArquillianResource URL baseUrl) throws IOException {
+        String message = postAndReadSingleMessage(baseUrl.toExternalForm() + "rest/conference/import/devoxx");
+    }
 
+    private String postAndReadSingleMessage(String url) {
+        InputStream contentIn = null;
+        try {
+            HttpClient client = HttpClients.createDefault();
+            HttpPost request = new HttpPost(url);
+            HttpResponse response = client.execute(request);
+            assertEquals(200, response.getStatusLine().getStatusCode());
+            contentIn = response.getEntity().getContent();
+            List<String> lines = IOUtils.readLines(contentIn);
+            assertEquals(1, lines.size());
+            return lines.get(0);
+        } catch (IOException e) {
+            throw new IllegalStateException("Failed to connect to url (" + url + ").", e);
+        } finally {
+            IOUtils.closeQuietly(contentIn);
+        }
     }
 
 }

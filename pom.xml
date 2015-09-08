@@ -33,7 +33,8 @@
 
     <version.org.arquillian>1.1.9.Final</version.org.arquillian>
     <version.org.optaplanner>6.2.0.Final</version.org.optaplanner>
-    <version.org.wildfly.bom>8.1.0.Final</version.org.wildfly.bom>
+    <version.org.wildfly>8.2.1.Final</version.org.wildfly>
+    <version.org.wildfly.bom>8.2.2.Final</version.org.wildfly.bom>
     <version.org.wildfly.plugins>1.0.2.Final</version.org.wildfly.plugins>
   </properties>
 
@@ -113,12 +114,22 @@
         <scope>import</scope>
         <type>pom</type>
       </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>1.7.2</version>
+      </dependency>
+      <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-classic</artifactId>
+        <version>1.0.9</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
   <modules>
     <module>optaconf-webapp</module>
-    <module>optaconf-webapp-test</module>
+    <!--<module>optaconf-webapp-test</module>-->
   </modules>
 
 </project>
