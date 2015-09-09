@@ -39,16 +39,13 @@ import org.slf4j.LoggerFactory;
 @Consumes(MediaType.APPLICATION_JSON)
 public class ConferenceService {
 
-    private static final Logger LOG = LoggerFactory
-            .getLogger(ConferenceService.class);
-
-    @Inject
-    UserTransaction utx;
+    private static final Logger LOG = LoggerFactory.getLogger(ConferenceService.class);
 
     @PersistenceContext(unitName = "optaconf-webapp-persistence-unit")
     private EntityManager em;
 
-    private Solver solver;
+    @Inject
+    private UserTransaction utx;
 
     @Inject
     private DevoxxImporter devoxxImporter;
@@ -58,6 +55,8 @@ public class ConferenceService {
 
     @Resource(name = "DefaultManagedExecutorService")
     private ManagedExecutorService executor;
+
+    private Solver solver;
 
     @POST
     @Path("/import/devoxx")

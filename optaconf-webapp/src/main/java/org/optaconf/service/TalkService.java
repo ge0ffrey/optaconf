@@ -40,7 +40,7 @@ public class TalkService {
     private EntityManager em;
 
     @Inject
-    UserTransaction utx;
+    private UserTransaction utx;
 
     @GET
     @Path("/")
