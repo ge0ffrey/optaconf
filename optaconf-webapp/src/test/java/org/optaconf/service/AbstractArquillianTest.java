@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package org.optaconf.bridge.devoxx;
+package org.optaconf.service;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
@@ -30,47 +29,47 @@ import org.apache.http.impl.client.HttpClients;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.archive.importer.MavenImporter;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(Arquillian.class)
 @RunAsClient
-public class DevoxxImporterTest {
+public class AbstractArquillianTest {
+
+    private static final String POM_DIRECTORY_NAME = "optaconf-webapp";
 
     @Deployment
     public static WebArchive createDeployment() {
-        File file = new File("pom.xml");
-        if (!file.exists()) {
-            throw new IllegalStateException("The file (" + file + ") does not exist.\n"
-                    + "This test needs to be run with the working directory optaconf-webapp-test.");
-        }
-        try {
-            file = file.getCanonicalFile();
-        } catch (IOException e) {
-            throw new IllegalStateException("Could not get cannonical file for file (" + file + ").", e);
-        }
-        if (!file.getParentFile().getName().equals("optaconf-webapp")) {
-            throw new IllegalStateException("The file (" + file + ") is not correct.\n"
-                    + "This test needs to be run with the working directory optaconf-webapp-test.");
-        }
+        File file = findPomFile();
         return ShrinkWrap.create(MavenImporter.class)
                 .loadPomFromFile(file)
                 .importBuildOutput()
                 .as(WebArchive.class);
     }
 
-    @Test
-    public void importConference(@ArquillianResource URL baseUrl) throws IOException {
-        String message = postAndReadSingleMessage(baseUrl.toExternalForm() + "rest/conference/import/devoxx");
+    private static File findPomFile() {
+        File file = new File("pom.xml");
+        if (!file.exists()) {
+            throw new IllegalStateException("The file (" + file + ") does not exist.\n"
+                    + "This test needs to be run with the working directory " +  POM_DIRECTORY_NAME + ".");
+        }
+        try {
+            file = file.getCanonicalFile();
+        } catch (IOException e) {
+            throw new IllegalStateException("Could not get cannonical file for file (" + file + ").", e);
+        }
+        if (!file.getParentFile().getName().equals(POM_DIRECTORY_NAME)) {
+            throw new IllegalStateException("The file (" + file + ") is not correct.\n"
+                    + "This test needs to be run with the working directory " + POM_DIRECTORY_NAME + ".");
+        }
+        return file;
     }
 
-    private String postAndReadSingleMessage(String url) {
+    protected String postAndReadSingleMessage(String url) {
         InputStream contentIn = null;
         try {
             HttpClient client = HttpClients.createDefault();
