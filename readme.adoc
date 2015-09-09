@@ -44,3 +44,7 @@ Solve a schedule
 * Solve the schedule: http://localhost:8080/optaconf-webapp/rest/123/schedule/solve
 * Is solving? http://localhost:8080/optaconf-webapp/rest/123/schedule/isSolving
 * Terminate solving: http://localhost:8080/optaconf-webapp/rest/123/schedule/terminateSolving
+
+== Development methodology
+
+* Code style: https://github.com/droolsjbpm/droolsjbpm-build-bootstrap/tree/master/ide-configuration[KIE (Drools, OptaPlanner, jBPM) code style]
