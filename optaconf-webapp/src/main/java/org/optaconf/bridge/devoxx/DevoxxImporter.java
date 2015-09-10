@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -38,21 +39,22 @@ import org.slf4j.LoggerFactory;
 @LocalBean
 public class DevoxxImporter {
 
-    @PersistenceContext(unitName = "optaconf-webapp-persistence-unit")
-    private EntityManager em;
-
     private static final Logger LOG = LoggerFactory
             .getLogger(DevoxxImporter.class);
 
-    // private static final String REST_URL_ROOT = "http://cfp.devoxx.be/api/conferences/DV15";
-    private static final String REST_URL_ROOT = "http://cfp.devoxx.fr/api/conferences/DevoxxFR2015";
+    @PersistenceContext(unitName = "optaconf-webapp-persistence-unit")
+    private EntityManager em;
+
+     private static final String REST_URL_ROOT = "http://cfp.devoxx.be/api/conferences/DV15";
+//    private static final String REST_URL_ROOT = "http://cfp.devoxx.fr/api/conferences/DevoxxFR2015";
 
     public Conference importConference(boolean persist) {
         StringBuilder comment = new StringBuilder("Imported on ").append(new Date().toString()).append(" from ")
                 .append(REST_URL_ROOT);
 
         Conference conference = new Conference();
-        conference.setName("DEVOXX FR 2015");
+        conference.setName("DEVOXX BE 2016");
+//        conference.setName("DEVOXX FR 2015");
         conference.setComment(comment.toString());
         conference.setExternalId(REST_URL_ROOT);
 
@@ -139,20 +141,28 @@ public class DevoxxImporter {
             Map<String, Speaker> speakerMap, Map<String, Room> roomMap, boolean persist) {
         JsonObject rootObject = readJsonObject(REST_URL_ROOT + "/schedules");
         JsonArray array = rootObject.getJsonArray("links");
-        Pattern dTitlePattern = Pattern
-                .compile("Schedule for (\\w+) (\\d+.*\\d{4})");
+        Pattern[] dTitlePatterns = {
+                Pattern.compile("Schedule for (\\w+) (\\d+.*\\d{4})"), // Used in Devoxx FR 2015
+                Pattern.compile("(\\w+), (\\d+.*\\d{4})") // Used in Devoxx BE 2015
+        };
         for (int i = 0; i < array.size(); i++) {
             JsonObject dDay = array.getJsonObject(i);
             String dHref = dDay.getString("href");
             String dTitle = dDay.getString("title");
-            Matcher dTitleMatcher = dTitlePattern.matcher(dTitle);
-            if (!dTitleMatcher.find() && dTitleMatcher.groupCount() != 2) {
-                throw new IllegalStateException("A schedules title (" + dTitle
-                        + ") does not match the pattern ("
-                        + dTitlePattern.pattern() + ").");
+            String name = null;
+            String date = null;
+            for (Pattern dTitlePattern : dTitlePatterns) {
+                Matcher dTitleMatcher = dTitlePattern.matcher(dTitle);
+                if (dTitleMatcher.find() && dTitleMatcher.groupCount() == 2) {
+                    name = dTitleMatcher.group(1);
+                    date = dTitleMatcher.group(2);
+                    break;
+                }
             }
-            String name = dTitleMatcher.group(1);
-            String date = dTitleMatcher.group(2);
+            if (name == null) {
+                throw new IllegalStateException("A schedules title (" + dTitle
+                        + ") does not match any of the patterns (" + Arrays.toString(dTitlePatterns) + ").");
+            }
             Day day = new Day(dHref.replaceAll(".*\\/(.*)/", "$1"), name, date, conference);
             if (persist) {
                 em.persist(day);

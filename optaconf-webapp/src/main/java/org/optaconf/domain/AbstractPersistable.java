@@ -68,8 +68,26 @@ public abstract class AbstractPersistable implements Serializable {
         this.version = version;
     }
 
-    public String toString() {
-        return "[" + getClass().getName().replaceAll(".*\\.", "") + "=> ID: " + id + ", External ID: " + externalId + "]";
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null) {
+            return false;
+        }
+        if (getClass() != o.getClass()) {
+            return false;
+        }
+        AbstractPersistable other = (AbstractPersistable) o;
+        if (getExternalId() == null) {
+            if (other.getExternalId() != null) {
+                return false;
+            }
+        } else if (!getExternalId().equals(other.getExternalId())) {
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -80,26 +98,8 @@ public abstract class AbstractPersistable implements Serializable {
         return result;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        AbstractPersistable other = (AbstractPersistable) obj;
-        if (getExternalId() == null) {
-            if (other.getExternalId() != null) {
-                return false;
-            }
-        } else if (!getExternalId().equals(other.getExternalId())) {
-            return false;
-        }
-        return true;
+    public String toString() {
+        return "[" + getClass().getSimpleName() + "-" + id + (externalId == null ? "" : " (" + externalId + ")") + "]";
     }
 
 }
