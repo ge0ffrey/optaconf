@@ -31,11 +31,16 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
+    <version.com.fasterxml.jackson.core>2.4.1</version.com.fasterxml.jackson.core>
+    <version.org.apache.commons.lang3>3.1</version.org.apache.commons.lang3>
+    <version.org.apache.httpcomponent.httpclient>4.3.6</version.org.apache.httpcomponent.httpclient>
     <version.org.arquillian>1.1.9.Final</version.org.arquillian>
-    <version.org.optaplanner>6.2.0.Final</version.org.optaplanner>
+    <version.org.hibernate>5.0.0.Final</version.org.hibernate>
+    <version.org.optaplanner>6.3.0.CR2</version.org.optaplanner>
     <version.org.wildfly>9.0.1.Final</version.org.wildfly>
     <version.org.wildfly.bom>9.0.1.Final</version.org.wildfly.bom>
     <version.org.wildfly.plugins>1.0.2.Final</version.org.wildfly.plugins>
+    <version.javax.javee-api>7.0</version.javax.javee-api>
   </properties>
 
   <repositories>
