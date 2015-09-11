@@ -33,8 +33,8 @@
 
     <version.org.arquillian>1.1.9.Final</version.org.arquillian>
     <version.org.optaplanner>6.2.0.Final</version.org.optaplanner>
-    <version.org.wildfly>8.2.1.Final</version.org.wildfly>
-    <version.org.wildfly.bom>8.2.2.Final</version.org.wildfly.bom>
+    <version.org.wildfly>9.0.1.Final</version.org.wildfly>
+    <version.org.wildfly.bom>9.0.1.Final</version.org.wildfly.bom>
     <version.org.wildfly.plugins>1.0.2.Final</version.org.wildfly.plugins>
   </properties>
 
@@ -102,7 +102,7 @@
       </dependency>
       <dependency>
         <groupId>org.wildfly.bom</groupId>
-        <artifactId>jboss-javaee-7.0-with-tools</artifactId>
+        <artifactId>jboss-javaee-7.0-wildfly-with-tools</artifactId>
         <version>${version.org.wildfly.bom}</version>
         <type>pom</type>
         <scope>import</scope>

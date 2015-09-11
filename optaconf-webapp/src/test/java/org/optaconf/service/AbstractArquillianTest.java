@@ -38,7 +38,7 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(Arquillian.class)
 @RunAsClient
-public class AbstractArquillianTest {
+public abstract class AbstractArquillianTest {
 
     private static final String POM_DIRECTORY_NAME = "optaconf-webapp";
 
