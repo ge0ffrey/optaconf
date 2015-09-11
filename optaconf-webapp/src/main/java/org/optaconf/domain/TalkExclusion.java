@@ -14,7 +14,7 @@ import org.optaplanner.core.api.domain.solution.cloner.DeepPlanningClone;
 
 @DeepPlanningClone
 @Entity(name = "optaconf_talkexclusion")
-public class TalkExclusion extends AbstractPersistable {
+public class TalkExclusion extends AbstractConferencedPersistable {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JsonBackReference
@@ -27,20 +27,14 @@ public class TalkExclusion extends AbstractPersistable {
     @Enumerated(EnumType.STRING)
     private TalkExclusionType type;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "conference_id", nullable = false)
-    @JsonIgnore
-    private Conference conference;
-
     public TalkExclusion() {
     }
 
-    public TalkExclusion(String externalId, Talk firstTalk, Talk secondTalk, TalkExclusionType type, Conference conference) {
-        super(externalId);
+    public TalkExclusion(Conference conference, String externalId, Talk firstTalk, Talk secondTalk, TalkExclusionType type) {
+        super(conference, externalId);
         this.firstTalk = firstTalk;
         this.secondTalk = secondTalk;
         this.type = type;
-        this.conference = conference;
     }
 
     public Talk getFirstTalk() {
@@ -67,12 +61,8 @@ public class TalkExclusion extends AbstractPersistable {
         this.type = type;
     }
 
-    public Conference getConference() {
-        return conference;
-    }
-
-    public void setConference(Conference conference) {
-        this.conference = conference;
-    }
+    // ************************************************************************
+    // Real methods
+    // ************************************************************************
 
 }

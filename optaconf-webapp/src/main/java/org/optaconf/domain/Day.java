@@ -6,21 +6,17 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.optaplanner.core.api.domain.solution.cloner.DeepPlanningClone;
 
 @DeepPlanningClone
 @Entity(name = "optaconf_day")
-public class Day extends AbstractPersistable implements Comparable<Day> {
+public class Day extends AbstractConferencedPersistable implements Comparable<Day> {
 
     @Column(length = 255, nullable = false)
     private String name;
-
     @Column(length = 255, nullable = false)
     private String date;
 
@@ -28,19 +24,12 @@ public class Day extends AbstractPersistable implements Comparable<Day> {
     @JsonManagedReference
     private List<Timeslot> timeslots = new ArrayList<Timeslot>();
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "conference_id", nullable = false)
-    @JsonIgnore
-    private Conference conference;
+    protected Day() {}
 
-    public Day() {
-    }
-
-    public Day(String externalId, String name, String date, Conference conference) {
-        super(externalId);
+    public Day(Conference conference, String externalId, String name, String date) {
+        super(conference, externalId);
         this.name = name;
         this.date = date;
-        this.conference = conference;
     }
 
     public String getName() {
@@ -59,11 +48,6 @@ public class Day extends AbstractPersistable implements Comparable<Day> {
         this.date = date;
     }
 
-    @Override
-    public int compareTo(Day other) {
-        return date.compareTo(other.date);
-    }
-
     public List<Timeslot> getTimeslots() {
         return timeslots;
     }
@@ -72,12 +56,13 @@ public class Day extends AbstractPersistable implements Comparable<Day> {
         this.timeslots = timeslots;
     }
 
-    public Conference getConference() {
-        return conference;
-    }
+    // ************************************************************************
+    // Real methods
+    // ************************************************************************
 
-    public void setConference(Conference conference) {
-        this.conference = conference;
+    @Override
+    public int compareTo(Day other) {
+        return date.compareTo(other.date);
     }
 
 }

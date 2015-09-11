@@ -18,7 +18,7 @@ import org.optaplanner.core.api.domain.solution.cloner.DeepPlanningClone;
 
 @DeepPlanningClone
 @Entity(name = "optaconf_room")
-public class Room extends AbstractPersistable implements Comparable<Room> {
+public class Room extends AbstractConferencedPersistable implements Comparable<Room> {
 
     @Column
     private String name;
@@ -34,19 +34,13 @@ public class Room extends AbstractPersistable implements Comparable<Room> {
     @JoinColumn(name = "timeslot_room_penalty_id")
     private UnavailableTimeslotRoomPenalty penalty;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "conference_id", nullable = false)
-    @JsonIgnore
-    private Conference conference;
-
     public Room() {
     }
 
-    public Room(String externalId, String name, int seatingCapacity, Conference conference) {
-        super(externalId);
+    public Room(Conference conference, String externalId, String name, int seatingCapacity) {
+        super(conference, externalId);
         this.name = name;
         this.seatingCapacity = seatingCapacity;
-        this.conference = conference;
     }
 
     public String getName() {
@@ -65,14 +59,6 @@ public class Room extends AbstractPersistable implements Comparable<Room> {
         this.seatingCapacity = seatingCapacity;
     }
 
-    @Override
-    public int compareTo(Room other) {
-        return new CompareToBuilder()
-                .append(name, other.name)
-                .append(other.seatingCapacity, seatingCapacity)
-                .toComparison();
-    }
-
     public List<Talk> getTalks() {
         return talks;
     }
@@ -89,12 +75,16 @@ public class Room extends AbstractPersistable implements Comparable<Room> {
         this.penalty = penalty;
     }
 
-    public Conference getConference() {
-        return conference;
-    }
+    // ************************************************************************
+    // Real methods
+    // ************************************************************************
 
-    public void setConference(Conference conference) {
-        this.conference = conference;
+    @Override
+    public int compareTo(Room other) {
+        return new CompareToBuilder()
+                .append(name, other.name)
+                .append(other.seatingCapacity, seatingCapacity)
+                .toComparison();
     }
 
 }

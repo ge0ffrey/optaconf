@@ -31,18 +31,10 @@ public abstract class AbstractPersistable implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
-    @Column(name = "external_id")
-    protected String externalId;
-
     @Version
     protected Long version;
 
-    protected AbstractPersistable() {
-    }
-
-    protected AbstractPersistable(String externalId) {
-        this.externalId = externalId;
-    }
+    public AbstractPersistable() {}
 
     public Long getId() {
         return id;
@@ -52,14 +44,6 @@ public abstract class AbstractPersistable implements Serializable {
         this.id = id;
     }
 
-    public String getExternalId() {
-        return externalId;
-    }
-
-    public void setExternalId(String externalId) {
-        this.externalId = externalId;
-    }
-
     public Long getVersion() {
         return version;
     }
@@ -67,6 +51,10 @@ public abstract class AbstractPersistable implements Serializable {
     protected void setVersion(Long version) {
         this.version = version;
     }
+
+    // ************************************************************************
+    // Real methods
+    // ************************************************************************
 
     @Override
     public boolean equals(Object o) {
@@ -80,11 +68,11 @@ public abstract class AbstractPersistable implements Serializable {
             return false;
         }
         AbstractPersistable other = (AbstractPersistable) o;
-        if (getExternalId() == null) {
-            if (other.getExternalId() != null) {
+        if (getId() == null) {
+            if (other.getId() != null) {
                 return false;
             }
-        } else if (!getExternalId().equals(other.getExternalId())) {
+        } else if (!getId().equals(other.getId())) {
             return false;
         }
         return true;
@@ -94,12 +82,12 @@ public abstract class AbstractPersistable implements Serializable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((getExternalId() == null) ? 0 : getExternalId().hashCode());
+        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         return result;
     }
 
     public String toString() {
-        return "[" + getClass().getSimpleName() + "-" + id + (externalId == null ? "" : " (" + externalId + ")") + "]";
+        return "[" + getClass().getSimpleName() + "-" + id + "]";
     }
 
 }

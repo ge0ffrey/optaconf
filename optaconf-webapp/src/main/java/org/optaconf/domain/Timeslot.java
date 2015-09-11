@@ -18,7 +18,7 @@ import org.optaplanner.core.api.domain.solution.cloner.DeepPlanningClone;
 
 @DeepPlanningClone
 @Entity(name = "optaconf_timeslot")
-public class Timeslot extends AbstractPersistable implements Comparable<Timeslot> {
+public class Timeslot extends AbstractConferencedPersistable implements Comparable<Timeslot> {
 
     @Column(length = 255, nullable = false)
     private String name;
@@ -42,21 +42,15 @@ public class Timeslot extends AbstractPersistable implements Comparable<Timeslot
     @JoinColumn(name = "timeslot_room_penalty_id")
     private UnavailableTimeslotRoomPenalty penalty;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "conference_id", nullable = false)
-    @JsonIgnore
-    private Conference conference;
-
     public Timeslot() {
     }
 
-    public Timeslot(String externalId, String name, Day day, String fromTime, String toTime, Conference conference) {
-        super(externalId);
+    public Timeslot(Conference conference, String externalId, String name, Day day, String fromTime, String toTime) {
+        super(conference, externalId);
         this.name = name;
         this.day = day;
         this.fromTime = fromTime;
         this.toTime = toTime;
-        this.conference = conference;
     }
 
     public String getName() {
@@ -91,15 +85,6 @@ public class Timeslot extends AbstractPersistable implements Comparable<Timeslot
         this.toTime = toTime;
     }
 
-    @Override
-    public int compareTo(Timeslot other) {
-        return new CompareToBuilder()
-                .append(day, other.day)
-                .append(fromTime, other.fromTime)
-                .append(toTime, other.toTime)
-                .toComparison();
-    }
-
     public List<Talk> getTalks() {
         return talks;
     }
@@ -116,12 +101,17 @@ public class Timeslot extends AbstractPersistable implements Comparable<Timeslot
         this.penalty = penalty;
     }
 
-    public Conference getConference() {
-        return conference;
-    }
+    // ************************************************************************
+    // Real methods
+    // ************************************************************************
 
-    public void setConference(Conference conference) {
-        this.conference = conference;
+    @Override
+    public int compareTo(Timeslot other) {
+        return new CompareToBuilder()
+                .append(day, other.day)
+                .append(fromTime, other.fromTime)
+                .append(toTime, other.toTime)
+                .toComparison();
     }
 
 }

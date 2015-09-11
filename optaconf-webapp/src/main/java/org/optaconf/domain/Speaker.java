@@ -13,7 +13,7 @@ import org.optaplanner.core.api.domain.solution.cloner.DeepPlanningClone;
 
 @DeepPlanningClone
 @Entity(name = "optaconf_speaker")
-public class Speaker extends AbstractPersistable implements Comparable<Speaker> {
+public class Speaker extends AbstractConferencedPersistable implements Comparable<Speaker> {
 
     @Column
     private String name;
@@ -25,18 +25,12 @@ public class Speaker extends AbstractPersistable implements Comparable<Speaker> 
     @JoinColumn(name = "speaking_relation_id", nullable = true)
     private SpeakingRelation relation;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "conference_id", nullable = false)
-    @JsonIgnore
-    private Conference conference;
-
     public Speaker() {
     }
 
-    public Speaker(String externalId, String name, Conference conference) {
-        super(externalId);
+    public Speaker(Conference conference, String externalId, String name) {
+        super(conference, externalId);
         this.name = name;
-        this.conference = conference;
     }
 
     public String getName() {
@@ -60,13 +54,6 @@ public class Speaker extends AbstractPersistable implements Comparable<Speaker> 
         this.rockstar = rockstar;
     }
 
-    @Override
-    public int compareTo(Speaker other) {
-        return new CompareToBuilder()
-                .append(name, other.name)
-                .toComparison();
-    }
-
     public SpeakingRelation getRelation() {
         return relation;
     }
@@ -75,12 +62,15 @@ public class Speaker extends AbstractPersistable implements Comparable<Speaker> 
         this.relation = relation;
     }
 
-    public Conference getConference() {
-        return conference;
-    }
+    // ************************************************************************
+    // Real methods
+    // ************************************************************************
 
-    public void setConference(Conference conference) {
-        this.conference = conference;
+    @Override
+    public int compareTo(Speaker other) {
+        return new CompareToBuilder()
+                .append(name, other.name)
+                .toComparison();
     }
 
 }

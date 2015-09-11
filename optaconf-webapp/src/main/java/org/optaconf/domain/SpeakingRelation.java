@@ -11,7 +11,7 @@ import org.optaplanner.core.api.domain.solution.cloner.DeepPlanningClone;
 
 @DeepPlanningClone
 @Entity(name = "optaconf_speakingrelation")
-public class SpeakingRelation extends AbstractPersistable {
+public class SpeakingRelation extends AbstractConferencedPersistable {
 
     @OneToOne(cascade = CascadeType.ALL)
     private Speaker speaker;
@@ -19,19 +19,13 @@ public class SpeakingRelation extends AbstractPersistable {
     @OneToOne(cascade = CascadeType.ALL)
     private Talk talk;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "conference_id", nullable = false)
-    @JsonIgnore
-    private Conference conference;
-
     public SpeakingRelation() {
     }
 
-    public SpeakingRelation(String externalId, Talk talk, Speaker speaker, Conference conference) {
-        super(externalId);
+    public SpeakingRelation(Conference conference, String externalId, Talk talk, Speaker speaker) {
+        super(conference, externalId);
         this.talk = talk;
         this.speaker = speaker;
-        this.conference = conference;
     }
 
     public Speaker getSpeaker() {
@@ -50,12 +44,8 @@ public class SpeakingRelation extends AbstractPersistable {
         this.talk = talk;
     }
 
-    public Conference getConference() {
-        return conference;
-    }
-
-    void setConference(Conference conference) {
-        this.conference = conference;
-    }
+    // ************************************************************************
+    // Real methods
+    // ************************************************************************
 
 }

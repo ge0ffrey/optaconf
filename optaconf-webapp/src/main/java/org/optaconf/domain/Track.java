@@ -18,7 +18,7 @@ import org.optaplanner.core.api.domain.solution.cloner.DeepPlanningClone;
  */
 @DeepPlanningClone
 @Entity(name = "optaconf_track")
-public class Track extends AbstractPersistable {
+public class Track extends AbstractConferencedPersistable {
 
     @Column
     private String title;
@@ -29,19 +29,13 @@ public class Track extends AbstractPersistable {
     @OneToMany(mappedBy = "track", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Talk> talks = new ArrayList<Talk>();
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "conference_id", nullable = false)
-    @JsonIgnore
-    private Conference conference;
-
     public Track() {
     }
 
-    public Track(String externalId, String title, String cssStyleClass, Conference conference) {
-        super(externalId);
+    public Track(Conference conference, String externalId, String title, String cssStyleClass) {
+        super(conference, externalId);
         this.title = title;
         this.cssStyleClass = cssStyleClass;
-        this.conference = conference;
     }
 
     public String getTitle() {
@@ -60,12 +54,8 @@ public class Track extends AbstractPersistable {
         this.cssStyleClass = cssStyleClass;
     }
 
-    public Conference getConference() {
-        return conference;
-    }
-
-    public void setConference(Conference conference) {
-        this.conference = conference;
-    }
+    // ************************************************************************
+    // Real methods
+    // ************************************************************************
 
 }

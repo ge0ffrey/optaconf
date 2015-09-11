@@ -23,7 +23,6 @@ public class Conference extends AbstractPersistable implements Solution<HardSoft
 
     @Column(nullable = false)
     private String name;
-
     @Column(nullable = false)
     private String comment;
 
@@ -66,12 +65,7 @@ public class Conference extends AbstractPersistable implements Solution<HardSoft
     @Column
     private HardSoftScore score;
 
-    public Conference() {
-    }
-
-    public Conference(String externalId) {
-        super(externalId);
-    }
+    public Conference() {}
 
     public String getName() {
         return name;
@@ -172,6 +166,10 @@ public class Conference extends AbstractPersistable implements Solution<HardSoft
     public void setScore(HardSoftScore score) {
         this.score = score;
     }
+
+    // ************************************************************************
+    // Real methods
+    // ************************************************************************
 
     @Override
     @JsonIgnore

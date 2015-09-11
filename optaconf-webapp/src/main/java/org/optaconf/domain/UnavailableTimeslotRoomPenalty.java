@@ -28,7 +28,7 @@ import org.optaplanner.core.api.domain.solution.cloner.DeepPlanningClone;
 
 @DeepPlanningClone
 @Entity(name = "optaconf_unavailtimeslotroompenalty")
-public class UnavailableTimeslotRoomPenalty extends AbstractPersistable {
+public class UnavailableTimeslotRoomPenalty extends AbstractConferencedPersistable {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JsonBackReference
@@ -38,19 +38,13 @@ public class UnavailableTimeslotRoomPenalty extends AbstractPersistable {
     @JsonBackReference
     private Room room;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "conference_id", nullable = false)
-    @JsonIgnore
-    private Conference conference;
-
     public UnavailableTimeslotRoomPenalty() {
     }
 
-    public UnavailableTimeslotRoomPenalty(String externalId, Timeslot timeslot, Room room, Conference conference) {
-        super(externalId);
+    public UnavailableTimeslotRoomPenalty(Conference conference, String externalId, Timeslot timeslot, Room room) {
+        super(conference, externalId);
         this.timeslot = timeslot;
         this.room = room;
-        this.conference = conference;
     }
 
     public Timeslot getTimeslot() {
@@ -69,12 +63,8 @@ public class UnavailableTimeslotRoomPenalty extends AbstractPersistable {
         this.room = room;
     }
 
-    public Conference getConference() {
-        return conference;
-    }
-
-    public void setConference(Conference conference) {
-        this.conference = conference;
-    }
+    // ************************************************************************
+    // Real methods
+    // ************************************************************************
 
 }

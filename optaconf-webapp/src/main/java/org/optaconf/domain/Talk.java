@@ -16,7 +16,7 @@ import org.optaplanner.core.api.domain.variable.PlanningVariable;
 @PlanningEntity
 @DeepPlanningClone
 @Entity(name = "optaconf_talk")
-public class Talk extends AbstractPersistable {
+public class Talk extends AbstractConferencedPersistable {
 
     @Column(length = 255, nullable = false)
     private String title;
@@ -43,19 +43,13 @@ public class Talk extends AbstractPersistable {
     @JoinColumn(name = "talk_exclusion_id")
     private TalkExclusion talkExclusion;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "conference_id", nullable = false)
-    @JsonIgnore
-    private Conference conference;
-
     public Talk() {
     }
 
-    public Talk(String externalId, String title, Conference conference, Room room, Track track, Timeslot timeslot) {
-        super(externalId);
+    public Talk(Conference conference, String externalId, String title, Room room, Track track, Timeslot timeslot) {
+        super(conference, externalId);
         this.title = title;
         this.track = track;
-        this.conference = conference;
         this.room = room;
         this.timeslot = timeslot;
     }
@@ -110,12 +104,8 @@ public class Talk extends AbstractPersistable {
         this.talkExclusion = talkExclusion;
     }
 
-    public Conference getConference() {
-        return conference;
-    }
-
-    public void setConference(Conference conference) {
-        this.conference = conference;
-    }
+    // ************************************************************************
+    // Real methods
+    // ************************************************************************
 
 }

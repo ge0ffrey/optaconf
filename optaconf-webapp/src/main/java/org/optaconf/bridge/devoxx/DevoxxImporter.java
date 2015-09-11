@@ -56,7 +56,6 @@ public class DevoxxImporter {
         conference.setName("DEVOXX BE 2016");
 //        conference.setName("DEVOXX FR 2015");
         conference.setComment(comment.toString());
-        conference.setExternalId(REST_URL_ROOT);
 
         Map<String, Track> titleToTrackMap = mapTracks(conference, persist);
         Map<String, Speaker> speakerMap = mapSpeakers(conference, persist);
@@ -80,7 +79,7 @@ public class DevoxxImporter {
             String id = dTrack.getString("id");
             String title = dTrack.getString("title");
             String colorHex = tangoColorFactory.pickCssClass(id);
-            Track track = new Track(id, title, colorHex, conference);
+            Track track = new Track(conference, id, title, colorHex);
             if (persist) {
                 em.persist(track);
             }
@@ -100,7 +99,7 @@ public class DevoxxImporter {
             String firstName = dSpeaker.getString("firstName");
             String lastName = dSpeaker.getString("lastName");
             String name = firstName + " " + lastName;
-            Speaker speaker = new Speaker(id, name, conference);
+            Speaker speaker = new Speaker(conference, id, name);
 
             if (persist) {
                 em.persist(speaker);
@@ -125,7 +124,7 @@ public class DevoxxImporter {
             if (!dRoom.getString("setup").equals("theatre")) {
                 continue;
             }
-            Room room = new Room(id, name, capacity, conference);
+            Room room = new Room(conference, id, name, capacity);
             if (persist) {
                 em.persist(room);
             }
@@ -163,7 +162,7 @@ public class DevoxxImporter {
                 throw new IllegalStateException("A schedules title (" + dTitle
                         + ") does not match any of the patterns (" + Arrays.toString(dTitlePatterns) + ").");
             }
-            Day day = new Day(dHref.replaceAll(".*\\/(.*)/", "$1"), name, date, conference);
+            Day day = new Day(conference, dHref.replaceAll(".*\\/(.*)/", "$1"), name, date);
             if (persist) {
                 em.persist(day);
             }
@@ -232,8 +231,8 @@ public class DevoxxImporter {
 
             Timeslot timeslot = timeslotMap.get(timeslotId);
             if (timeslot == null) {
-                timeslot = new Timeslot(timeslotId, timeslotId, day, fromTime,
-                        toTime, conference);
+                timeslot = new Timeslot(conference, timeslotId, timeslotId, day, fromTime,
+                        toTime);
 
                 if (persist) {
                     em.persist(timeslot);
@@ -242,7 +241,7 @@ public class DevoxxImporter {
                 timeslotMap.put(timeslotId, timeslot);
             }
 
-            Talk talk = new Talk(id, title, conference, room, track, timeslot);
+            Talk talk = new Talk(conference, id, title, room, track, timeslot);
 
             if (persist) {
                 em.persist(talk);
@@ -267,7 +266,7 @@ public class DevoxxImporter {
                     // ").");
                 }
                 SpeakingRelation speakingRelation = new SpeakingRelation(
-                        talk.getExternalId() + "_" + speaker.getExternalId(), talk, speaker, conference);
+                        conference, talk.getExternalId() + "_" + speaker.getExternalId(), talk, speaker);
                 conference.getSpeakingRelationList().add(speakingRelation);
             }
 
@@ -295,8 +294,8 @@ public class DevoxxImporter {
             for (Room room : conference.getRoomList()) {
                 if (roomToTalkMap == null || !roomToTalkMap.containsKey(room)) {
                     UnavailableTimeslotRoomPenalty penalty = new UnavailableTimeslotRoomPenalty(
-                            timeslot.getExternalId() + "_" + room.getExternalId(), timeslot,
-                            room, conference);
+                            conference, timeslot.getExternalId() + "_" + room.getExternalId(), timeslot,
+                            room);
                     if (persist) {
                         em.persist(penalty);
                     }
