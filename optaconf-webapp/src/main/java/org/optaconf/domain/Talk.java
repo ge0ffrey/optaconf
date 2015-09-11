@@ -51,8 +51,8 @@ public class Talk extends AbstractPersistable {
     public Talk() {
     }
 
-    public Talk(String id, String title, Conference conference, Room room, Track track, Timeslot timeslot) {
-        super(id);
+    public Talk(String externalId, String title, Conference conference, Room room, Track track, Timeslot timeslot) {
+        super(externalId);
         this.title = title;
         this.track = track;
         this.conference = conference;

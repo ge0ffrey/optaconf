@@ -36,8 +36,8 @@ public class Day extends AbstractPersistable implements Comparable<Day> {
     public Day() {
     }
 
-    public Day(String id, String name, String date, Conference conference) {
-        super(id);
+    public Day(String externalId, String name, String date, Conference conference) {
+        super(externalId);
         this.name = name;
         this.date = date;
         this.conference = conference;

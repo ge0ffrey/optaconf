@@ -46,8 +46,8 @@ public class UnavailableTimeslotRoomPenalty extends AbstractPersistable {
     public UnavailableTimeslotRoomPenalty() {
     }
 
-    public UnavailableTimeslotRoomPenalty(String id, Timeslot timeslot, Room room, Conference conference) {
-        super(id);
+    public UnavailableTimeslotRoomPenalty(String externalId, Timeslot timeslot, Room room, Conference conference) {
+        super(externalId);
         this.timeslot = timeslot;
         this.room = room;
         this.conference = conference;

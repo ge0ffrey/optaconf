@@ -27,8 +27,8 @@ public class SpeakingRelation extends AbstractPersistable {
     public SpeakingRelation() {
     }
 
-    public SpeakingRelation(String id, Talk talk, Speaker speaker, Conference conference) {
-        super(id);
+    public SpeakingRelation(String externalId, Talk talk, Speaker speaker, Conference conference) {
+        super(externalId);
         this.talk = talk;
         this.speaker = speaker;
         this.conference = conference;

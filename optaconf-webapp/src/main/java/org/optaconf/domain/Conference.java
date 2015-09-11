@@ -69,8 +69,8 @@ public class Conference extends AbstractPersistable implements Solution<HardSoft
     public Conference() {
     }
 
-    public Conference(String id) {
-        super(id);
+    public Conference(String externalId) {
+        super(externalId);
     }
 
     public String getName() {

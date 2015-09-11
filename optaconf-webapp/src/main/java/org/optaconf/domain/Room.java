@@ -42,8 +42,8 @@ public class Room extends AbstractPersistable implements Comparable<Room> {
     public Room() {
     }
 
-    public Room(String id, String name, int seatingCapacity, Conference conference) {
-        super(id);
+    public Room(String externalId, String name, int seatingCapacity, Conference conference) {
+        super(externalId);
         this.name = name;
         this.seatingCapacity = seatingCapacity;
         this.conference = conference;

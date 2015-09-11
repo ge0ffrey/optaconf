@@ -33,8 +33,8 @@ public class Speaker extends AbstractPersistable implements Comparable<Speaker> 
     public Speaker() {
     }
 
-    public Speaker(String id, String name, Conference conference) {
-        super(id);
+    public Speaker(String externalId, String name, Conference conference) {
+        super(externalId);
         this.name = name;
         this.conference = conference;
     }

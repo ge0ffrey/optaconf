@@ -50,8 +50,8 @@ public class Timeslot extends AbstractPersistable implements Comparable<Timeslot
     public Timeslot() {
     }
 
-    public Timeslot(String id, String name, Day day, String fromTime, String toTime, Conference conference) {
-        super(id);
+    public Timeslot(String externalId, String name, Day day, String fromTime, String toTime, Conference conference) {
+        super(externalId);
         this.name = name;
         this.day = day;
         this.fromTime = fromTime;

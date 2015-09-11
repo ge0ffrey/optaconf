@@ -35,8 +35,8 @@ public class TalkExclusion extends AbstractPersistable {
     public TalkExclusion() {
     }
 
-    public TalkExclusion(String id, Talk firstTalk, Talk secondTalk, TalkExclusionType type, Conference conference) {
-        super(id);
+    public TalkExclusion(String externalId, Talk firstTalk, Talk secondTalk, TalkExclusionType type, Conference conference) {
+        super(externalId);
         this.firstTalk = firstTalk;
         this.secondTalk = secondTalk;
         this.type = type;

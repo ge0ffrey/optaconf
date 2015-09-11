@@ -37,8 +37,8 @@ public class Track extends AbstractPersistable {
     public Track() {
     }
 
-    public Track(String id, String title, String cssStyleClass, Conference conference) {
-        super(id);
+    public Track(String externalId, String title, String cssStyleClass, Conference conference) {
+        super(externalId);
         this.title = title;
         this.cssStyleClass = cssStyleClass;
         this.conference = conference;
