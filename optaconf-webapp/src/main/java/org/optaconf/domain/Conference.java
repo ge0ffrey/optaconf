@@ -3,8 +3,11 @@ package org.optaconf.domain;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
@@ -63,6 +66,7 @@ public class Conference extends AbstractPersistable implements Solution<HardSoft
     private List<TalkExclusion> talkExclusionList = new ArrayList<TalkExclusion>();
 
     @Column
+    // TODO Replace database blob with nice columns - https://issues.jboss.org/browse/PLANNER-442
     private HardSoftScore score;
 
     public Conference() {}
