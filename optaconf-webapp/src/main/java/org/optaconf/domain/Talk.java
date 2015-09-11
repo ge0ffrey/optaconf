@@ -25,11 +25,13 @@ public class Talk extends AbstractConferencedPersistable {
     @JoinColumn(name = "track_id", nullable = false)
     private Track track;
 
+    @PlanningVariable(valueRangeProviderRefs = {"timeslotRange"})
     @ManyToOne()
-    @JoinColumn(name = "timeslot_id", nullable = false)
+    @JoinColumn(name = "timeslot_id", nullable = true)
     @JsonBackReference
     private Timeslot timeslot;
 
+    @PlanningVariable(valueRangeProviderRefs = {"roomRange"})
     @ManyToOne()
     @JoinColumn(name = "room_id", nullable = true)
     @JsonBackReference
@@ -46,12 +48,10 @@ public class Talk extends AbstractConferencedPersistable {
     public Talk() {
     }
 
-    public Talk(Conference conference, String externalId, String title, Room room, Track track, Timeslot timeslot) {
+    public Talk(Conference conference, String externalId, String title, Track track) {
         super(conference, externalId);
         this.title = title;
         this.track = track;
-        this.room = room;
-        this.timeslot = timeslot;
     }
 
     public String getTitle() {
@@ -70,7 +70,6 @@ public class Talk extends AbstractConferencedPersistable {
         this.track = track;
     }
 
-    @PlanningVariable(valueRangeProviderRefs = {"timeslotRange"})
     public Timeslot getTimeslot() {
         return timeslot;
     }
@@ -79,7 +78,6 @@ public class Talk extends AbstractConferencedPersistable {
         this.timeslot = timeslot;
     }
 
-    @PlanningVariable(valueRangeProviderRefs = {"roomRange"})
     public Room getRoom() {
         return room;
     }

@@ -33,10 +33,12 @@ public class Conference extends AbstractPersistable implements Solution<HardSoft
     @JsonManagedReference
     private List<Day> dayList = new ArrayList<Day>();
 
+    @ValueRangeProvider(id = "timeslotRange")
     @OneToMany(mappedBy = "conference", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<Timeslot> timeslotList = new ArrayList<Timeslot>();
 
+    @ValueRangeProvider(id = "roomRange")
     @OneToMany(mappedBy = "conference", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<Room> roomList = new ArrayList<Room>();
@@ -53,6 +55,7 @@ public class Conference extends AbstractPersistable implements Solution<HardSoft
     @JsonManagedReference
     private List<Speaker> speakerList = new ArrayList<Speaker>();
 
+    @PlanningEntityCollectionProperty
     @OneToMany(mappedBy = "conference", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<Talk> talkList = new ArrayList<Talk>();
@@ -95,7 +98,6 @@ public class Conference extends AbstractPersistable implements Solution<HardSoft
         this.dayList = dayList;
     }
 
-    @ValueRangeProvider(id = "timeslotRange")
     public List<Timeslot> getTimeslotList() {
         return timeslotList;
     }
@@ -104,7 +106,6 @@ public class Conference extends AbstractPersistable implements Solution<HardSoft
         this.timeslotList = timeslotList;
     }
 
-    @ValueRangeProvider(id = "roomRange")
     public List<Room> getRoomList() {
         return roomList;
     }
@@ -138,7 +139,6 @@ public class Conference extends AbstractPersistable implements Solution<HardSoft
         this.speakerList = speakerList;
     }
 
-    @PlanningEntityCollectionProperty
     public List<Talk> getTalkList() {
         return talkList;
     }

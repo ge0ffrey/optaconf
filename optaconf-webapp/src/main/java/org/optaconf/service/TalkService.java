@@ -89,9 +89,9 @@ public class TalkService {
         }
         for (Talk talk : conference.getTalkList()) {
             Timeslot timeslot = talk.getTimeslot();
-            Day day = timeslot.getDay();
             Room room = talk.getRoom();
-            if (room != null && room.getExternalId() != null) {
+            if (timeslot != null && room != null && room.getExternalId() != null) {
+                Day day = timeslot.getDay();
                 Map<String, Map<String, Talk>> map = dayTimeslotRoomToTalkMap.get(day.getExternalId());
                 Map<String, Talk> map2 = map.get(timeslot.getExternalId());
                 map2.put(room.getExternalId(), talk);
