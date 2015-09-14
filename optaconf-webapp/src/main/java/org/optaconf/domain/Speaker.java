@@ -1,13 +1,14 @@
 package org.optaconf.domain;
 
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.optaplanner.core.api.domain.solution.cloner.DeepPlanningClone;
 
@@ -17,13 +18,12 @@ public class Speaker extends AbstractConferencedPersistable implements Comparabl
 
     @Column
     private String name;
-
     @Column
     private Boolean rockstar = false;
 
-    @OneToOne(optional = true, cascade = CascadeType.ALL)
-    @JoinColumn(name = "speaking_relation_id", nullable = true)
-    private SpeakingRelation relation;
+    @OneToMany(mappedBy = "speaker", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonManagedReference
+    private List<SpeakingRelation> speakingRelationList;
 
     public Speaker() {
     }
@@ -54,12 +54,12 @@ public class Speaker extends AbstractConferencedPersistable implements Comparabl
         this.rockstar = rockstar;
     }
 
-    public SpeakingRelation getRelation() {
-        return relation;
+    public List<SpeakingRelation> getSpeakingRelationList() {
+        return speakingRelationList;
     }
 
-    public void setRelation(SpeakingRelation relation) {
-        this.relation = relation;
+    public void setSpeakingRelationList(List<SpeakingRelation> speakingRelationList) {
+        this.speakingRelationList = speakingRelationList;
     }
 
     // ************************************************************************
@@ -70,6 +70,7 @@ public class Speaker extends AbstractConferencedPersistable implements Comparabl
     public int compareTo(Speaker other) {
         return new CompareToBuilder()
                 .append(name, other.name)
+                .append(id, other.id)
                 .toComparison();
     }
 

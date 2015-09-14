@@ -1,14 +1,16 @@
 package org.optaconf.domain;
 
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.optaplanner.core.api.domain.entity.PlanningEntity;
 import org.optaplanner.core.api.domain.solution.cloner.DeepPlanningClone;
 import org.optaplanner.core.api.domain.variable.PlanningVariable;
@@ -37,13 +39,9 @@ public class Talk extends AbstractConferencedPersistable {
     @JsonBackReference
     private Room room;
 
-    @OneToOne(optional = true, cascade = CascadeType.ALL)
-    @JoinColumn(name = "speaking_relation_id", nullable = true)
-    private SpeakingRelation speakingRelation;
-
-    @OneToOne(optional = true, cascade = CascadeType.ALL)
-    @JoinColumn(name = "talk_exclusion_id")
-    private TalkExclusion talkExclusion;
+    @OneToMany(mappedBy = "talk", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonManagedReference
+    private List<SpeakingRelation> speakingRelationList;
 
     public Talk() {
     }
@@ -86,20 +84,12 @@ public class Talk extends AbstractConferencedPersistable {
         this.room = room;
     }
 
-    public SpeakingRelation getSpeakingRelation() {
-        return speakingRelation;
+    public List<SpeakingRelation> getSpeakingRelationList() {
+        return speakingRelationList;
     }
 
-    public void setSpeakingRelation(SpeakingRelation speakingRelation) {
-        this.speakingRelation = speakingRelation;
-    }
-
-    public TalkExclusion getTalkExclusion() {
-        return talkExclusion;
-    }
-
-    public void setTalkExclusion(TalkExclusion talkExclusion) {
-        this.talkExclusion = talkExclusion;
+    public void setSpeakingRelationList(List<SpeakingRelation> speakingRelationList) {
+        this.speakingRelationList = speakingRelationList;
     }
 
     // ************************************************************************

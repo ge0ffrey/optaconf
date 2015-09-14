@@ -30,10 +30,6 @@ public class Room extends AbstractConferencedPersistable implements Comparable<R
     @JsonManagedReference
     private List<Talk> talks = new ArrayList<Talk>();
 
-    @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "timeslot_room_penalty_id")
-    private UnavailableTimeslotRoomPenalty penalty;
-
     public Room() {
     }
 
@@ -67,14 +63,6 @@ public class Room extends AbstractConferencedPersistable implements Comparable<R
         this.talks = talks;
     }
 
-    public UnavailableTimeslotRoomPenalty getPenalty() {
-        return penalty;
-    }
-
-    public void setPenalty(UnavailableTimeslotRoomPenalty penalty) {
-        this.penalty = penalty;
-    }
-
     // ************************************************************************
     // Real methods
     // ************************************************************************
@@ -84,6 +72,7 @@ public class Room extends AbstractConferencedPersistable implements Comparable<R
         return new CompareToBuilder()
                 .append(name, other.name)
                 .append(other.seatingCapacity, seatingCapacity)
+                .append(id, other.id)
                 .toComparison();
     }
 

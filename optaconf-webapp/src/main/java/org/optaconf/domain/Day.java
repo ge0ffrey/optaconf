@@ -9,6 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.optaplanner.core.api.domain.solution.cloner.DeepPlanningClone;
 
 @DeepPlanningClone
@@ -22,7 +23,7 @@ public class Day extends AbstractConferencedPersistable implements Comparable<Da
 
     @OneToMany(mappedBy = "day", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference
-    private List<Timeslot> timeslots = new ArrayList<Timeslot>();
+    private List<Timeslot> timeslotList = new ArrayList<Timeslot>();
 
     protected Day() {}
 
@@ -48,12 +49,12 @@ public class Day extends AbstractConferencedPersistable implements Comparable<Da
         this.date = date;
     }
 
-    public List<Timeslot> getTimeslots() {
-        return timeslots;
+    public List<Timeslot> getTimeslotList() {
+        return timeslotList;
     }
 
-    public void setTimeslots(List<Timeslot> timeslots) {
-        this.timeslots = timeslots;
+    public void setTimeslotList(List<Timeslot> timeslotList) {
+        this.timeslotList = timeslotList;
     }
 
     // ************************************************************************
@@ -62,7 +63,10 @@ public class Day extends AbstractConferencedPersistable implements Comparable<Da
 
     @Override
     public int compareTo(Day other) {
-        return date.compareTo(other.date);
+        return new CompareToBuilder()
+                .append(date, other.date)
+                .append(id, other.id)
+                .toComparison();
     }
 
 }

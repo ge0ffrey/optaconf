@@ -38,10 +38,6 @@ public class Timeslot extends AbstractConferencedPersistable implements Comparab
     @JsonManagedReference
     private List<Talk> talks;
 
-    @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "timeslot_room_penalty_id")
-    private UnavailableTimeslotRoomPenalty penalty;
-
     public Timeslot() {
     }
 
@@ -93,14 +89,6 @@ public class Timeslot extends AbstractConferencedPersistable implements Comparab
         this.talks = talks;
     }
 
-    public UnavailableTimeslotRoomPenalty getPenalty() {
-        return penalty;
-    }
-
-    public void setPenalty(UnavailableTimeslotRoomPenalty penalty) {
-        this.penalty = penalty;
-    }
-
     // ************************************************************************
     // Real methods
     // ************************************************************************
@@ -111,6 +99,7 @@ public class Timeslot extends AbstractConferencedPersistable implements Comparab
                 .append(day, other.day)
                 .append(fromTime, other.fromTime)
                 .append(toTime, other.toTime)
+                .append(id, other.id)
                 .toComparison();
     }
 
