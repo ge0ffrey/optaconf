@@ -8,6 +8,8 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -20,22 +22,23 @@ import org.optaplanner.core.api.domain.variable.PlanningVariable;
 @Entity(name = "optaconf_talk")
 public class Talk extends AbstractConferencedPersistable {
 
-    @Column(length = 255, nullable = false)
+    @NotNull @Size(max = 120)
     private String title;
 
+    @NotNull
     @ManyToOne()
-    @JoinColumn(name = "track_id", nullable = false)
+    @JoinColumn(name = "track_id")
     private Track track;
 
     @PlanningVariable(valueRangeProviderRefs = {"timeslotRange"})
     @ManyToOne()
-    @JoinColumn(name = "timeslot_id", nullable = true)
+    @JoinColumn(name = "timeslot_id")
     @JsonBackReference
     private Timeslot timeslot;
 
     @PlanningVariable(valueRangeProviderRefs = {"roomRange"})
     @ManyToOne()
-    @JoinColumn(name = "room_id", nullable = true)
+    @JoinColumn(name = "room_id")
     @JsonBackReference
     private Room room;
 

@@ -11,6 +11,8 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -24,9 +26,9 @@ import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
 @Entity(name = "optaconf_conference")
 public class Conference extends AbstractPersistable implements Solution<HardSoftScore> {
 
-    @Column(nullable = false)
+    @NotNull @Size(max = 120)
     private String name;
-    @Column(nullable = false)
+    @NotNull @Size(max = 240)
     private String comment;
 
     @OneToMany(mappedBy = "conference", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -68,7 +70,6 @@ public class Conference extends AbstractPersistable implements Solution<HardSoft
     @JsonManagedReference
     private List<TalkExclusion> talkExclusionList = new ArrayList<TalkExclusion>();
 
-    @Column
     // TODO Replace database blob with nice columns - https://issues.jboss.org/browse/PLANNER-442
     private HardSoftScore score;
 

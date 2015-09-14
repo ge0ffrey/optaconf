@@ -21,6 +21,8 @@ import javax.persistence.Column;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -29,11 +31,13 @@ public abstract class AbstractConferencedPersistable extends AbstractPersistable
 
     // TODO @NaturalId for the combination of conference and externalId
 
+    @NotNull
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "conference_id", nullable = false)
+    @JoinColumn(name = "conference_id")
     @JsonIgnore
     protected Conference conference;
 
+    @NotNull @Size(max = 240)
     @Column(name = "external_id")
     protected String externalId;
 

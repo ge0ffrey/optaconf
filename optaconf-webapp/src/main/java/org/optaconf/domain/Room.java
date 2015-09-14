@@ -3,15 +3,13 @@ package org.optaconf.domain;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.optaplanner.core.api.domain.solution.cloner.DeepPlanningClone;
@@ -20,15 +18,15 @@ import org.optaplanner.core.api.domain.solution.cloner.DeepPlanningClone;
 @Entity(name = "optaconf_room")
 public class Room extends AbstractConferencedPersistable implements Comparable<Room> {
 
-    @Column
+    @NotNull @Size(max = 120)
     private String name;
 
-    @Column
+    @NotNull @Min(0)
     private int seatingCapacity;
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference
-    private List<Talk> talks = new ArrayList<Talk>();
+    private List<Talk> talkList = new ArrayList<Talk>();
 
     public Room() {
     }
@@ -55,12 +53,12 @@ public class Room extends AbstractConferencedPersistable implements Comparable<R
         this.seatingCapacity = seatingCapacity;
     }
 
-    public List<Talk> getTalks() {
-        return talks;
+    public List<Talk> getTalkList() {
+        return talkList;
     }
 
-    public void setTalks(List<Talk> talks) {
-        this.talks = talks;
+    public void setTalkList(List<Talk> talkList) {
+        this.talkList = talkList;
     }
 
     // ************************************************************************

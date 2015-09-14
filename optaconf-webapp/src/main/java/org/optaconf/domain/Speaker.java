@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.apache.commons.lang3.builder.CompareToBuilder;
@@ -16,9 +18,8 @@ import org.optaplanner.core.api.domain.solution.cloner.DeepPlanningClone;
 @Entity(name = "optaconf_speaker")
 public class Speaker extends AbstractConferencedPersistable implements Comparable<Speaker> {
 
-    @Column
+    @NotNull @Size(max = 120)
     private String name;
-    @Column
     private Boolean rockstar = false;
 
     @OneToMany(mappedBy = "speaker", cascade = CascadeType.ALL, fetch = FetchType.EAGER)

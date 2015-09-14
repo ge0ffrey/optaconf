@@ -2,16 +2,15 @@ package org.optaconf.domain;
 
 import java.util.List;
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.optaplanner.core.api.domain.solution.cloner.DeepPlanningClone;
@@ -20,23 +19,24 @@ import org.optaplanner.core.api.domain.solution.cloner.DeepPlanningClone;
 @Entity(name = "optaconf_timeslot")
 public class Timeslot extends AbstractConferencedPersistable implements Comparable<Timeslot> {
 
-    @Column(length = 255, nullable = false)
+    @NotNull @Size(max = 120)
     private String name;
 
-    @Column(length = 255, nullable = false)
+    @NotNull @Size(max = 120)
     private String fromTime;
 
-    @Column(length = 255, nullable = false)
+    @NotNull @Size(max = 120)
     private String toTime;
 
+    @NotNull
     @ManyToOne()
-    @JoinColumn(name = "day_id", nullable = false)
+    @JoinColumn(name = "day_id")
     @JsonBackReference
     private Day day;
 
     @OneToMany(mappedBy = "timeslot", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference
-    private List<Talk> talks;
+    private List<Talk> talkList;
 
     public Timeslot() {
     }
@@ -81,12 +81,12 @@ public class Timeslot extends AbstractConferencedPersistable implements Comparab
         this.toTime = toTime;
     }
 
-    public List<Talk> getTalks() {
-        return talks;
+    public List<Talk> getTalkList() {
+        return talkList;
     }
 
-    public void setTalks(List<Talk> talks) {
-        this.talks = talks;
+    public void setTalkList(List<Talk> talkList) {
+        this.talkList = talkList;
     }
 
     // ************************************************************************

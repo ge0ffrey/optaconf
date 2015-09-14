@@ -7,6 +7,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.apache.commons.lang3.builder.CompareToBuilder;
@@ -16,9 +18,9 @@ import org.optaplanner.core.api.domain.solution.cloner.DeepPlanningClone;
 @Entity(name = "optaconf_day")
 public class Day extends AbstractConferencedPersistable implements Comparable<Day> {
 
-    @Column(length = 255, nullable = false)
+    @NotNull @Size(max = 120)
     private String name;
-    @Column(length = 255, nullable = false)
+    @NotNull @Size(max = 120)
     private String date;
 
     @OneToMany(mappedBy = "day", cascade = CascadeType.ALL, fetch = FetchType.EAGER)

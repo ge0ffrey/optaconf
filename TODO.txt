@@ -1,9 +1,11 @@
-- Tests: unit tests, etc
+- Tests: unit tests, etc - FIXED with arquillian
 -- testdata => serialize a schedule to a file (let's just xstream dump it)
 -- just testing the solver?
-(-- test the jaxrs calls with arquillian maybe? or cargo? or soapui?)... Still thinking about what would be the best solution for this
 
 
+Bugs
+- Fix "IOException: UT010029: Stream is closed"
+-- Which leads to live lock (100% CPU usage) and memory overflow
 
 - Add JPA (matyas)
 -- Refactor String id to String externalId - FINISHED

@@ -9,8 +9,11 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.optaplanner.core.api.domain.solution.cloner.DeepPlanningClone;
 
 /**
@@ -20,14 +23,11 @@ import org.optaplanner.core.api.domain.solution.cloner.DeepPlanningClone;
 @Entity(name = "optaconf_track")
 public class Track extends AbstractConferencedPersistable {
 
-    @Column
+    @NotNull @Size(max = 120)
     private String title;
 
-    @Column
+    @NotNull
     private String cssStyleClass;
-
-    @OneToMany(mappedBy = "track", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Talk> talks = new ArrayList<Talk>();
 
     public Track() {
     }

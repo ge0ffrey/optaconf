@@ -7,6 +7,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -16,14 +17,17 @@ import org.optaplanner.core.api.domain.solution.cloner.DeepPlanningClone;
 @Entity(name = "optaconf_talkexclusion")
 public class TalkExclusion extends AbstractConferencedPersistable {
 
+    @NotNull
     @ManyToOne(cascade = CascadeType.ALL)
     @JsonBackReference
     private Talk firstTalk;
 
+    @NotNull
     @ManyToOne(cascade = CascadeType.ALL)
     @JsonBackReference
     private Talk secondTalk;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     private TalkExclusionType type;
 

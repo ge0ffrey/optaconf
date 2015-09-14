@@ -21,6 +21,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -30,10 +31,12 @@ import org.optaplanner.core.api.domain.solution.cloner.DeepPlanningClone;
 @Entity(name = "optaconf_unavailtimeslotroompenalty")
 public class UnavailableTimeslotRoomPenalty extends AbstractConferencedPersistable {
 
+    @NotNull
     @OneToOne(cascade = CascadeType.ALL)
     @JsonBackReference
     private Timeslot timeslot;
 
+    @NotNull
     @OneToOne(cascade = CascadeType.ALL)
     @JsonBackReference
     private Room room;
