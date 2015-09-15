@@ -42,7 +42,7 @@ public abstract class AbstractArquillianTest {
 
     private static final String POM_DIRECTORY_NAME = "optaconf-webapp";
 
-    @Deployment
+    @Deployment(testable = false)
     public static WebArchive createDeployment() {
         File file = findPomFile();
         return ShrinkWrap.create(MavenImporter.class)
