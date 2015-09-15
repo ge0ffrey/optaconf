@@ -16,18 +16,13 @@
 
 package org.optaconf.service;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
-import java.util.List;
 
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
-public class ConferenceServiceArquillianTest extends AbstractArquillianTest {
+public class ConferenceServiceTest extends AbstractClientArquillianTest {
 
     @Test
     public void importDevoxx(@ArquillianResource URL baseUrl) throws IOException {
