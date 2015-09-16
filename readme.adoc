@@ -22,31 +22,33 @@ if you don't have IntelliJ Ultimate Edition:
 
 Import a schedule:
 
-* A Devoxx schedule: http://localhost:8080/optaconf-webapp/rest/123/schedule/import/devoxx
+* A Devoxx schedule: [POST] http://localhost:8080/optaconf-webapp/rest/conference/import/devoxx
 
 General lists:
 
-* All days: http://localhost:8080/optaconf-webapp/rest/123/day
-* All timeslots: http://localhost:8080/optaconf-webapp/rest/123/timeslot
-* All rooms: http://localhost:8080/optaconf-webapp/rest/123/room
-* All tracks: http://localhost:8080/optaconf-webapp/rest/123/track
-* All speakers: http://localhost:8080/optaconf-webapp/rest/123/speaker
-* All talks: http://localhost:8080/optaconf-webapp/rest/123/talk
+* All conferences: [GET] http://localhost:8080/optaconf-webapp/rest/conference/
+* All days: [GET] http://localhost:8080/optaconf-webapp/rest/<conference-id>/day
+* All timeslots: [GET] http://localhost:8080/optaconf-webapp/rest/<conference-id>/timeslot
+* All rooms: [GET] http://localhost:8080/optaconf-webapp/rest/<conference-id>/room
+* All tracks: [GET] http://localhost:8080/optaconf-webapp/rest/<conference-id>/track
+* All speakers: [GET] http://localhost:8080/optaconf-webapp/rest/<conference-id>/speaker
+* All talks: [GET] http://localhost:8080/optaconf-webapp/rest/<conference-id>/talk
 
 Gui map:
-* Talk map per day per timeslot per room: http://localhost:8080/optaconf-webapp/rest/123/talk/map
+
+* Talk map per day per timeslot per room: [GET] http://localhost:8080/optaconf-webapp/#!/schedule/<conference-id>
 
 Filtered lists:
 
-* All timeslots of 1 day: http://localhost:8080/optaconf-webapp/rest/123/day/wednesday/timeslot
-* All talk exclusions of 1 talk: http://localhost:8080/optaconf-webapp/rest/123/talk/1/exclusion
-* All talks on 1 day grouped by timeslot and room: http://localhost:8080/optaconf-webapp/rest/123/day/wednesday/talk
+* All timeslots of 1 day: [GET] http://localhost:8080/optaconf-webapp/rest/<conference-id>/day/wednesday/timeslot
+* All talk exclusions of 1 talk: [GET] http://localhost:8080/optaconf-webapp/rest/<conference-id>/talk/1/exclusion
+* All talks on 1 day grouped by timeslot and room: [GET] http://localhost:8080/optaconf-webapp/rest/<conference-id>/day/wednesday/talk
 
 Solve a schedule
 
-* Solve the schedule: http://localhost:8080/optaconf-webapp/rest/123/schedule/solve
-* Is solving? http://localhost:8080/optaconf-webapp/rest/123/schedule/isSolving
-* Terminate solving: http://localhost:8080/optaconf-webapp/rest/123/schedule/terminateSolving
+* Solve the schedule: [PUT] http://localhost:8080/optaconf-webapp/rest/conference/<conference-id>/solve
+* Is solving? [GET] http://localhost:8080/optaconf-webapp/rest/conference/<conference-id>/isSolving
+* Terminate solving: [PUT] http://localhost:8080/optaconf-webapp/rest/conference/<conference-id>/terminateSolving
 
 == Development methodology
 
