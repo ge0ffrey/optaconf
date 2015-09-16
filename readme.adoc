@@ -39,15 +39,15 @@ Gui map:
 
 Filtered lists:
 
-* All timeslots of 1 day: http://localhost:8080/optaconf-webapp/rest/<conference-id>/day/wednesday/timeslot
-* All talk exclusions of 1 talk: http://localhost:8080/optaconf-webapp/rest/<conference-id>/talk/1/exclusion
-* All talks on 1 day grouped by timeslot and room: http://localhost:8080/optaconf-webapp/rest/<conference-id>/day/wednesday/talk
+* All timeslots of 1 day: [GET] http://localhost:8080/optaconf-webapp/rest/<conference-id>/day/wednesday/timeslot
+* All talk exclusions of 1 talk: [GET] http://localhost:8080/optaconf-webapp/rest/<conference-id>/talk/1/exclusion
+* All talks on 1 day grouped by timeslot and room: [GET] http://localhost:8080/optaconf-webapp/rest/<conference-id>/day/wednesday/talk
 
 Solve a schedule
 
-* Solve the schedule: PUT to http://localhost:8080/optaconf-webapp/rest/conference/<conference-id>/solve
-* Is solving? GET to http://localhost:8080/optaconf-webapp/rest/conference/<conference-id>/isSolving
-* Terminate solving: PUT to http://localhost:8080/optaconf-webapp/rest/conference/<conference-id>/terminateSolving
+* Solve the schedule: [PUT] http://localhost:8080/optaconf-webapp/rest/conference/<conference-id>/solve
+* Is solving? [GET] http://localhost:8080/optaconf-webapp/rest/conference/<conference-id>/isSolving
+* Terminate solving: [PUT] http://localhost:8080/optaconf-webapp/rest/conference/<conference-id>/terminateSolving
 
 == Development methodology
 
