@@ -35,6 +35,7 @@ General lists:
 * All talks: [GET] http://localhost:8080/optaconf-webapp/rest/<conference-id>/talk
 
 Gui map:
+
 * Talk map per day per timeslot per room: [GET] http://localhost:8080/optaconf-webapp/#!/schedule/<conference-id>
 
 Filtered lists:
