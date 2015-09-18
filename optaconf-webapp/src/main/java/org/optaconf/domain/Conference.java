@@ -16,6 +16,11 @@ import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.hibernate.annotations.Columns;
+import org.hibernate.annotations.Parameter;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+import org.optaconf.util.HardSoftScoreHibernateType;
 import org.optaplanner.core.api.domain.solution.PlanningEntityCollectionProperty;
 import org.optaplanner.core.api.domain.solution.PlanningSolution;
 import org.optaplanner.core.api.domain.solution.Solution;
@@ -24,6 +29,8 @@ import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
 
 @PlanningSolution
 @Entity(name = "optaconf_conference")
+// TODO After upgrading to OptaPlanner 6.4.0.Beta1 adjust this TypeDef to use optaplanner-persistence-jpa's version
+@TypeDef(name = "hardSoftScoreHibernateType", defaultForType = HardSoftScore.class, typeClass = HardSoftScoreHibernateType.class)
 public class Conference extends AbstractPersistable implements Solution<HardSoftScore> {
 
     @NotNull @Size(max = 120)
@@ -70,7 +77,7 @@ public class Conference extends AbstractPersistable implements Solution<HardSoft
     @JsonManagedReference
     private List<TalkExclusion> talkExclusionList = new ArrayList<TalkExclusion>();
 
-    // TODO Replace database blob with nice columns - https://issues.jboss.org/browse/PLANNER-442
+    @Columns(columns = {@Column(name = "hardScore"), @Column(name="softScore")})
     private HardSoftScore score;
 
     public Conference() {}
