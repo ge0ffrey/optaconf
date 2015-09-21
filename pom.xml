@@ -35,7 +35,7 @@
     <version.org.apache.commons.lang3>3.1</version.org.apache.commons.lang3>
     <version.org.apache.httpcomponent.httpclient>4.3.6</version.org.apache.httpcomponent.httpclient>
     <version.org.arquillian>1.1.9.Final</version.org.arquillian>
-    <version.org.hibernate>5.0.0.Final</version.org.hibernate>
+    <version.org.hibernate>4.3.10.Final</version.org.hibernate>
     <version.org.optaplanner>6.3.0.CR2</version.org.optaplanner>
     <version.org.wildfly>9.0.1.Final</version.org.wildfly>
     <version.org.wildfly.bom>9.0.1.Final</version.org.wildfly.bom>
