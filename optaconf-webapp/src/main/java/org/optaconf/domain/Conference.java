@@ -11,12 +11,15 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.Columns;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
@@ -38,42 +41,54 @@ public class Conference extends AbstractPersistable implements Solution<HardSoft
     @NotNull @Size(max = 240)
     private String comment;
 
+    @OneToOne(mappedBy = "conference", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private ConferenceParametrization conferenceParametrization;
+
     @OneToMany(mappedBy = "conference", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
     @JsonManagedReference
     private List<Day> dayList = new ArrayList<Day>();
 
     @ValueRangeProvider(id = "timeslotRange")
     @OneToMany(mappedBy = "conference", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
     @JsonManagedReference
     private List<Timeslot> timeslotList = new ArrayList<Timeslot>();
 
     @ValueRangeProvider(id = "roomRange")
     @OneToMany(mappedBy = "conference", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
     @JsonManagedReference
     private List<Room> roomList = new ArrayList<Room>();
 
     @OneToMany(mappedBy = "conference", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
     @JsonManagedReference
     private List<UnavailableTimeslotRoomPenalty> unavailableTimeslotRoomPenaltyList = new ArrayList<UnavailableTimeslotRoomPenalty>();
 
     @OneToMany(mappedBy = "conference", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
     @JsonManagedReference
     private List<Track> trackList = new ArrayList<Track>();
 
     @OneToMany(mappedBy = "conference", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
     @JsonManagedReference
     private List<Speaker> speakerList = new ArrayList<Speaker>();
 
     @PlanningEntityCollectionProperty
     @OneToMany(mappedBy = "conference", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
     @JsonManagedReference
     private List<Talk> talkList = new ArrayList<Talk>();
 
     @OneToMany(mappedBy = "conference", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
     @JsonManagedReference
     private List<SpeakingRelation> speakingRelationList = new ArrayList<SpeakingRelation>();
 
     @OneToMany(mappedBy = "conference", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
     @JsonManagedReference
     private List<TalkExclusion> talkExclusionList = new ArrayList<TalkExclusion>();
 
@@ -96,6 +111,14 @@ public class Conference extends AbstractPersistable implements Solution<HardSoft
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public ConferenceParametrization getConferenceParametrization() {
+        return conferenceParametrization;
+    }
+
+    public void setConferenceParametrization(ConferenceParametrization conferenceParametrization) {
+        this.conferenceParametrization = conferenceParametrization;
     }
 
     public List<Day> getDayList() {
@@ -187,6 +210,7 @@ public class Conference extends AbstractPersistable implements Solution<HardSoft
     @JsonIgnore
     public Collection<?> getProblemFacts() {
         List<Object> facts = new ArrayList<Object>();
+        facts.add(conferenceParametrization);
         facts.addAll(dayList);
         facts.addAll(timeslotList);
         facts.addAll(roomList);

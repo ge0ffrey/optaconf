@@ -23,6 +23,7 @@ import javax.persistence.PersistenceContext;
 
 import org.apache.commons.io.IOUtils;
 import org.optaconf.domain.Conference;
+import org.optaconf.domain.ConferenceParametrization;
 import org.optaconf.domain.Day;
 import org.optaconf.domain.Room;
 import org.optaconf.domain.Speaker;
@@ -63,6 +64,7 @@ public class DevoxxImporter {
         conference.setName("DEVOXX BE 2016");
 //        conference.setName("DEVOXX FR 2015");
         conference.setComment("Imported on " + new Date().toString() + " from " + REST_URL_ROOT);
+        conference.setConferenceParametrization(ConferenceParametrization.createDefault(conference));
         importData.conference = conference;
         mapTracks(importData, persist);
         mapSpeakers(importData, persist);

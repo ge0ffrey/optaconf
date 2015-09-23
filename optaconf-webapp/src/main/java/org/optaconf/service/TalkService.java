@@ -53,7 +53,7 @@ public class TalkService {
     @Path("/map")
     public Map<String, Map<String, Map<String, Talk>>> getDayTimeslotRoomToTalkMap(
             @PathParam("conferenceId") Long conferenceId) {
-        Conference conference = new Conference();
+        Conference conference;
         try {
             utx.begin();
             em.joinTransaction();
@@ -63,8 +63,7 @@ public class TalkService {
             conference.getTimeslotList().iterator().hasNext();
             conference.getRoomList().iterator().hasNext();
         } catch (NotSupportedException | SystemException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new IllegalStateException(e);
         } finally {
             try {
                 utx.commit();

@@ -24,6 +24,7 @@ import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @MappedSuperclass
@@ -34,7 +35,7 @@ public abstract class AbstractConferencedPersistable extends AbstractPersistable
     @NotNull
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "conference_id")
-    @JsonIgnore
+    @JsonBackReference
     protected Conference conference;
 
     @NotNull @Size(max = 240)
