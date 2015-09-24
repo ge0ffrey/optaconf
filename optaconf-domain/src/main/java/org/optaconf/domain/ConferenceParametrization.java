@@ -23,7 +23,9 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import org.optaplanner.core.api.domain.solution.cloner.DeepPlanningClone;
 
+@DeepPlanningClone
 @Entity(name = "optaconf_conference_parametrization")
 public class ConferenceParametrization extends AbstractPersistable {
 
