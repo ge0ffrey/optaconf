@@ -1,20 +1,25 @@
-== Project setup for IntelliJ
+= OptaConf -- the optimal conference planner
 
-. Open the `pom.xml` as a new project in IntelliJ.
-. Download and unzip http://wildfly.org/[WildFly 9.0.1.Final].
-. In IntelliJ, add a JBoss app server run configuration for that WildFly installation and a deployment for the exploded war..
-. In IntelliJ, go to _Project structure_, menu item _Artifacts_ and suffix exploded war's output directory with `-exploded.war`.
-. Run the WildFly run configuration.
+== Project setup for IntelliJ IDEA
 
-if you don't have IntelliJ Ultimate Edition:
+For IntelliJ IDEA Ultimate Edition:
 
-. Run wildfly-9.0.1.Final/bin/standalone.sh then run mvn wildfly:deploy from within optaconf-webapp directory
+. Open the `pom.xml` as a new project in IntelliJ
+. Download and unzip http://wildfly.org/downloads/[WildFly 9.0.1.Final]
+. In IntelliJ, add a JBoss app server run configuration for that WildFly installation and a deployment for the exploded war
+. In IntelliJ, go to _Project structure_, menu item _Artifacts_ and suffix exploded war's output directory with `-exploded.war`
+. Run the WildFly run configuration
+
+If you have IntelliJ IDEA Community Edition:
+
+. Run `wildfly-9.0.1.Final/bin/standalone.sh` with Java 8+
+. Run `mvn wildfly:deploy` from within the `optaconf-webapp` directory
 
 == Project setup for Eclipse
 
-. Install http://tools.jboss.org[JBoss Tools] 
-. In Eclipse, Import the project as a Maven project.
-. In Eclipse, Use *File > New Server*, choose WildFly 9.x and you can use 'Download and install' to get WildFly 9.
+. Install http://tools.jboss.org[JBoss Tools]
+. In Eclipse, Import the project as a Maven project
+. In Eclipse, Use *File > New Server*, choose WildFly 9.x and you can use "Download and install" to get WildFly 9
 . In Eclipse, Drag the webapp project to the WildFly server
 . In Eclipse, Run WildFly
 
@@ -34,7 +39,7 @@ General lists:
 * All speakers: [GET] http://localhost:8080/optaconf-webapp/rest/<conference-id>/speaker
 * All talks: [GET] http://localhost:8080/optaconf-webapp/rest/<conference-id>/talk
 
-Gui map:
+GUI map:
 
 * Talk map per day per timeslot per room: [GET] http://localhost:8080/optaconf-webapp/#/schedule/<conference-id>
 
@@ -44,7 +49,7 @@ Filtered lists:
 * All talk exclusions of 1 talk: [GET] http://localhost:8080/optaconf-webapp/rest/<conference-id>/talk/1/exclusion
 * All talks on 1 day grouped by timeslot and room: [GET] http://localhost:8080/optaconf-webapp/rest/<conference-id>/day/wednesday/talk
 
-Solve a schedule
+Solve a conference schedule
 
 * Solve the schedule: [PUT] http://localhost:8080/optaconf-webapp/rest/conference/<conference-id>/solve
 * Is solving? [GET] http://localhost:8080/optaconf-webapp/rest/conference/<conference-id>/isSolving
