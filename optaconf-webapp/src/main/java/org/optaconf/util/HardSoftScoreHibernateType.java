@@ -21,10 +21,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import javax.persistence.MappedSuperclass;
-
-import org.hibernate.HibernateException;
-import org.hibernate.annotations.TypeDef;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.type.IntegerType;
 import org.hibernate.type.StandardBasicTypes;
