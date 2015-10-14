@@ -1,0 +1,25 @@
+<div class="page-header">
+	<h1>{{vm.title}}</h1>
+</div>
+
+<div class="row">
+	
+	<div class="col-md-12">
+		<table class="table table-striped">
+			<thead>
+				<tr>
+				    <th>ID</th>
+					<th>Name</th>
+					<th>Rockstar</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr data-ng-repeat="speaker in vm.speakers">
+					<td>{{speaker.id}}</td>
+					<td>{{speaker.name}}</td>
+					<td><input name="speaker_{{speaker_id}}" type="checkbox" data-ng-checked="{{speaker.rockstar}}" data-ng-click="vm.toggleRockstar(speaker.id)" /></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

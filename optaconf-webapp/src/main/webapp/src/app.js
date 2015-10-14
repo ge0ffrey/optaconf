@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('optaconf', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.utils', 'dashboard', 'rooms', 'schedule', 'talks']);
+var app = angular.module('optaconf', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.utils', 'dashboard', 'rooms', 'schedule', 'talks', 'speakers']);
 
 app.config(["$routeProvider", function($routeProvider) {
     $routeProvider.
@@ -15,6 +15,10 @@ app.config(["$routeProvider", function($routeProvider) {
         when('/schedule/:conferenceId', {
             templateUrl: 'src/talks/talks.html',
             controller: 'TalkController as vm'
+        }).
+        when('/schedule/:conferenceId/speakers', {
+            templateUrl: 'src/speakers/speakers.html',
+            controller: 'SpeakerController as vm'
         }).
         otherwise({
             redirectTo: '/'
