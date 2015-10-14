@@ -14,15 +14,17 @@
 <div class=" row col-md-12">
 	<table class="table table-striped col-md-12">
 		<thead><tr>
-			<th>ID</th><th>name</th><th>options</th><th>SCORE (HARD/SOFT/FEASIBLE)</th>
+			<th>ID</th><th>Name</th><th>Options</th><th>Score (HARD/SOFT/FEASIBLE)</th>
 		</tr></thead>
 		<tbody>
 		    <tr data-ng-repeat="conference in vm.conferences">
 		    	<td>{{conference.id}}</td><td>{{conference.name}}</td>
 		    	<td>
-		    	    <a class="btn btn-sm btn-primary" href="#/schedule/{{conference.id}}">view schedule</a>
-		    	    <a class="btn btn-sm btn-primary" href="#/rooms/{{conference.id}}">view rooms</a> 
-		    	    <a class="btn btn-sm btn-primary" href="#/schedule/{{conference.id}}/speakers">view speakers</a> 
+		    		<div class="btn-group" >
+		    	    	<a class="btn btn-sm btn-primary" href="#/schedule/{{conference.id}}">view schedule</a>
+		    	    	<a class="btn btn-sm btn-primary" href="#/rooms/{{conference.id}}">view rooms</a> 
+		    	    	<a class="btn btn-sm btn-primary" href="#/schedule/{{conference.id}}/speakers">view speakers</a>
+		    	    </div> 
 		    	    <button class="btn btn-sm btn-success" data-ng-click="vm.solve(conference.id)" data-ng-disabled="{{conference.score.hardScore != null}}">optimize</button>  
 		    	    <button class="btn btn-sm btn-warning" data-ng-click="vm.delete(conference.id)">remove</button>
 		    	</td>
