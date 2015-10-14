@@ -48,15 +48,15 @@ public class SpeakerService {
     @Path("/{speakerId}/toggleRockstar")
     public Speaker toggleRockstar(@PathParam("speakerId") Long speakerId) {
         
-        Speaker s = null;
+        Speaker speaker = null;
         
         try {
             utx.begin();
             em.joinTransaction();
 
-            Speaker speaker = em.find(Speaker.class, speakerId);
+            speaker = em.find(Speaker.class, speakerId);
             speaker.setRockstar(!speaker.getRockstar());
-            s = em.merge(speaker);
+            em.merge(speaker);
         } catch (NotSupportedException | SystemException e) {
             LOG.error(e.getLocalizedMessage(), e);
         } finally {
@@ -68,7 +68,7 @@ public class SpeakerService {
             }
         }
         
-        return s;
+        return speaker;
 
     }
 
