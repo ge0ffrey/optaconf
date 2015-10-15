@@ -79,6 +79,9 @@ angular.module('dashboard', [])
         return {
             getAll: function() {
                 return $http.get('rest/conference');
+            },
+            getOne: function(conferenceId){
+            	return $http.get('rest/conference/'+conferenceId);
             }
         };
     });

@@ -23,7 +23,7 @@
 		    		<div class="btn-group" >
 		    	    	<a class="btn btn-sm btn-primary" href="#/schedule/{{conference.id}}">view schedule</a>
 		    	    	<a class="btn btn-sm btn-primary" href="#/rooms/{{conference.id}}">view rooms</a> 
-		    	    	<a class="btn btn-sm btn-primary" href="#/schedule/{{conference.id}}/speakers">view speakers</a>
+		    	    	<a class="btn btn-sm btn-primary" href="#/speakers/{{conference.id}}">view speakers</a>
 		    	    </div> 
 		    	    <button class="btn btn-sm btn-success" data-ng-click="vm.solve(conference.id)" data-ng-disabled="{{conference.score.hardScore != null}}">optimize</button>  
 		    	    <button class="btn btn-sm btn-warning" data-ng-click="vm.delete(conference.id)">remove</button>

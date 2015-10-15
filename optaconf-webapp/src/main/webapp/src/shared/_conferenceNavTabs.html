@@ -1,0 +1,12 @@
+<div data-ng-controller="NavController as nav">
+	<div>
+		<h1>{{nav.title}}</h1>
+	</div>
+	
+	<ul class="nav nav-tabs">
+	  <li role="presentation" class="{{nav.sheduleTab}}" ><a href="#/schedule/{{nav.conferenceId}}">Talk Schedule</a></li>
+	  <li role="presentation" class="{{nav.roomsTab}}" ><a href="#/rooms/{{nav.conferenceId}}">Room List</a></li>
+	  <li role="presentation" class="{{nav.speakersTab}}" ><a href="#/speakers/{{nav.conferenceId}}">Speaker List</a></li>
+	</ul>
+</div>
+<div class="row">&nbsp;</div>
