@@ -1,6 +1,7 @@
 package org.optaconf.service;
 
 import java.util.List;
+
 import javax.annotation.Resource;
 import javax.enterprise.concurrent.ManagedExecutorService;
 import javax.inject.Inject;
@@ -31,6 +32,8 @@ import org.optaconf.bridge.devoxx.DevoxxImporter;
 import org.optaconf.domain.Conference;
 import org.optaplanner.core.api.solver.Solver;
 import org.optaplanner.core.api.solver.SolverFactory;
+import org.optaplanner.core.api.solver.event.BestSolutionChangedEvent;
+import org.optaplanner.core.api.solver.event.SolverEventListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,6 +55,7 @@ public class ConferenceService {
 
     @Inject
     private SolverFactory solverFactory;
+    
 
     @Resource(name = "DefaultManagedExecutorService")
     private ManagedExecutorService executor;
@@ -69,14 +73,7 @@ public class ConferenceService {
 
             Conference conference = devoxxImporter.importConference(true);
 
-            message.append("Devoxx conference with ")
-                    .append(conference.getDayList().size()).append(" days, ")
-                    .append(conference.getTimeslotList().size())
-                    .append(" timeslots, ").append(conference.getRoomList().size())
-                    .append(" rooms, ").append(conference.getTrackList().size())
-                    .append(" tracks, ").append(conference.getSpeakerList().size())
-                    .append(" speakers, ").append(conference.getTalkList().size())
-                    .append(" talks imported successfully.");
+            message.append("Devoxx conference with ").append(conference.getDayList().size()).append(" days, ").append(conference.getTimeslotList().size()).append(" timeslots, ").append(conference.getRoomList().size()).append(" rooms, ").append(conference.getTrackList().size()).append(" tracks, ").append(conference.getSpeakerList().size()).append(" speakers, ").append(conference.getTalkList().size()).append(" talks imported successfully.");
 
             LOG.info(message.toString());
         } catch (NotSupportedException | SystemException e) {
@@ -132,6 +129,15 @@ public class ConferenceService {
             oldSolver.terminateEarly();
         }
         Solver solver = solverFactory.buildSolver();
+        solver.addEventListener(new SolverEventListener<Conference>() {
+
+            public void bestSolutionChanged(BestSolutionChangedEvent<Conference> event) {
+
+                if (event.isNewBestSolutionInitialized()) {
+                    LOG.info(event.getNewBestSolution().toString());
+                }
+            }
+        });
         // TODO Use async solving https://developer.jboss.org/message/910391
         // executor.submit(new SolverCallable(solver,
         // scheduleManager.getSchedule()));
@@ -176,36 +182,36 @@ public class ConferenceService {
 
         return Response.status(Response.Status.NOT_FOUND).entity("Solver not found.").build();
     }
-   /*
+    /*
        private class SolverCallable implements Runnable {
-   
-   		private final Solver solver;
-   		private final Schedule schedule;
-   
-   		private SolverCallable(Solver solver, Schedule schedule) {
-   			this.solver = solver;
-   			this.schedule = schedule;
-   		}
-   
-   		public void run() {
-   			solver.addEventListener(new SolverEventListener() {
-   				@Override
-   				public void bestSolutionChanged(
-   						BestSolutionChangedEvent bestSolutionChangedEvent) {
-   					scheduleManager
-   							.setSchedule((Schedule) bestSolutionChangedEvent
-   									.getNewBestSolution()); // TODO throws eaten
-   															// Exception
-   				}
-   			});
-   			solver.solve(schedule);
-   			Schedule bestSchedule = (Schedule) solver.getBestSolution(); // TODO
-   																			// throws
-   																			// eaten
-   																			// Exception
-   			scheduleManager.setSchedule(bestSchedule);
-   			scheduleManager.setSolver(null);
-   		}
-   	}
-   */
+    
+    	private final Solver solver;
+    	private final Schedule schedule;
+    
+    	private SolverCallable(Solver solver, Schedule schedule) {
+    		this.solver = solver;
+    		this.schedule = schedule;
+    	}
+    
+    	public void run() {
+    		solver.addEventListener(new SolverEventListener() {
+    			@Override
+    			public void bestSolutionChanged(
+    					BestSolutionChangedEvent bestSolutionChangedEvent) {
+    				scheduleManager
+    						.setSchedule((Schedule) bestSolutionChangedEvent
+    								.getNewBestSolution()); // TODO throws eaten
+    														// Exception
+    			}
+    		});
+    		solver.solve(schedule);
+    		Schedule bestSchedule = (Schedule) solver.getBestSolution(); // TODO
+    																		// throws
+    																		// eaten
+    																		// Exception
+    		scheduleManager.setSchedule(bestSchedule);
+    		scheduleManager.setSolver(null);
+    	}
+    }
+    */
 }
