@@ -21,7 +21,7 @@
 		    	<td>{{conference.id}}</td><td>{{conference.name}}</td>
 		    	<td>
 		    		<div class="btn-group" >
-		    	    	<a class="btn btn-sm btn-primary" href="#/schedule/{{conference.id}}">view schedule</a>
+		    	    	<button class="btn btn-sm btn-primary" data-ng-click="vm.view(conference.id)">view schedule</button>
 		    	    	<a class="btn btn-sm btn-primary" href="#/rooms/{{conference.id}}">view rooms</a> 
 		    	    	<a class="btn btn-sm btn-primary" href="#/speakers/{{conference.id}}">view speakers</a>
 		    	    </div> 

@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('optaconf', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.utils', 'dashboard', 'rooms', 'schedule', 'talks', 'speakers', 'nav']);
+var app = angular.module('optaconf', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.utils', 'dashboard', 'rooms', 'schedule', 'talks', 'speakers', 'nav','ngWebSocket']);
 
 app.config(["$routeProvider", function($routeProvider) {
     $routeProvider.

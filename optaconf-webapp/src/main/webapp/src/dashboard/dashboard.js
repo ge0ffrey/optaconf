@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('dashboard', [])
-    .controller('DashboardController', ['ScheduleImport', 'ScheduleSolve', '$log','$modal', '$timeout', '$location', 'ConferenceService', function(ScheduleImport, ScheduleSolve, $log, $modal, $timeout, $location, ConferenceService) {
+    .controller('DashboardController', ['ScheduleImport', 'ScheduleSolve', '$log','$modal', '$timeout', '$location', 'ConferenceService','$websocket','$window', function(ScheduleImport, ScheduleSolve, $log, $modal, $timeout, $location, ConferenceService, $websocket, $window) {
         
     	var vm = this;
         vm.feedback = '';
@@ -35,24 +35,28 @@ angular.module('dashboard', [])
             });
         };
 
+        
         vm.solve = function(conferenceId) {
-            $log.info("Solving schedule for conference id " + conferenceId);
-         
-			vm.busyModal = vm.openBusySolve();
+        	$log.info('Getting schedule for Conference ID: '+conferenceId);
+            var API = $window.location.host+$window.location.pathname+'schedule';
+        	
+        	var dataStream = $websocket('ws://'+API);
+        	
+        	dataStream.send(JSON.stringify({ action: 'solve', id: conferenceId }));
+			$location.path('/schedule/'+conferenceId);
 			
-            ScheduleSolve.solve(conferenceId).then(function() {
-                $log.info("solved devoxx schedule!");
-                vm.init();
-                vm.busyModal.close();
-                
-                vm.feedback = "solved devoxx schedule, redirecting to Talk Schedule in 5 seconds.";
-                
-                $timeout(function() {
-					vm.feedback = '';
-					$location.path('/schedule/'+conferenceId);
-					
-				}, 5000);
-            });
+        };
+        
+        vm.view = function(conferenceId) {
+        	$log.info('Getting schedule for Conference ID: '+conferenceId);
+            var API = $window.location.host+$window.location.pathname+'schedule';
+        	
+        	var dataStream = $websocket('ws://'+API);
+        	
+        	dataStream.send(JSON.stringify({ action: 'view', id: conferenceId }));
+        	
+        	$location.path('/schedule/'+conferenceId);
+        	
         };
         
         vm.openBusyImport = function() {
@@ -65,15 +69,7 @@ angular.module('dashboard', [])
 
 		};
 		
-		vm.openBusySolve = function() {
-
-			return $modal.open({
-				templateUrl : 'src/dashboard/_solveModal.html',
-				backdrop : 'static',
-				keyboard : false
-			});
-
-		};
+		
     }]).factory('ConferenceService', function($http, $window) {
         var contextPath = $window.location.pathname.substr(1).split('/')[0];
         return {
