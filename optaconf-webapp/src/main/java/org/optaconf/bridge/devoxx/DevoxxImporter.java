@@ -45,7 +45,7 @@ public class DevoxxImporter {
     @PersistenceContext(unitName = "optaconf-webapp-persistence-unit")
     private EntityManager em;
 
-     private static final String REST_URL_ROOT = "http://cfp.devoxx.be/api/conferences/DV15";
+     private static final String REST_URL_ROOT = "http://cfp.devoxx.be/api/conferences/DV16";
 //    private static final String REST_URL_ROOT = "http://cfp.devoxx.fr/api/conferences/DevoxxFR2015";
 
     private static class ImportData {
@@ -102,7 +102,7 @@ public class DevoxxImporter {
     private void mapSpeakers(ImportData importData, boolean persist) {
         importData.speakerMap = new LinkedHashMap<String, Speaker>();
         importData.fullNameToSpeakerMap = new LinkedHashMap<String, Speaker>();
-        JsonArray array = readJsonArray(REST_URL_ROOT + "/speakers");
+        JsonArray array = readJsonArray(REST_URL_ROOT + "/speakers/");
         for (int i = 0; i < array.size(); i++) {
             JsonObject dSpeaker = array.getJsonObject(i);
             String id = dSpeaker.getString("uuid");
@@ -122,7 +122,7 @@ public class DevoxxImporter {
 
     private void mapTalks(ImportData importData, boolean persist) {
         importData.talkMap = new LinkedHashMap<String, Talk>();
-        JsonObject rootObject = readJsonObject(REST_URL_ROOT + "/talks");
+        JsonObject rootObject = readJsonObject(REST_URL_ROOT + "/talks/");
         JsonObject subRootObject = rootObject.getJsonObject("talks");
         JsonArray approvedArray = subRootObject.getJsonArray("approved");
         JsonArray acceptedArray = subRootObject.getJsonArray("accepted");
@@ -184,7 +184,7 @@ public class DevoxxImporter {
 
     private void mapRooms(ImportData importData, boolean persist) {
         importData.roomMap = new LinkedHashMap<String, Room>();
-        JsonObject rootObject = readJsonObject(REST_URL_ROOT + "/rooms");
+        JsonObject rootObject = readJsonObject(REST_URL_ROOT + "/rooms/");
         JsonArray array = rootObject.getJsonArray("rooms");
         for (int i = 0; i < array.size(); i++) {
             JsonObject dRoom = array.getJsonObject(i);
@@ -206,7 +206,7 @@ public class DevoxxImporter {
     }
 
     private void mapDays(ImportData importData, boolean persist) {
-        JsonObject rootObject = readJsonObject(REST_URL_ROOT + "/schedules");
+        JsonObject rootObject = readJsonObject(REST_URL_ROOT + "/schedules/");
         JsonArray array = rootObject.getJsonArray("links");
         Pattern[] dTitlePatterns = {
                 Pattern.compile("Schedule for (\\w+) (\\d+.*\\d{4})"), // Used in Devoxx FR 2015
