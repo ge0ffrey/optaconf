@@ -51,12 +51,12 @@ public class ConferenceService {
     private DevoxxImporter devoxxImporter;
 
     @Inject
-    private SolverFactory solverFactory;
+    private SolverFactory<Conference> solverFactory;
 
     @Resource(name = "DefaultManagedExecutorService")
     private ManagedExecutorService executor;
 
-    private Solver solver;
+    private Solver<Conference> solver;
 
     @POST
     @Path("/import/devoxx")
@@ -130,14 +130,14 @@ public class ConferenceService {
         if (oldSolver != null && oldSolver.isSolving()) {
             oldSolver.terminateEarly();
         }
-        Solver solver = solverFactory.buildSolver();
+        Solver<Conference> solver = solverFactory.buildSolver();
         // TODO Use async solving https://developer.jboss.org/message/910391
         // executor.submit(new SolverCallable(solver,
         // scheduleManager.getSchedule()));
         // return "Solving started.";
         solver.solve(conference);
 
-        conference = (Conference) solver.getBestSolution();
+        conference = solver.getBestSolution();
 
         try {
             utx.begin();
