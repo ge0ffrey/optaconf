@@ -8,18 +8,10 @@
     <artifactId>optaconf</artifactId>
     <version>0.1.0-SNAPSHOT</version>
   </parent>
-  <artifactId>optaconf-webapp</artifactId>
-  <packaging>war</packaging>
-  <name>OptaConf WebApp</name>
+  <artifactId>optaconf-domain</artifactId>
+  <name>OptaConf Domain</name>
 
   <build>
-    <finalName>${project.artifactId}</finalName>
-    <testResources>
-      <testResource>
-        <directory>src/test/resources</directory>
-        <filtering>true</filtering>
-      </testResource>
-    </testResources>
     <plugins>
       <plugin>
         <groupId>org.bsc.maven</groupId>
@@ -47,45 +39,10 @@
           </dependency>
         </dependencies>
       </plugin>
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <proc>none</proc>
-        </configuration>
-      </plugin>
-      <plugin>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>unpack-wildfly</id>
-            <phase>generate-test-resources</phase>
-            <goals>
-              <goal>unpack</goal>
-            </goals>
-            <configuration>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>org.wildfly</groupId>
-                  <artifactId>wildfly-dist</artifactId>
-                  <version>${version.org.wildfly}</version>
-                  <type>zip</type>
-                  <overWrite>false</overWrite>
-                  <outputDirectory>${project.build.directory}</outputDirectory>
-                </artifactItem>
-              </artifactItems>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
     </plugins>
   </build>
 
   <dependencies>
-    <dependency>
-      <groupId>org.optaconf</groupId>
-      <artifactId>optaconf-domain</artifactId>
-      <version>${project.version}</version>
-    </dependency>
     <dependency>
       <groupId>org.optaplanner</groupId>
       <artifactId>optaplanner-core</artifactId>
@@ -152,35 +109,6 @@
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpclient</artifactId>
-      <version>${version.org.apache.httpcomponent.httpclient}</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.jboss.arquillian.junit</groupId>
-      <artifactId>arquillian-junit-container</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.jboss.shrinkwrap.resolver</groupId>
-      <artifactId>shrinkwrap-resolver-depchain</artifactId>
-      <type>pom</type>
-      <scope>test</scope>
-    </dependency>
-    <!--<dependency>-->
-      <!--<groupId>org.wildfly.arquillian</groupId>-->
-      <!--<artifactId>wildfly-arquillian-container-embedded</artifactId>-->
-      <!--<version>${version.org.wildfly}</version>-->
-      <!--<scope>test</scope>-->
-    <!--</dependency>-->
-    <dependency>
-      <groupId>org.wildfly.arquillian</groupId>
-      <artifactId>wildfly-arquillian-container-managed</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>

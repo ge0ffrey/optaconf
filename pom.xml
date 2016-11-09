@@ -125,8 +125,8 @@
   </dependencyManagement>
 
   <modules>
+    <module>optaconf-domain</module>
     <module>optaconf-webapp</module>
-    <!--<module>optaconf-webapp-test</module>-->
   </modules>
 
 </project>
