@@ -17,7 +17,6 @@ import org.hibernate.annotations.Columns;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.TypeDef;
-import org.optaconf.util.HardSoftScoreHibernateType;
 import org.optaplanner.core.api.domain.solution.PlanningEntityCollectionProperty;
 import org.optaplanner.core.api.domain.solution.PlanningSolution;
 import org.optaplanner.core.api.domain.solution.Solution;
@@ -26,11 +25,11 @@ import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.optaplanner.persistence.jpa.impl.score.buildin.hardsoft.HardSoftScoreHibernateType;
 
 @PlanningSolution
 @Entity(name = "optaconf_conference")
-// TODO After upgrading to OptaPlanner 6.4.0.Beta1 adjust this TypeDef to use optaplanner-persistence-jpa's version
-@TypeDef(name = "hardSoftScoreHibernateType", defaultForType = HardSoftScore.class, typeClass = HardSoftScoreHibernateType.class)
+@TypeDef(defaultForType = HardSoftScore.class, typeClass = HardSoftScoreHibernateType.class)
 public class Conference extends AbstractPersistable implements Solution<HardSoftScore> {
 
     @NotNull @Size(max = 120)
