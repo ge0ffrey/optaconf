@@ -91,7 +91,6 @@ public class ConferenceService {
         }
 
         return Response.ok(message).build();
-
     }
 
     @GET
