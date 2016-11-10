@@ -5,6 +5,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 
 import org.optaconf.domain.Conference;
+import org.optaconf.planner.OptaConfPlanner;
 import org.optaplanner.core.api.solver.SolverFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +18,7 @@ public class SolverFactoryProducer implements Serializable {
     @Produces
     @ApplicationScoped
     public SolverFactory<Conference> createSolverFactory() {
-        return SolverFactory.createFromXmlResource("org/optaconf/planner/solverConfig.xml");
+        return SolverFactory.createFromXmlResource(OptaConfPlanner.SOLVER_CONFIG);
     }
 
 }

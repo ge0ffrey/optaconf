@@ -126,6 +126,7 @@
 
   <modules>
     <module>optaconf-domain</module>
+    <module>optaconf-bridge-devoxx</module>
     <module>optaconf-planner</module>
     <module>optaconf-planner-benchmark</module>
     <module>optaconf-webapp</module>

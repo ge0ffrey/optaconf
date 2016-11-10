@@ -62,6 +62,11 @@
     </dependency>
     <dependency>
       <groupId>org.optaconf</groupId>
+      <artifactId>optaconf-bridge-devoxx</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.optaconf</groupId>
       <artifactId>optaconf-planner</artifactId>
       <version>${project.version}</version>
     </dependency>
