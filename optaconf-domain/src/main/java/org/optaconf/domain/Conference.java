@@ -216,7 +216,7 @@ public class Conference extends AbstractPersistable implements Solution<HardSoft
         facts.addAll(speakingRelationList);
         facts.addAll(talkList);
         facts.addAll(talkExclusionList);
-        // Do not add the planning entity's (processList) because that will be done automatically
+        // Do not add the planning entity's (talkList) because that will be done automatically
         return facts;
     }
 

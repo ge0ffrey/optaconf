@@ -24,6 +24,7 @@
   <!--</appender>-->
 
   <logger name="org.optaplanner" level="debug"/>
+  <logger name="org.optaconf" level="debug"/>
 
   <root level="warn">
     <appender-ref ref="consoleAppender" />

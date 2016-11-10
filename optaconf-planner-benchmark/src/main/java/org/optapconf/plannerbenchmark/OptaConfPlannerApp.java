@@ -16,22 +16,39 @@
 
 package org.optapconf.plannerbenchmark;
 
+import java.awt.Desktop;
+import java.io.File;
+import java.io.IOException;
+
 import org.optaconf.bridge.devoxx.DevoxxImporter;
 import org.optaconf.domain.Conference;
 import org.optaconf.planner.OptaConfPlanner;
 import org.optaplanner.core.api.solver.Solver;
 import org.optaplanner.core.api.solver.SolverFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class OptaConfPlannerApp {
 
-    public static void main(String[] args) {
+    private static final Logger logger = LoggerFactory.getLogger(OptaConfPlannerApp.class);
+
+    public static void main(String[] args) throws IOException {
         DevoxxImporter devoxxImporter = new DevoxxImporter();
         SolverFactory<Conference> solverFactory = SolverFactory.createFromXmlResource(
                 OptaConfPlanner.SOLVER_CONFIG);
 
         Conference conference = devoxxImporter.importConference(false);
+        logger.info("Imported.");
+
         Solver<Conference> solver = solverFactory.buildSolver();
         conference = solver.solve(conference);
+        logger.info("Solved.");
+
+        ConferenceFileIO fileIO = new ConferenceFileIO();
+        File outputFile = File.createTempFile("devoxx2016-", "." + fileIO.getOutputFileExtension());
+        fileIO.write(conference, outputFile);
+        logger.info("Written.");
+        Desktop.getDesktop().open(outputFile);
     }
 
 }
